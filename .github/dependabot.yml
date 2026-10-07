@@ -1,0 +1,18 @@
+# Dependabot mantiene al día las GitHub Actions de los workflows.
+# Las dependencias de npm las actualiza Renovate (ver renovate.json), porque
+# Dependabot todavía no soporta el lockfile de pnpm 11 en adelante.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    # Gitflow: los cambios entran primero a develop, nunca directo a main.
+    target-branch: develop
+    schedule:
+      interval: weekly
+      day: monday
+      timezone: America/Lima
+    commit-message:
+      prefix: ci
+    groups:
+      github-actions:
+        patterns: ["*"]

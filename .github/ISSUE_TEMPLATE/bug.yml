@@ -1,0 +1,35 @@
+name: Reportar un error
+description: Algo no funciona como debería
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: parte
+    attributes:
+      label: ¿Dónde ocurre?
+      options:
+        - Web (lo que se ve en el navegador)
+        - API (servidor)
+        - Google Sheets (datos)
+    validations:
+      required: true
+  - type: textarea
+    id: que-paso
+    attributes:
+      label: ¿Qué pasó?
+      description: Cuenta qué esperabas que pasara y qué pasó en realidad.
+    validations:
+      required: true
+  - type: textarea
+    id: pasos
+    attributes:
+      label: Pasos para reproducirlo
+      placeholder: |
+        1. Ir a /clases
+        2. Pulsar "Crear clase"
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: capturas
+    attributes:
+      label: Capturas o mensajes de error

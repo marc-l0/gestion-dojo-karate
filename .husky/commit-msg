@@ -1,0 +1,2 @@
+# Revisa que el mensaje del commit siga Conventional Commits (ej. "feat(api): registrar profesores").
+pnpm exec commitlint --edit "$1"

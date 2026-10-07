@@ -1,0 +1,40 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended", ":semanticCommits", ":timezone(America/Lima)"],
+  "baseBranchPatterns": ["develop"],
+  "schedule": ["before 9am on monday"],
+  "labels": ["dependencias"],
+  "enabledManagers": ["npm"],
+  "semanticCommitScope": "deps",
+  "vulnerabilityAlerts": {
+    "labels": ["seguridad"],
+    "schedule": ["at any time"]
+  },
+  "packageRules": [
+    {
+      "description": "Paquetes de NestJS juntos",
+      "matchPackageNames": ["@nestjs/**"],
+      "groupName": "nestjs"
+    },
+    {
+      "description": "Astro y sus integraciones juntos",
+      "matchPackageNames": ["astro", "@astrojs/**"],
+      "groupName": "astro"
+    },
+    {
+      "description": "React y sus tipos juntos",
+      "matchPackageNames": ["react", "react-dom", "@types/react", "@types/react-dom"],
+      "groupName": "react"
+    },
+    {
+      "description": "Tailwind y su plugin de Vite juntos",
+      "matchPackageNames": ["tailwindcss", "@tailwindcss/**"],
+      "groupName": "tailwind"
+    },
+    {
+      "description": "Vitest y su cobertura juntos",
+      "matchPackageNames": ["vitest", "@vitest/**"],
+      "groupName": "vitest"
+    }
+  ]
+}

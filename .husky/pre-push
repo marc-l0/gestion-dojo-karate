@@ -1,0 +1,3 @@
+# Antes de subir cambios a GitHub: revisa tipos y ejecuta las pruebas unitarias.
+# Turborepo reutiliza resultados anteriores, así que si nada cambió tarda segundos.
+pnpm exec turbo run typecheck test

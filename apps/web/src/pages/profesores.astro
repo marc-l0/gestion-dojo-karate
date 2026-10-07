@@ -1,0 +1,18 @@
+---
+import GestionarProfesores from "../components/GestionarProfesores";
+import "../styles/global.css";
+import ProtegerPagina from "../components/ProtegerPagina.astro";
+---
+
+<html lang="es">
+  <head>
+    <ProtegerPagina />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Profesores</title>
+  </head>
+
+  <body class="bg-gray-100">
+    <GestionarProfesores client:load />
+  </body>
+</html>

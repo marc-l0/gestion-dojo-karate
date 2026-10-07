@@ -1,0 +1,33 @@
+# Dependencias
+node_modules/
+
+# Builds
+dist/
+build/
+coverage/
+*.tsbuildinfo
+
+# Turborepo y Astro (cachés y tipos generados)
+.turbo/
+.astro/
+
+# Variables de entorno (solo se versiona .env.example)
+.env
+.env.*
+!.env.example
+
+# Credenciales de Google (cuenta de servicio de la API). NUNCA se suben a Git.
+credentials/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Sistema / editores
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json

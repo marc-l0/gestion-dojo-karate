@@ -1,0 +1,13 @@
+# Todos los archivos de texto se guardan en Git con finales de línea LF (estilo Linux).
+# Así no aparecen "cambios fantasma" cuando alguien trabaja en Windows y otro en Linux.
+* text=auto eol=lf
+
+# Archivos binarios: Git no debe tocarlos.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.woff binary
+*.woff2 binary

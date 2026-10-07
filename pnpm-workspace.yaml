@@ -1,0 +1,8 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+
+# pnpm no ejecuta scripts de instalación de dependencias salvo que se aprueben
+# explícitamente aquí (protección contra paquetes maliciosos).
+allowBuilds:
+  esbuild: true

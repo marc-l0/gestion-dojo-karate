@@ -1,0 +1,15 @@
+name: Pedir una funcionalidad
+description: Una mejora o algo nuevo para el sistema del dojo
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: necesidad
+    attributes:
+      label: ¿Qué necesitas y para qué?
+      description: Describe la necesidad, no solo la solución.
+    validations:
+      required: true
+  - type: textarea
+    id: propuesta
+    attributes:
+      label: ¿Cómo imaginas que funcionaría?

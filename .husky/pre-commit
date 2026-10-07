@@ -1,0 +1,3 @@
+# Antes de guardar el commit: formatea y revisa con Biome los archivos que vas a commitear.
+# Si encuentra un error que no puede corregir solo, cancela el commit.
+pnpm exec lint-staged

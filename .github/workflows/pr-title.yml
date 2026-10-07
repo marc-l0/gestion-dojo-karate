@@ -1,0 +1,80 @@
+# Valida las reglas de Gitflow y de Conventional Commits en cada Pull Request.
+name: Reglas del PR
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  pull-requests: read
+
+jobs:
+  titulo:
+    name: Validar Conventional Commits
+    runs-on: ubuntu-latest
+    steps:
+      # Con "squash and merge" el título del PR se convierte en el commit final,
+      # así que también debe seguir el formato tipo(scope): descripción.
+      - uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            docs
+            style
+            refactor
+            perf
+            test
+            build
+            ci
+            chore
+            revert
+          scopes: |
+            web
+            api
+            shared
+            sheets
+            ci
+            deps
+            config
+            docs
+            release
+          requireScope: false
+
+  rama:
+    name: Validar ramas de Gitflow
+    runs-on: ubuntu-latest
+    steps:
+      - name: Revisar origen y destino del PR
+        env:
+          ORIGEN: ${{ github.head_ref }}
+          DESTINO: ${{ github.base_ref }}
+        run: |
+          echo "PR de '$ORIGEN' hacia '$DESTINO'"
+
+          case "$DESTINO" in
+            main)
+              # A producción solo llegan versiones listas (release) o arreglos urgentes (hotfix).
+              if [[ "$ORIGEN" =~ ^(release|hotfix)/ ]]; then exit 0; fi
+              echo "::error::A main solo se unen ramas release/* o hotfix/*."
+              exit 1
+              ;;
+            develop)
+              # Trabajo del día a día, regreso de release/hotfix y bots de dependencias.
+              if [[ "$ORIGEN" =~ ^(feature|bugfix|release|hotfix|renovate|dependabot)/ ]]; then exit 0; fi
+              echo "::error::Nombra tu rama feature/<descripcion> o bugfix/<descripcion>."
+              exit 1
+              ;;
+            release/*)
+              # Correcciones de último momento dentro de una versión en pruebas.
+              if [[ "$ORIGEN" =~ ^bugfix/ ]]; then exit 0; fi
+              echo "::error::A una rama release/* solo se unen ramas bugfix/*."
+              exit 1
+              ;;
+            *)
+              echo "::error::Los PR deben ir hacia develop, main o una rama release/*."
+              exit 1
+              ;;
+          esac

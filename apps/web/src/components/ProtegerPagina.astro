@@ -1,0 +1,30 @@
+---
+// Oculta la página hasta confirmar que hay sesión; si no la hay, redirige a /login.
+// La protección real está en la API (responde 401); esto evita mostrar pantallas vacías.
+---
+
+<style is:global>
+  html {
+    visibility: hidden;
+  }
+</style>
+
+<script>
+  import { API_URL } from "../lib/api.js";
+
+  const mostrar = () => {
+    document.documentElement.style.visibility = "visible";
+  };
+
+  fetch(`${API_URL}/auth/me`, { credentials: "include" })
+    .then((respuesta) => {
+      if (respuesta.ok) {
+        mostrar();
+        return;
+      }
+
+      const volver = window.location.pathname + window.location.search;
+      window.location.href = `/login?volver=${encodeURIComponent(volver)}`;
+    })
+    .catch(mostrar);
+</script>

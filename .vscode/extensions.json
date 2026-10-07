@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "biomejs.biome",
+    "astro-build.astro-vscode",
+    "editorconfig.editorconfig",
+    "vivaxy.vscode-conventional-commits"
+  ],
+  "unwantedRecommendations": ["esbenp.prettier-vscode", "dbaeumer.vscode-eslint", "oxc.oxc-vscode"]
+}
