@@ -112,6 +112,7 @@ docs/                        guías del proyecto
 ### Frontend
 
 - Unificar el diseño del frontend: revisar las páginas de `apps/web` y aplicar criterios visuales comunes (estructura, navegación, colores, tipografía, espaciado y estilos de formularios, tablas y botones), reutilizando los layouts y componentes compartidos. La meta es que todas las páginas se vean ordenadas y coherentes entre sí, en lugar de parecer diseños distintos.
+
 - Aunque `apps/web/src/lib/api.js` ya centraliza la URL con `PUBLIC_API_URL` y ofrece `apiFetch`, algunos componentes todavía hacen `fetch` directamente a `http://127.0.0.1:3000`; falta migrarlos a la configuración común.
 - `apps/web` todavía no usa `@dojo/shared`.
 
