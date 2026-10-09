@@ -1,7 +1,7 @@
 import { Calendar, ConfigProvider, List, Modal } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
-import { apiFetch } from "../lib/api.js";
+import { apiFetch } from '../lib/api.js';
 import 'dayjs/locale/es';
 import locale from 'antd/locale/es_ES';
 

@@ -9,7 +9,7 @@ export class ClasesService {
     private readonly clasesRepository: ClasesRepository,
 
     private readonly postulacionesRepository: PostulacionesRepository,
-  ) { }
+  ) {}
 
   private calcularFechaFin(fechaInicio: string, duracion: string) {
     const fecha = new Date(fechaInicio + 'T00:00:00');
@@ -64,7 +64,7 @@ export class ClasesService {
     const clase = clases.find((item) => Number(item.id) === id);
 
     if (!clase) {
-      throw new NotFoundException("Clase no encontrada");
+      throw new NotFoundException('Clase no encontrada');
     }
 
     return clase;
@@ -148,7 +148,7 @@ export class ClasesService {
 
       horaFin: clase.horaFin,
 
-      estado: "pendiente",
+      estado: 'pendiente',
 
       fechaPostulacion: new Date().toISOString(),
     };

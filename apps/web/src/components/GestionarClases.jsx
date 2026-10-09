@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { apiFetch } from "../lib/api.js";
+import { apiFetch } from '../lib/api.js';
 
 export default function GestionarClases() {
   const [clases, setClases] = useState([]);

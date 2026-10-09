@@ -1,6 +1,6 @@
+import { createHash, timingSafeEqual } from 'node:crypto';
 import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { createHash, timingSafeEqual } from 'node:crypto';
 import { env } from '../config/env.js';
 
 const MAX_INTENTOS = 5;

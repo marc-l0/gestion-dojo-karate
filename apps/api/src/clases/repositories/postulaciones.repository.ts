@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { env } from "../../config/env.js";
-import { crearClienteSheets } from "../../google/sheets.client.js";
+import { env } from '../../config/env.js';
+import { crearClienteSheets } from '../../google/sheets.client.js';
 import { Postulacion } from '../interfaces/postulacion.interface.js';
 
 @Injectable()

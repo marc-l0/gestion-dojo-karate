@@ -50,16 +50,14 @@ export default function Formulario() {
 
     // Enlace público (QR): se pide la clase a la API por su id.
     if (claseId) {
-
-      fetch(API_URL + "/clases/" + encodeURIComponent(claseId))
+      fetch(API_URL + '/clases/' + encodeURIComponent(claseId))
         .then((respuesta) => {
-
           if (respuesta.status === 404) {
-            throw new Error("NO_EXISTE");
+            throw new Error('NO_EXISTE');
           }
 
           if (!respuesta.ok) {
-            throw new Error("ERROR");
+            throw new Error('ERROR');
           }
 
           return respuesta.json();
@@ -69,9 +67,9 @@ export default function Formulario() {
         })
         .catch((error) => {
           setErrorClase(
-            error.message === "NO_EXISTE"
-              ? "Esta clase ya no existe o el enlace no es válido."
-              : "No se pudo cargar la clase. Intenta de nuevo en unos minutos."
+            error.message === 'NO_EXISTE'
+              ? 'Esta clase ya no existe o el enlace no es válido.'
+              : 'No se pudo cargar la clase. Intenta de nuevo en unos minutos.',
           );
         });
 

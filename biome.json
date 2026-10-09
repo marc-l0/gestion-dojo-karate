@@ -13,6 +13,7 @@
       "!**/.astro",
       "!**/coverage",
       "!**/*.astro",
+      "!**/*.svg",
       "!**/pnpm-lock.yaml"
     ]
   },
@@ -54,6 +55,22 @@
         "rules": {
           "style": {
             "useImportType": "off"
+          }
+        }
+      }
+    },
+
+    {
+      "includes": ["apps/web/**"],
+      "linter": {
+        "rules": {
+          "a11y": {
+            "useKeyWithClickEvents": "warn",
+            "noStaticElementInteractions": "warn",
+            "noLabelWithoutControl": "warn"
+          },
+          "correctness": {
+            "useExhaustiveDependencies": "warn"
           }
         }
       }

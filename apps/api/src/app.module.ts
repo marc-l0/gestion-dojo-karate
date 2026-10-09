@@ -3,8 +3,8 @@ import { APP_GUARD } from '@nestjs/core';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { AuthModule } from './auth/auth.module.js';
-import { JwtAuthGuard } from './common/guards/jwt-auth.guard.js';
 import { ClasesModule } from './clases/clases.module.js';
+import { JwtAuthGuard } from './common/guards/jwt-auth.guard.js';
 import { ProfesoresModule } from './profesores/profesores.module.js';
 
 @Module({
