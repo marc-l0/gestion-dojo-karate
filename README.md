@@ -107,6 +107,14 @@ docs/                        guías del proyecto
 - Se corrigió la carga de postulaciones en `apps/web/src/pages/postulaciones.astro`: ahora consulta `GET /clases/postulaciones` en vez de `GET /profesores`.
 - Se movió la importación de `apiFetch` al `<script>` de la página, donde se utiliza en el navegador. La compilación de `apps/web` finalizó correctamente después del cambio.
 
+## Cambios realizados (2026-10-09)
+
+- Se corrigió el tipado de la prueba e2e de la API en `apps/api/test/app.e2e-spec.ts`, eliminando la importación no válida de `supertest/types`.
+- Se actualizaron las pruebas unitarias de `ClasesController` y `ClasesService` para registrar sus dependencias mediante mocks en los módulos de prueba.
+- Se ejecutó Biome sobre los archivos modificados mediante los hooks de Git.
+
+**Pendiente de verificación:** ejecutar `typecheck` y las pruebas de la API y del monorepo antes de publicar los cambios.
+
 ## Pendiente de mejorar
 
 ### Frontend
