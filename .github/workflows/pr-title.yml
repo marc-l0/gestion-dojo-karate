@@ -15,7 +15,7 @@ jobs:
     steps:
       # Con "squash and merge" el título del PR se convierte en el commit final,
       # así que también debe seguir el formato tipo(scope): descripción.
-      - uses: amannn/action-semantic-pull-request@v5
+      - uses: amannn/action-semantic-pull-request@v6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
