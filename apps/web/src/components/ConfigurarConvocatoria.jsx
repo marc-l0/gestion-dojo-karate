@@ -333,7 +333,6 @@ export default function ConfigurarConvocatoria() {
               url={enlace}
               nombreArchivo={'qr-clase-' + clase.id}
               tamano={128}
-              colorQr="#9333ea"
               claseBoton="mx-auto mt-3 block rounded-full border border-purple-100 bg-purple-50 px-4 py-2 text-xs font-semibold text-purple-600"
               textoBoton="↓ Descargar QR para impresión / redes"
             />

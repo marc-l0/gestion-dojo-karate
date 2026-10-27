@@ -7,7 +7,7 @@ export default function QrFormulario({
   url,
   nombreArchivo = 'qr-formulario',
   tamano = 128,
-  colorQr = '#673ab7',
+  colorQr = '#000000',
   claseContenedor = 'mt-4 flex justify-center',
   claseMarco = 'rounded-xl border border-gray-100 bg-white p-3 shadow-sm',
   claseBoton = '',

@@ -118,7 +118,6 @@ export default function FormularioGenerado() {
               url={enlace}
               nombreArchivo={'qr-clase-' + clase.id}
               tamano={160}
-              colorQr="#673ab7"
               claseContenedor="mt-7 flex justify-center"
               claseMarco="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm"
               claseBoton="mx-auto mt-4 block rounded-full border border-[#d9c5f5] bg-[#f8f3ff] px-4 py-2 text-sm font-semibold text-[#673ab7] transition hover:bg-[#f0e7ff]"
