@@ -9,6 +9,9 @@ import { PostulacionesRepository } from '../src/clases/repositories/postulacione
 describe('Postulación pública (HTTP, repositorios simulados)', () => {
   let app: INestApplication;
   const guardar = vi.fn();
+  let inicio: string;
+  let fin: string;
+  let cupos: number;
   const datos = {
     claseId: 1,
     nombre: 'Alumno Ejemplo',
@@ -18,6 +21,9 @@ describe('Postulación pública (HTTP, repositorios simulados)', () => {
     consentimiento: true,
   };
   beforeEach(async () => {
+    inicio = '2020-01-01';
+    fin = '2099-12-31';
+    cupos = 3;
     guardar.mockReset().mockImplementation(async (valor) => valor);
     const modulo = await Test.createTestingModule({ imports: [AppModule] })
       .overrideProvider(ClasesRepository)
@@ -31,9 +37,9 @@ describe('Postulación pública (HTTP, repositorios simulados)', () => {
             frecuencia: ['Lunes'],
             horaInicio: '09:00',
             horaFin: '10:00',
-            cupos: 3,
-            fechaInicio: '2020-01-01',
-            fechaFin: '2099-12-31',
+            cupos,
+            fechaInicio: inicio,
+            fechaFin: fin,
           },
         ],
       })
@@ -68,6 +74,22 @@ describe('Postulación pública (HTTP, repositorios simulados)', () => {
       }),
     );
     expect(respuesta.body).not.toHaveProperty('correo');
+  });
+  it('recibe postulaciones antes de que empiece la clase', async () => {
+    inicio = '2099-10-31';
+    await request(app.getHttpServer()).post('/clases/postulaciones').send(datos).expect(201);
+    expect(guardar).toHaveBeenCalledWith(expect.objectContaining({ estado: 'pendiente' }));
+  });
+  it('mantiene cerrada una clase finalizada', async () => {
+    fin = '2020-01-31';
+    await request(app.getHttpServer()).post('/clases/postulaciones').send(datos).expect(400);
+    expect(guardar).not.toHaveBeenCalled();
+  });
+  it('no permite preinscribirse sin cupos', async () => {
+    inicio = '2099-10-31';
+    cupos = 0;
+    await request(app.getHttpServer()).post('/clases/postulaciones').send(datos).expect(409);
+    expect(guardar).not.toHaveBeenCalled();
   });
   it.each([
     { correo: 'invalido' },

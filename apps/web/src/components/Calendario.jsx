@@ -62,19 +62,6 @@ export default function Calendario() {
   };
 
   /*
-   * Comprueba si la clase está vigente actualmente.
-   */
-  const claseEstaVigenteHoy = (clase) => {
-    if (!clase.fechaInicio || !clase.fechaFin) {
-      return true;
-    }
-
-    const hoy = dayjs();
-
-    return claseEstaVigente(clase, hoy);
-  };
-
-  /*
    * Genera las fechas de una clase solamente
    * dentro de su período de vigencia.
    */
@@ -244,35 +231,23 @@ export default function Calendario() {
       return;
     }
 
-    /*
-     * Segunda comprobación de seguridad:
-     * aunque la clase aparezca en el calendario,
-     * comprobamos nuevamente su vigencia antes
-     * de crear la convocatoria.
-     */
-    if (!claseEstaVigenteHoy(claseSeleccionada)) {
-      const hoy = dayjs();
-
-      const fechaInicio = claseSeleccionada.fechaInicio
-        ? dayjs(claseSeleccionada.fechaInicio)
-        : null;
-
-      const fechaFin = claseSeleccionada.fechaFin ? dayjs(claseSeleccionada.fechaFin) : null;
-
-      if (fechaInicio && hoy.isBefore(fechaInicio, 'day')) {
-        window.alert('Esta clase todavía no está disponible para generar una convocatoria.');
-
-        return;
-      }
-
-      if (fechaFin && hoy.isAfter(fechaFin, 'day')) {
-        window.alert('Esta clase ya finalizó y no se puede generar una convocatoria.');
-
-        return;
-      }
-
-      window.alert('Esta clase no está vigente actualmente.');
-
+    // La convocatoria abre desde la creación; fechaInicio solo marca el comienzo de las clases.
+    const hoy = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'America/Lima',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).format(new Date());
+    if (
+      !claseSeleccionada.fechaInicio ||
+      !claseSeleccionada.fechaFin ||
+      claseSeleccionada.fechaInicio > claseSeleccionada.fechaFin
+    ) {
+      window.alert('Completa las fechas de la clase antes de generar su convocatoria.');
+      return;
+    }
+    if (hoy > claseSeleccionada.fechaFin) {
+      window.alert('Esta clase ya finalizó y no se puede generar una convocatoria.');
       return;
     }
 

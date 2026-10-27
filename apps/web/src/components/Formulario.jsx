@@ -30,10 +30,13 @@ export default function Formulario() {
   let edad = Number(hoy.slice(0, 4)) - Number(fechaNacimiento.slice(0, 4));
   if (hoy.slice(5) < fechaNacimiento.slice(5)) edad -= 1;
   const esMenor = Boolean(fechaNacimiento) && edad < 18;
-  const vigente =
-    clase?.fechaInicio && clase.fechaFin && hoy >= clase.fechaInicio && hoy <= clase.fechaFin;
+  const convocatoriaAbierta =
+    clase?.fechaInicio &&
+    clase.fechaFin &&
+    clase.fechaInicio <= clase.fechaFin &&
+    hoy <= clase.fechaFin;
   const sinCupos = clase && clase.cuposDisponibles <= 0;
-  const habilitado = Boolean(vigente && !sinCupos && !cargando);
+  const habilitado = Boolean(convocatoriaAbierta && !sinCupos && !cargando);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -136,7 +139,7 @@ export default function Formulario() {
         {clase.horaInicio} – {clase.horaFin}
       </p>
       <p className="mt-2 text-sm text-purple-900">
-        Vigencia: {clase.fechaInicio} al {clase.fechaFin}
+        Fechas de la clase: {clase.fechaInicio} al {clase.fechaFin}
       </p>
       <p className="mt-2 font-medium text-purple-900">
         {clase.cuposDisponibles} vacantes disponibles
@@ -192,10 +195,16 @@ export default function Formulario() {
             </div>
           )}
           {resumenClase}
-          {clase && !vigente && (
+          {clase && !convocatoriaAbierta && (
             <p role="alert" className="rounded-xl bg-amber-50 p-4 text-amber-900">
-              Esta convocatoria no está vigente. Las postulaciones están disponibles del{' '}
-              {clase.fechaInicio} al {clase.fechaFin}.
+              {clase.fechaFin && hoy > clase.fechaFin
+                ? 'Esta clase ya finalizó y no recibe postulaciones.'
+                : 'Esta clase no tiene fechas válidas para recibir postulaciones. Contacta al dojo.'}
+            </p>
+          )}
+          {convocatoriaAbierta && hoy < clase.fechaInicio && (
+            <p className="rounded-xl bg-blue-50 p-4 text-sm text-blue-900">
+              La clase empieza el {clase.fechaInicio}. Ya puedes enviar tu postulación.
             </p>
           )}
           {sinCupos && (

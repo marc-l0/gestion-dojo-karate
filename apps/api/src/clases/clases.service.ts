@@ -148,13 +148,13 @@ export class ClasesService {
     return this.enClase(datos.claseId, async () => {
       const clase = await this.obtenerClase(datos.claseId);
       const hoy = this.hoyEnLima();
-      if (
-        !clase.fechaInicio ||
-        !clase.fechaFin ||
-        hoy < clase.fechaInicio ||
-        hoy > clase.fechaFin
-      ) {
-        throw new BadRequestException('Esta convocatoria no está vigente.');
+      if (!clase.fechaInicio || !clase.fechaFin || clase.fechaInicio > clase.fechaFin) {
+        throw new BadRequestException(
+          'Esta clase no tiene fechas válidas para recibir postulaciones.',
+        );
+      }
+      if (hoy > clase.fechaFin) {
+        throw new BadRequestException('Esta clase ya finalizó y no recibe postulaciones.');
       }
       if (clase.cuposDisponibles <= 0) {
         throw new ConflictException('Esta clase ya no tiene cupos disponibles.');

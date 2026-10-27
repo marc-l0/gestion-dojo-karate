@@ -81,14 +81,31 @@ describe('Postulaciones y cupos', () => {
     });
     expect(guardar).not.toHaveBeenCalled();
   });
-  it.each(['2026-09-30T17:00:00Z', '2026-11-01T17:00:00Z'])(
-    'rechaza fuera de la vigencia: %s',
-    async (fecha) => {
-      vi.setSystemTime(new Date(fecha));
-      await expect(service.crearPostulacion(datos)).rejects.toThrow('no está vigente');
+  it('permite postular el 27 de octubre a una clase que empieza el 31', async () => {
+    clase.fechaInicio = '2026-10-31';
+    clase.fechaFin = '2026-11-30';
+    await expect(service.crearPostulacion(datos)).resolves.toMatchObject({ estado: 'pendiente' });
+    expect(guardar).toHaveBeenCalledTimes(1);
+  });
+  it('rechaza postulaciones después de la fecha de fin', async () => {
+    vi.setSystemTime(new Date('2026-11-01T17:00:00Z'));
+    await expect(service.crearPostulacion(datos)).rejects.toThrow('ya finalizó');
+    expect(guardar).not.toHaveBeenCalled();
+  });
+  it.each([{ fechaInicio: '' }, { fechaFin: '' }, { fechaInicio: '2026-11-30' }])(
+    'rechaza fechas incompletas o invertidas: %j',
+    async (cambio) => {
+      Object.assign(clase, cambio);
+      await expect(service.crearPostulacion(datos)).rejects.toThrow('fechas válidas');
       expect(guardar).not.toHaveBeenCalled();
     },
   );
+  it('mantiene el control de cupos para clases que aún no empiezan', async () => {
+    clase.fechaInicio = '2026-10-31';
+    clase.cupos = 0;
+    await expect(service.crearPostulacion(datos)).rejects.toThrow('no tiene cupos');
+    expect(guardar).not.toHaveBeenCalled();
+  });
   it('usa el día en Perú en el límite de medianoche UTC', async () => {
     vi.setSystemTime(new Date('2026-11-01T02:00:00Z'));
     await expect(service.crearPostulacion(datos)).resolves.toMatchObject({ estado: 'pendiente' });

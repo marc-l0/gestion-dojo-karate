@@ -76,7 +76,7 @@ La ruta se escribe como `credentials/google-service-account.json` (relativa), as
 
 La API valida nombre (3–120 caracteres), correo, teléfono de 9 dígitos y fecha de nacimiento (0–100 años). Los menores de 18 deben incluir nombre, correo y teléfono del apoderado. El consentimiento es obligatorio y se registra en las columnas R y S; añade esos encabezados a una hoja existente. Las filas antiguas pueden dejar esas columnas vacías.
 
-Se permite postular desde `fechaInicio` hasta `fechaFin`, ambos días incluidos, según la fecha de Perú (`America/Lima`). No se permite postular antes del inicio ni después del fin. El correo se normaliza y no puede repetirse para la misma clase, incluso si la postulación anterior fue rechazada. Puede usarse para otra clase.
+La convocatoria permite postular desde que se crea la clase hasta `fechaFin` inclusive, según la fecha de Perú (`America/Lima`), siempre que haya cupos. `fechaInicio` marca el comienzo de las clases, no la apertura de inscripciones: una clase que empieza el 31 de octubre puede recibir postulaciones el día 27. No se permite postular después del fin ni si faltan fechas o están invertidas. El correo se normaliza y no puede repetirse para la misma clase, incluso si la postulación anterior fue rechazada. Puede usarse para otra clase.
 
 Las postulaciones pendientes no reservan vacante. Aceptar o aprobar consume cupo; rechazar o ignorar lo libera. La API comprueba nuevamente los cupos al aceptar. Las operaciones de postulación y aceptación se serializan por clase dentro de una instancia; Google Sheets no ofrece transacciones y esta protección no coordina varias instancias de la API.
 
