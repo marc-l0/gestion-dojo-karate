@@ -45,7 +45,7 @@ export default function CrearClase() {
   useEffect(() => {
     const cargarProfesores = async () => {
       try {
-        const respuesta = await fetch('http://127.0.0.1:3000/profesores');
+        const respuesta = await apiFetch('/profesores');
 
         if (!respuesta.ok) {
           throw new Error('No se pudieron cargar los profesores');
@@ -100,7 +100,7 @@ export default function CrearClase() {
     };
 
     try {
-      const respuesta = await fetch('http://127.0.0.1:3000/clases', {
+      const respuesta = await apiFetch('/clases', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

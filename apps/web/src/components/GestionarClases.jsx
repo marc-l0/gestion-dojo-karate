@@ -248,7 +248,7 @@ export default function GestionarClases() {
     try {
       const frecuenciaOrdenada = ordenarDias(frecuencia);
 
-      const respuesta = await fetch('http://127.0.0.1:3000/clases/' + editandoId, {
+      const respuesta = await apiFetch('/clases/' + editandoId, {
         method: 'POST',
 
         headers: {
@@ -306,7 +306,7 @@ export default function GestionarClases() {
     }
 
     try {
-      const respuesta = await fetch('http://127.0.0.1:3000/clases/' + id, {
+      const respuesta = await apiFetch('/clases/' + id, {
         method: 'DELETE',
       });
 

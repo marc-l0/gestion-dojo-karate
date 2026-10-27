@@ -34,7 +34,7 @@ export default function GestionarProfesores() {
     }
 
     try {
-      const respuesta = await fetch('http://127.0.0.1:3000/profesores', {
+      const respuesta = await apiFetch('/profesores', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ export default function GestionarProfesores() {
 
   const cambiarEstado = async (id, estado) => {
     try {
-      const respuesta = await fetch('http://127.0.0.1:3000/profesores/estado', {
+      const respuesta = await apiFetch('/profesores/estado', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

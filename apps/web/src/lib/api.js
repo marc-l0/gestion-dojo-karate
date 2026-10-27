@@ -1,5 +1,5 @@
 // URL base de la API. Se define con PUBLIC_API_URL en apps/web/.env (ver .env.example).
-// Abre la web como http://localhost:4321 (no 127.0.0.1) para que la cookie de sesión funcione.
+// Usa el mismo hostname para web y API (localhost o la IP de la PC en la red local).
 export const API_URL = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:3000';
 
 /**
