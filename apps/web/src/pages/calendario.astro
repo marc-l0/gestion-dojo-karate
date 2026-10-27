@@ -1,20 +1,7 @@
 ---
-import Sesion from "../components/Sesion.astro";
-import Calendario from "../components/Calendario";
-import "../styles/global.css";
-import ProtegerPagina from "../components/ProtegerPagina.astro";
+import AdminLayout from "../layouts/AdminLayout.astro";
+import Calendario from "../components/Calendario.jsx";
 ---
-
-<html lang="es">
-  <head>
-    <ProtegerPagina />
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Calendario</title>
-  </head>
-
-  <body class="bg-gray-100">
-    <Sesion />
-    <Calendario client:load />
-  </body>
-</html>
+<AdminLayout title="Calendario" active="calendario" backHref="/">
+  <Calendario client:load />
+</AdminLayout>

@@ -1,0 +1,37 @@
+---
+import NavegacionInferior from '../components/NavegacionInferior.astro';
+import ProtegerPagina from '../components/ProtegerPagina.astro';
+import Sesion from '../components/Sesion.astro';
+import '../styles/global.css';
+interface Props { title: string; active: string; backHref?: string; backLabel?: string; }
+const { title, active, backHref, backLabel = 'Volver al inicio' } = Astro.props;
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>{title} | Dojo Karate</title>
+    <ProtegerPagina />
+  </head>
+  <body class="admin-body">
+    <a class="app-skip-link" href="#contenido">Ir al contenido</a>
+    <div class="admin-shell">
+      <header class="app-header">
+        <div class="app-header__row">
+          {backHref && <a href={backHref} class="app-back" aria-label={backLabel} title={backLabel}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14 6-6 6 6 6" /></svg>
+          </a>}
+          <div class="app-header__title">
+            <p>DOJO KARATE</p>
+            <h1>{title}</h1>
+          </div>
+          <Sesion />
+        </div>
+      </header>
+      <div id="contenido" class="admin-content" tabindex="-1"><slot /></div>
+      <NavegacionInferior active={active} />
+    </div>
+  </body>
+</html>

@@ -1,20 +1,7 @@
 ---
-import Sesion from "../components/Sesion.astro";
-import GestionarClases from "../components/GestionarClases";
-import "../styles/global.css";
-import ProtegerPagina from "../components/ProtegerPagina.astro";
+import AdminLayout from "../layouts/AdminLayout.astro";
+import GestionarClases from "../components/GestionarClases.jsx";
 ---
-
-<html lang="es">
-  <head>
-    <ProtegerPagina />
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Clases</title>
-  </head>
-
-  <body class="bg-gray-100">
-    <Sesion />
-    <GestionarClases client:load />
-  </body>
-</html>
+<AdminLayout title="Clases" active="clases" backHref="/">
+  <GestionarClases client:load />
+</AdminLayout>

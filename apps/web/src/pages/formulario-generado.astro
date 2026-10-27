@@ -1,18 +1,7 @@
 ---
+import AdminLayout from "../layouts/AdminLayout.astro";
 import FormularioGenerado from "../components/FormularioGenerado.jsx";
-import ProtegerPagina from "../components/ProtegerPagina.astro";
-import Sesion from "../components/Sesion.astro";
-import "../styles/global.css";
 ---
-<html lang="es">
-  <head>
-    <ProtegerPagina />
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Compartir convocatoria | Dojo Karate</title>
-  </head>
-  <body class="bg-gray-100">
-    <Sesion />
-    <FormularioGenerado client:load />
-  </body>
-</html>
+<AdminLayout title="Compartir convocatoria" active="calendario" backHref="/configurar-convocatoria" backLabel="Volver a configurar convocatoria">
+  <FormularioGenerado client:load />
+</AdminLayout>

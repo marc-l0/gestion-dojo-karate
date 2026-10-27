@@ -1,20 +1,7 @@
 ---
-import Sesion from "../components/Sesion.astro";
-import ConfigurarConvocatoria from "../components/ConfigurarConvocatoria";
-import "../styles/global.css";
-import ProtegerPagina from "../components/ProtegerPagina.astro";
+import AdminLayout from "../layouts/AdminLayout.astro";
+import ConfigurarConvocatoria from "../components/ConfigurarConvocatoria.jsx";
 ---
-
-<html lang="es">
-  <head>
-    <ProtegerPagina />
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Configurar convocatoria</title>
-  </head>
-
-  <body class="bg-gray-100">
-    <Sesion />
-    <ConfigurarConvocatoria client:load />
-  </body>
-</html>
+<AdminLayout title="Configurar convocatoria" active="calendario" backHref="/calendario" backLabel="Volver al calendario">
+  <ConfigurarConvocatoria client:load />
+</AdminLayout>

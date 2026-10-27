@@ -88,45 +88,27 @@ export default function GestionarProfesores() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f7f9fb] text-gray-800">
-      <header className="flex h-14 items-center justify-between border-b border-gray-200 bg-white px-4">
-        <div>
-          <p className="text-[9px] font-semibold text-gray-400">ADMINISTRACIÓN</p>
-
-          <h1 className="text-sm font-bold text-gray-900">Profesores</h1>
-        </div>
-
-        <button
-          type="button"
-          onClick={() => {
-            window.location.href = '/';
-          }}
-          className="rounded-full border border-gray-200 px-3 py-1.5 text-[8px] font-semibold text-gray-500"
-        >
-          Volver
-        </button>
-      </header>
-
+    <div className="min-h-0 bg-[#f7f9fb] text-gray-800">
       <main className="space-y-4 px-4 pb-10 pt-4">
         {/* AGREGAR PROFESOR */}
 
         <section className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
-          <h2 className="text-[11px] font-bold text-gray-900">Agregar profesor</h2>
+          <h2 className="text-sm font-bold text-gray-900">Agregar profesor</h2>
 
-          <p className="mt-1 text-[8px] text-gray-400">Registra un nuevo profesor en el sistema.</p>
+          <p className="mt-1 text-xs text-gray-400">Registra un nuevo profesor en el sistema.</p>
 
           <input
             type="text"
             value={nombre}
             onChange={(e) => setNombre(e.target.value)}
             placeholder="Nombre del profesor"
-            className="mt-4 h-9 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 text-[9px] text-gray-700 outline-none focus:border-blue-500"
+            className="mt-4 h-9 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 text-sm text-gray-700 outline-none focus:border-blue-500"
           />
 
           <button
             type="button"
             onClick={agregarProfesor}
-            className="mt-2 h-9 w-full rounded-xl bg-blue-500 text-[9px] font-semibold text-white hover:bg-blue-600"
+            className="mt-2 h-9 w-full rounded-xl bg-blue-500 text-sm font-semibold text-white hover:bg-blue-600"
           >
             Agregar profesor
           </button>
@@ -135,15 +117,15 @@ export default function GestionarProfesores() {
         {/* LISTA DE PROFESORES */}
 
         <section className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
-          <h2 className="text-[11px] font-bold text-gray-900">Profesores registrados</h2>
+          <h2 className="text-sm font-bold text-gray-900">Profesores registrados</h2>
 
-          <p className="mt-1 text-[8px] text-gray-400">
+          <p className="mt-1 text-xs text-gray-400">
             Los profesores inactivos no aparecerán al crear nuevas clases.
           </p>
 
           <div className="mt-4 space-y-2">
             {profesores.length === 0 ? (
-              <p className="text-[9px] text-gray-400">No hay profesores registrados.</p>
+              <p className="text-sm text-gray-400">No hay profesores registrados.</p>
             ) : (
               profesores.map((profesor) => {
                 const activo = profesor.estado === 'activo';
@@ -154,11 +136,11 @@ export default function GestionarProfesores() {
                     className="flex items-center justify-between rounded-xl bg-gray-50 px-3 py-3"
                   >
                     <div>
-                      <p className="text-[9px] font-semibold text-gray-800">{profesor.nombre}</p>
+                      <p className="text-sm font-semibold text-gray-800">{profesor.nombre}</p>
 
                       <p
                         className={
-                          'mt-0.5 text-[7px] ' + (activo ? 'text-green-500' : 'text-gray-400')
+                          'mt-0.5 text-xs ' + (activo ? 'text-green-500' : 'text-gray-400')
                         }
                       >
                         {activo ? 'Activo' : 'Inactivo'}
@@ -175,7 +157,7 @@ export default function GestionarProfesores() {
                             cambiarEstado(profesor.id, 'inactivo');
                           }
                         }}
-                        className="rounded-full border border-red-200 px-3 py-1.5 text-[7px] font-semibold text-red-500"
+                        className="rounded-full border border-red-200 px-3 py-1.5 text-xs font-semibold text-red-500"
                       >
                         Desactivar
                       </button>
@@ -183,7 +165,7 @@ export default function GestionarProfesores() {
                       <button
                         type="button"
                         onClick={() => cambiarEstado(profesor.id, 'activo')}
-                        className="rounded-full border border-green-200 px-3 py-1.5 text-[7px] font-semibold text-green-500"
+                        className="rounded-full border border-green-200 px-3 py-1.5 text-xs font-semibold text-green-500"
                       >
                         Activar
                       </button>

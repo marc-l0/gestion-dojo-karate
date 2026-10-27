@@ -1,7 +1,6 @@
-<div class="mx-auto flex w-full max-w-xl flex-wrap items-center justify-between gap-2 px-4 py-3 text-sm text-gray-600">
-  <span>Administración · Dojo Karate</span>
-  <button id="cerrar-sesion" type="button" class="min-h-11 rounded-xl border border-purple-200 bg-white px-4 font-semibold text-purple-800">Cerrar sesión</button>
-  <p id="error-sesion" role="alert" class="hidden w-full text-red-700"></p>
+<div class="app-session">
+  <button id="cerrar-sesion" type="button" class="app-session__button">Cerrar sesión</button>
+  <p id="error-sesion" role="alert" class="hidden app-session__error"></p>
 </div>
 <script>
   import { cerrarSesion } from '../lib/api.js';

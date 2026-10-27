@@ -329,48 +329,30 @@ export default function GestionarClases() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f7f9fb] text-gray-800">
-      <header className="flex h-14 items-center justify-between border-b border-gray-200 bg-white px-4">
-        <div>
-          <p className="text-[9px] font-semibold text-gray-400">ADMINISTRACIÓN</p>
-
-          <h1 className="text-sm font-bold text-gray-900">Clases</h1>
-        </div>
-
-        <button
-          type="button"
-          onClick={() => {
-            window.location.href = '/';
-          }}
-          className="rounded-full border border-gray-200 px-3 py-1.5 text-[8px] font-semibold text-gray-500"
-        >
-          Volver
-        </button>
-      </header>
-
+    <div className="min-h-0 bg-[#f7f9fb] text-gray-800">
       <main className="space-y-4 px-4 pb-10 pt-4">
         {editandoId !== null && (
           <section className="relative z-10 rounded-2xl border-2 border-blue-100 bg-white p-4 shadow-sm">
             <div className="mb-4">
-              <p className="text-[9px] font-semibold text-blue-500">EDITANDO CLASE</p>
+              <p className="text-sm font-semibold text-blue-500">EDITANDO CLASE</p>
 
               <h2 className="mt-1 text-[13px] font-bold text-gray-900">
                 Modificar datos de la clase
               </h2>
 
-              <p className="mt-1 text-[8px] text-gray-400">
+              <p className="mt-1 text-xs text-gray-400">
                 Los cambios solo se guardarán al pulsar Aceptar.
               </p>
             </div>
 
             <div className="space-y-3">
               <div>
-                <label className="text-[8px] font-semibold text-gray-500">NIVEL</label>
+                <label className="text-xs font-semibold text-gray-500">NIVEL</label>
 
                 <select
                   value={nivel}
                   onChange={(e) => setNivel(e.target.value)}
-                  className="mt-1 h-9 w-full rounded-xl border border-gray-200 bg-white px-3 text-[9px] text-gray-700"
+                  className="mt-1 h-9 w-full rounded-xl border border-gray-200 bg-white px-3 text-sm text-gray-700"
                 >
                   <option value="">Seleccionar nivel</option>
 
@@ -383,12 +365,12 @@ export default function GestionarClases() {
               </div>
 
               <div>
-                <label className="text-[8px] font-semibold text-gray-500">SEDE</label>
+                <label className="text-xs font-semibold text-gray-500">SEDE</label>
 
                 <select
                   value={sede}
                   onChange={(e) => setSede(e.target.value)}
-                  className="mt-1 h-9 w-full rounded-xl border border-gray-200 bg-white px-3 text-[9px] text-gray-700"
+                  className="mt-1 h-9 w-full rounded-xl border border-gray-200 bg-white px-3 text-sm text-gray-700"
                 >
                   <option value="">Seleccionar sede</option>
 
@@ -401,30 +383,28 @@ export default function GestionarClases() {
               </div>
 
               <div>
-                <label className="text-[8px] font-semibold text-gray-500">
-                  VIGENCIA DE LA CLASE
-                </label>
+                <label className="text-xs font-semibold text-gray-500">VIGENCIA DE LA CLASE</label>
 
-                <div className="mt-2 grid grid-cols-2 gap-3">
+                <div className="mt-2 grid grid-cols-1 gap-3 min-[400px]:grid-cols-2">
                   <div>
-                    <p className="mb-1 text-[7px] text-gray-400">FECHA DE INICIO</p>
+                    <p className="mb-1 text-xs text-gray-400">FECHA DE INICIO</p>
 
                     <input
                       type="date"
                       value={fechaInicio}
                       onChange={(e) => setFechaInicio(e.target.value)}
                       min={obtenerFechaHoy()}
-                      className="h-9 w-full rounded-xl border border-gray-200 bg-white px-3 text-[9px] text-gray-700"
+                      className="h-9 w-full rounded-xl border border-gray-200 bg-white px-3 text-sm text-gray-700"
                     />
                   </div>
 
                   <div>
-                    <p className="mb-1 text-[7px] text-gray-400">DURACIÓN</p>
+                    <p className="mb-1 text-xs text-gray-400">DURACIÓN</p>
 
                     <select
                       value={duracion}
                       onChange={(e) => setDuracion(e.target.value)}
-                      className="h-9 w-full rounded-xl border border-gray-200 bg-white px-3 text-[9px] text-gray-700"
+                      className="h-9 w-full rounded-xl border border-gray-200 bg-white px-3 text-sm text-gray-700"
                     >
                       <option value="">Seleccionar</option>
 
@@ -440,18 +420,18 @@ export default function GestionarClases() {
                 </div>
 
                 <div className="mt-2 rounded-xl bg-gray-50 px-3 py-2">
-                  <p className="text-[7px] font-medium text-gray-400">FECHA DE FINALIZACIÓN</p>
+                  <p className="text-xs font-medium text-gray-400">FECHA DE FINALIZACIÓN</p>
 
-                  <p className="mt-1 text-[9px] font-semibold text-gray-700">
+                  <p className="mt-1 text-sm font-semibold text-gray-700">
                     {fechaFin ? formatearFecha(fechaFin) : 'Se calculará automáticamente'}
                   </p>
                 </div>
               </div>
 
               <div>
-                <label className="text-[8px] font-semibold text-gray-500">FRECUENCIA</label>
+                <label className="text-xs font-semibold text-gray-500">FRECUENCIA</label>
 
-                <div className="mt-2 grid grid-cols-2 gap-2">
+                <div className="mt-2 grid grid-cols-1 gap-3 min-[400px]:grid-cols-2">
                   {diasSemana.map((dia) => (
                     <label
                       key={dia}
@@ -463,43 +443,43 @@ export default function GestionarClases() {
                         onChange={() => cambiarDia(dia)}
                       />
 
-                      <span className="text-[8px] font-medium text-gray-600">{dia}</span>
+                      <span className="text-xs font-medium text-gray-600">{dia}</span>
                     </label>
                   ))}
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-3 min-[400px]:grid-cols-2">
                 <div>
-                  <label className="text-[8px] font-semibold text-gray-500">HORA INICIO</label>
+                  <label className="text-xs font-semibold text-gray-500">HORA INICIO</label>
 
                   <input
                     type="time"
                     value={horaInicio}
                     onChange={(e) => setHoraInicio(e.target.value)}
-                    className="mt-1 h-9 w-full rounded-xl border border-gray-200 px-3 text-[9px]"
+                    className="mt-1 h-9 w-full rounded-xl border border-gray-200 px-3 text-sm"
                   />
                 </div>
 
                 <div>
-                  <label className="text-[8px] font-semibold text-gray-500">HORA FIN</label>
+                  <label className="text-xs font-semibold text-gray-500">HORA FIN</label>
 
                   <input
                     type="time"
                     value={horaFin}
                     onChange={(e) => setHoraFin(e.target.value)}
-                    className="mt-1 h-9 w-full rounded-xl border border-gray-200 px-3 text-[9px]"
+                    className="mt-1 h-9 w-full rounded-xl border border-gray-200 px-3 text-sm"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="text-[8px] font-semibold text-gray-500">PROFESOR</label>
+                <label className="text-xs font-semibold text-gray-500">PROFESOR</label>
 
                 <select
                   value={profesor}
                   onChange={(e) => setProfesor(e.target.value)}
-                  className="mt-1 h-9 w-full rounded-xl border border-gray-200 bg-white px-3 text-[9px] text-gray-700"
+                  className="mt-1 h-9 w-full rounded-xl border border-gray-200 bg-white px-3 text-sm text-gray-700"
                 >
                   <option value="">Seleccionar profesor</option>
 
@@ -511,14 +491,14 @@ export default function GestionarClases() {
                 </select>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-3 min-[400px]:grid-cols-2">
                 <div>
-                  <label className="text-[8px] font-semibold text-gray-500">TARIFA</label>
+                  <label className="text-xs font-semibold text-gray-500">TARIFA</label>
 
                   <select
                     value={tarifa}
                     onChange={(e) => setTarifa(e.target.value)}
-                    className="mt-1 h-9 w-full rounded-xl border border-gray-200 bg-white px-3 text-[9px] text-gray-700"
+                    className="mt-1 h-9 w-full rounded-xl border border-gray-200 bg-white px-3 text-sm text-gray-700"
                   >
                     <option value="">Seleccionar tarifa</option>
 
@@ -531,28 +511,28 @@ export default function GestionarClases() {
                 </div>
 
                 <div>
-                  <label className="text-[8px] font-semibold text-gray-500">CUPOS</label>
+                  <label className="text-xs font-semibold text-gray-500">CUPOS</label>
 
                   <input
                     type="number"
                     min="1"
                     value={cupos}
                     onChange={(e) => setCupos(e.target.value)}
-                    className="mt-1 h-9 w-full rounded-xl border border-gray-200 px-3 text-[9px]"
+                    className="mt-1 h-9 w-full rounded-xl border border-gray-200 px-3 text-sm"
                   />
                 </div>
               </div>
 
               <div className="relative z-20 mt-5 border-t border-gray-100 pt-4">
-                <p className="mb-3 text-center text-[8px] font-medium text-gray-400">
+                <p className="mb-3 text-center text-xs font-medium text-gray-400">
                   CONFIRMAR CAMBIOS
                 </p>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 gap-3 min-[400px]:grid-cols-2">
                   <button
                     type="button"
                     onClick={aceptarEdicion}
-                    className="h-9 rounded-xl border border-blue-200 bg-white text-[9px] font-semibold text-blue-500 hover:bg-blue-50"
+                    className="h-9 rounded-xl border border-blue-200 bg-white text-sm font-semibold text-blue-500 hover:bg-blue-50"
                   >
                     Aceptar
                   </button>
@@ -560,7 +540,7 @@ export default function GestionarClases() {
                   <button
                     type="button"
                     onClick={cancelarEdicion}
-                    className="h-9 rounded-xl border border-red-200 bg-white text-[9px] font-semibold text-red-500 hover:bg-red-50"
+                    className="h-9 rounded-xl border border-red-200 bg-white text-sm font-semibold text-red-500 hover:bg-red-50"
                   >
                     Cancelar
                   </button>
@@ -573,14 +553,14 @@ export default function GestionarClases() {
         <section className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-[11px] font-bold text-gray-900">Clases registradas</h2>
+              <h2 className="text-sm font-bold text-gray-900">Clases registradas</h2>
 
-              <p className="mt-1 text-[8px] text-gray-400">
+              <p className="mt-1 text-xs text-gray-400">
                 Clases creadas actualmente en el sistema.
               </p>
             </div>
 
-            <span className="rounded-full bg-blue-50 px-2.5 py-1 text-[8px] font-semibold text-blue-500">
+            <span className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-500">
               {clases.length} clases
             </span>
           </div>
@@ -588,11 +568,9 @@ export default function GestionarClases() {
 
         {clases.length === 0 ? (
           <section className="rounded-2xl border border-gray-200 bg-white p-6 text-center shadow-sm">
-            <p className="text-[10px] font-semibold text-gray-500">No hay clases registradas.</p>
+            <p className="text-sm font-semibold text-gray-500">No hay clases registradas.</p>
 
-            <p className="mt-1 text-[8px] text-gray-400">
-              Crea una clase desde la página principal.
-            </p>
+            <p className="mt-1 text-xs text-gray-400">Crea una clase desde la página principal.</p>
           </section>
         ) : (
           <div className="space-y-3">
@@ -606,43 +584,37 @@ export default function GestionarClases() {
                 >
                   <div className="flex items-start justify-between">
                     <div>
-                      <p className="text-[9px] font-semibold text-gray-400">{clase.sede}</p>
+                      <p className="text-sm font-semibold text-gray-400">{clase.sede}</p>
 
-                      <h2 className="mt-1 text-[12px] font-bold text-gray-900">
+                      <h2 className="mt-1 text-base font-bold text-gray-900">
                         Karate · {clase.nivel}
                       </h2>
                     </div>
 
                     <span
-                      className={
-                        'rounded-full px-2.5 py-1 text-[8px] font-semibold ' + estado.estilo
-                      }
+                      className={'rounded-full px-2.5 py-1 text-xs font-semibold ' + estado.estilo}
                     >
                       {estado.texto}
                     </span>
                   </div>
 
-                  <div className="mt-4 grid grid-cols-2 gap-3">
+                  <div className="mt-4 grid grid-cols-1 gap-3 min-[400px]:grid-cols-2">
                     <div>
-                      <p className="text-[7px] font-medium text-gray-400">PROFESOR</p>
+                      <p className="text-xs font-medium text-gray-400">PROFESOR</p>
 
-                      <p className="mt-1 text-[9px] font-semibold text-gray-700">
-                        {clase.profesor}
-                      </p>
+                      <p className="mt-1 text-sm font-semibold text-gray-700">{clase.profesor}</p>
                     </div>
 
                     <div>
-                      <p className="text-[7px] font-medium text-gray-400">TARIFA</p>
+                      <p className="text-xs font-medium text-gray-400">TARIFA</p>
 
-                      <p className="mt-1 text-[9px] font-semibold text-gray-700">
-                        S/ {clase.tarifa}
-                      </p>
+                      <p className="mt-1 text-sm font-semibold text-gray-700">S/ {clase.tarifa}</p>
                     </div>
 
                     <div>
-                      <p className="text-[7px] font-medium text-gray-400">DÍAS</p>
+                      <p className="text-xs font-medium text-gray-400">DÍAS</p>
 
-                      <p className="mt-1 text-[9px] font-semibold text-gray-700">
+                      <p className="mt-1 text-sm font-semibold text-gray-700">
                         {Array.isArray(clase.frecuencia)
                           ? ordenarDias(clase.frecuencia).join(', ')
                           : clase.frecuencia}
@@ -650,9 +622,9 @@ export default function GestionarClases() {
                     </div>
 
                     <div>
-                      <p className="text-[7px] font-medium text-gray-400">HORARIO</p>
+                      <p className="text-xs font-medium text-gray-400">HORARIO</p>
 
-                      <p className="mt-1 text-[9px] font-semibold text-gray-700">
+                      <p className="mt-1 text-sm font-semibold text-gray-700">
                         {clase.horaInicio} - {clase.horaFin}
                       </p>
                     </div>
@@ -661,40 +633,40 @@ export default function GestionarClases() {
                   <div className="mt-4 rounded-xl bg-gray-50 px-3 py-3">
                     <div className="flex items-center justify-between">
                       <div>
-                        <p className="text-[7px] font-medium text-gray-400">CUPOS DISPONIBLES</p>
+                        <p className="text-xs font-medium text-gray-400">CUPOS DISPONIBLES</p>
 
-                        <p className="mt-1 text-[10px] font-bold text-gray-800">
+                        <p className="mt-1 text-sm font-bold text-gray-800">
                           {clase.cuposDisponibles} de {clase.cupos}
                         </p>
                       </div>
 
-                      <span className="text-[8px] text-gray-400">disponibles</span>
+                      <span className="text-xs text-gray-400">disponibles</span>
                     </div>
                   </div>
 
                   <div className="mt-3 rounded-xl border border-gray-100 bg-white px-3 py-3">
-                    <p className="text-[7px] font-medium text-gray-400">VIGENCIA</p>
+                    <p className="text-xs font-medium text-gray-400">VIGENCIA</p>
 
                     {clase.fechaInicio && clase.fechaFin ? (
                       <div className="mt-1">
-                        <p className="text-[9px] font-semibold text-gray-700">
+                        <p className="text-sm font-semibold text-gray-700">
                           {formatearFecha(clase.fechaInicio)} - {formatearFecha(clase.fechaFin)}
                         </p>
 
-                        <p className="mt-1 text-[7px] text-gray-400">Duración: {clase.duracion}</p>
+                        <p className="mt-1 text-xs text-gray-400">Duración: {clase.duracion}</p>
                       </div>
                     ) : (
-                      <p className="mt-1 text-[8px] text-gray-400">
+                      <p className="mt-1 text-xs text-gray-400">
                         Esta clase pertenece a una versión anterior y no tiene vigencia registrada.
                       </p>
                     )}
                   </div>
 
-                  <div className="mt-3 grid grid-cols-2 gap-2">
+                  <div className="mt-3 grid grid-cols-1 gap-3 min-[400px]:grid-cols-2">
                     <button
                       type="button"
                       onClick={() => iniciarEdicion(clase)}
-                      className="h-9 rounded-xl border border-blue-200 bg-white text-[9px] font-semibold text-blue-500 hover:bg-blue-50"
+                      className="h-9 rounded-xl border border-blue-200 bg-white text-sm font-semibold text-blue-500 hover:bg-blue-50"
                     >
                       Editar clase
                     </button>
@@ -702,7 +674,7 @@ export default function GestionarClases() {
                     <button
                       type="button"
                       onClick={() => eliminarClase(clase.id)}
-                      className="h-9 rounded-xl border border-red-200 bg-white text-[9px] font-semibold text-red-500 hover:bg-red-50"
+                      className="h-9 rounded-xl border border-red-200 bg-white text-sm font-semibold text-red-500 hover:bg-red-50"
                     >
                       Eliminar clase
                     </button>

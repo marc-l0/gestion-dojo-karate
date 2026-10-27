@@ -1,0 +1,25 @@
+---
+interface Props { active: string; }
+const { active } = Astro.props;
+const enlaces = [
+  { id: 'inicio', href: '/', label: 'Inicio', paths: ['M3 10.5 12 3l9 7.5', 'M5 9v12h5v-7h4v7h5V9'] },
+  { id: 'postulaciones', href: '/postulaciones', label: 'Postulaciones', paths: ['M8 4H5v17h14V4h-3', 'M9 3h6v4H9z', 'm8 13 2 2 5-5', 'M8 18h8'] },
+  { id: 'clases', href: '/clases', label: 'Clases', paths: ['M3 4h7v7H3zM14 4h7v7h-7zM3 15h7v6H3zM14 15h7v6h-7z'] },
+  { id: 'calendario', href: '/calendario', label: 'Calendario', paths: ['M4 5h16v16H4z', 'M8 3v4M16 3v4M4 10h16', 'm9 16 2 2 4-4'] },
+  { id: 'profesores', href: '/profesores', label: 'Profesores', paths: ['M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2', 'M9 3a4 4 0 1 0 0 8 4 4 0 0 0 0-8', 'M17 4a4 4 0 0 1 0 8M22 21v-2a4 4 0 0 0-3-3.87'] },
+];
+---
+<nav class="app-bottom-nav" aria-label="Navegación principal">
+  <div class="app-bottom-nav__items">
+    {enlaces.map((enlace) => (
+      <a href={enlace.href} class="app-bottom-nav__link" aria-current={active === enlace.id ? 'page' : undefined}>
+        <span class="app-bottom-nav__icon">
+          <svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            {enlace.paths.map((d) => <path d={d} />)}
+          </svg>
+        </span>
+        <span class="app-bottom-nav__label">{enlace.label}</span>
+      </a>
+    ))}
+  </div>
+</nav>

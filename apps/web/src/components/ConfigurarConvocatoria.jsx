@@ -42,7 +42,7 @@ export default function ConfigurarConvocatoria() {
 
   if (!clase) {
     return (
-      <div className="min-h-screen bg-[#f7f9fb] p-10 text-gray-800">
+      <div className="min-h-0 bg-[#f7f9fb] p-10 text-gray-800">
         <div className="text-center">
           <p className="text-sm font-semibold text-gray-700">No hay una clase seleccionada</p>
 
@@ -122,26 +122,12 @@ export default function ConfigurarConvocatoria() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f7f9fb] pb-8 text-gray-800">
+    <div className="min-h-0 bg-[#f7f9fb] pb-8 text-gray-800">
       {/* ENCABEZADO */}
-
-      <header className="flex h-16 items-center gap-3 border-b border-gray-100 bg-white px-4">
-        <button
-          type="button"
-          onClick={() => {
-            window.location.href = '/calendario';
-          }}
-          className="flex h-9 w-9 items-center justify-center rounded-full text-gray-500 transition hover:bg-gray-100"
-        >
-          ←
-        </button>
-
-        <h1 className="text-base font-bold text-gray-900">Configurar convocatoria</h1>
-      </header>
 
       {/* CONTENIDO */}
 
-      <main className="mx-auto max-w-md space-y-6 px-4 pt-5">
+      <main className="mx-auto max-w-full space-y-6 px-4 pt-5">
         {/* PASO 1 */}
 
         <section>
@@ -158,7 +144,7 @@ export default function ConfigurarConvocatoria() {
           {/* NIVEL */}
 
           <div className="mb-3">
-            <p className="mb-1 text-[10px] font-semibold uppercase tracking-wide text-gray-400">
+            <p className="mb-1 text-sm font-semibold uppercase tracking-wide text-gray-400">
               NIVEL DE CLASE
             </p>
 
@@ -173,15 +159,15 @@ export default function ConfigurarConvocatoria() {
             <div className="mb-3 flex items-center gap-2">
               <span className="h-1.5 w-1.5 rounded-full bg-green-500"></span>
 
-              <p className="text-[9px] font-bold uppercase tracking-wide text-green-600">
+              <p className="text-sm font-bold uppercase tracking-wide text-green-600">
                 Datos cargados automáticamente
               </p>
             </div>
 
-            <div className="space-y-3 text-[10px]">
+            <div className="space-y-3 text-sm">
               <div className="flex items-center justify-between border-b border-gray-100 pb-3">
                 <span className="flex items-center gap-2 text-gray-500">
-                  <span className="text-[11px]">📍</span>
+                  <span className="text-sm">📍</span>
                   <span>Sede</span>
                 </span>
 
@@ -190,7 +176,7 @@ export default function ConfigurarConvocatoria() {
 
               <div className="flex items-center justify-between border-b border-gray-100 pb-3">
                 <span className="flex items-center gap-2 text-gray-500">
-                  <span className="text-[11px]">📅</span>
+                  <span className="text-sm">📅</span>
                   <span>Días</span>
                 </span>
 
@@ -201,7 +187,7 @@ export default function ConfigurarConvocatoria() {
 
               <div className="flex items-center justify-between border-b border-gray-100 pb-3">
                 <span className="flex items-center gap-2 text-gray-500">
-                  <span className="text-[11px]">◷</span>
+                  <span className="text-sm">◷</span>
                   <span>Horario</span>
                 </span>
 
@@ -212,7 +198,7 @@ export default function ConfigurarConvocatoria() {
 
               <div className="flex items-center justify-between">
                 <span className="flex items-center gap-2 text-gray-500">
-                  <span className="text-[11px]">♙</span>
+                  <span className="text-sm">♙</span>
                   <span>Instructor</span>
                 </span>
 
@@ -227,11 +213,11 @@ export default function ConfigurarConvocatoria() {
             <div className="mt-5 rounded-xl border border-green-100 bg-green-50 p-4">
               <p className="text-xs font-bold text-green-700">Contacto del docente</p>
 
-              <p className="mt-1 text-[9px] text-green-600">
+              <p className="mt-1 text-sm text-green-600">
                 📱 WhatsApp: {clase.telefonoProfesor || 'No registrado'}
               </p>
 
-              <p className="text-[9px] text-green-600">
+              <p className="text-sm text-green-600">
                 ✉ Correo: {clase.correoProfesor || 'No registrado'}
               </p>
             </div>
@@ -260,7 +246,7 @@ export default function ConfigurarConvocatoria() {
                 className="mt-0.5 h-4 w-4 cursor-pointer accent-purple-600"
               />
 
-              <span className="text-[10px] leading-5 text-gray-600">
+              <span className="text-sm leading-5 text-gray-600">
                 Enviar notificación automática por WhatsApp al docente y postulante
               </span>
             </label>
@@ -275,7 +261,7 @@ export default function ConfigurarConvocatoria() {
                 className="mt-0.5 h-4 w-4 cursor-pointer accent-purple-600"
               />
 
-              <span className="text-[10px] leading-5 text-gray-600">
+              <span className="text-sm leading-5 text-gray-600">
                 Enviar confirmación oficial por correo electrónico
               </span>
             </label>
@@ -304,7 +290,7 @@ export default function ConfigurarConvocatoria() {
         >
           <div
             className={
-              'max-h-[90dvh] w-full max-w-md overflow-y-auto rounded-t-3xl bg-white px-5 pb-6 pt-3 shadow-2xl ' +
+              'app-bottom-sheet max-h-[90dvh] w-full overflow-y-auto rounded-t-3xl bg-white px-5 pb-6 pt-3 shadow-2xl ' +
               (cerrandoGenerado
                 ? 'animate-[slideDown_250ms_ease-in_forwards]'
                 : 'animate-[slideUp_250ms_ease-out]')
@@ -336,7 +322,7 @@ export default function ConfigurarConvocatoria() {
                 ¡Formulario generado exitosamente!
               </h2>
 
-              <p className="mt-1 text-[9px] text-gray-500">
+              <p className="mt-1 text-sm text-gray-500">
                 {clase.nivel || clase.nombre || 'Clase'} · Sede {clase.sede}
               </p>
             </div>
@@ -348,19 +334,19 @@ export default function ConfigurarConvocatoria() {
               nombreArchivo={'qr-clase-' + clase.id}
               tamano={128}
               colorQr="#9333ea"
-              claseBoton="mx-auto mt-3 block rounded-full border border-purple-100 bg-purple-50 px-4 py-2 text-[8px] font-semibold text-purple-600"
+              claseBoton="mx-auto mt-3 block rounded-full border border-purple-100 bg-purple-50 px-4 py-2 text-xs font-semibold text-purple-600"
               textoBoton="↓ Descargar QR para impresión / redes"
             />
 
             {/* ENLACE */}
 
             <div className="mt-3 flex items-center justify-between rounded-xl border border-gray-200 bg-gray-50 px-3 py-2">
-              <span className="truncate text-[8px] text-gray-500">{enlace}</span>
+              <span className="truncate text-xs text-gray-500">{enlace}</span>
 
               <button
                 type="button"
                 onClick={copiarEnlace}
-                className="ml-2 shrink-0 text-[8px] font-semibold text-purple-600"
+                className="ml-2 shrink-0 text-xs font-semibold text-purple-600"
               >
                 {copiado ? '¡Copiado!' : 'Copiar'}
               </button>
@@ -377,7 +363,7 @@ export default function ConfigurarConvocatoria() {
                   'noopener,noreferrer',
                 );
               }}
-              className="mt-3 h-10 w-full rounded-xl bg-green-500 text-[9px] font-bold text-white shadow-sm transition hover:bg-green-600"
+              className="mt-3 h-10 w-full rounded-xl bg-green-500 text-sm font-bold text-white shadow-sm transition hover:bg-green-600"
             >
               ▣ Reenviar por WhatsApp
             </button>
@@ -389,7 +375,7 @@ export default function ConfigurarConvocatoria() {
               onClick={() => {
                 window.location.href = enlace;
               }}
-              className="mt-2 h-10 w-full rounded-xl border border-purple-500 bg-white text-[9px] font-bold text-purple-600 transition hover:bg-purple-50"
+              className="mt-2 h-10 w-full rounded-xl border border-purple-500 bg-white text-sm font-bold text-purple-600 transition hover:bg-purple-50"
             >
               Ver vista previa del formulario
             </button>

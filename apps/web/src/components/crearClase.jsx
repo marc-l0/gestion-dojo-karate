@@ -144,87 +144,75 @@ export default function CrearClase() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f7f9fb] text-gray-800">
-      {/* ENCABEZADO */}
-
-      <header className="flex h-14 items-center justify-between border-b border-gray-200 bg-white px-4">
-        <div>
-          <p className="text-[9px] font-semibold text-gray-400">DOJO</p>
-
-          <h1 className="text-sm font-bold text-gray-900">Crear clase</h1>
-        </div>
-      </header>
-
-      <main className="space-y-4 px-4 pb-24 pt-4">
+    <div className="min-h-0 bg-[#f7f9fb] text-gray-800">
+      <main className="space-y-4 px-4 pb-6 pt-4">
         {/* ÚLTIMA CLASE CREADA */}
 
         <section className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
           <div className="mb-3">
-            <p className="text-[9px] font-semibold text-gray-400">ÚLTIMA CLASE CREADA</p>
+            <p className="text-sm font-semibold text-gray-400">ÚLTIMA CLASE CREADA</p>
 
-            <h2 className="mt-1 text-[12px] font-bold text-gray-900">
+            <h2 className="mt-1 text-base font-bold text-gray-900">
               {ultimaClase ? `Karate · ${ultimaClase.nivel}` : 'Todavía no hay una clase creada'}
             </h2>
           </div>
 
           {ultimaClase ? (
             <div className="space-y-3">
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-3 min-[400px]:grid-cols-2">
                 <div>
-                  <p className="text-[7px] font-medium text-gray-400">SEDE</p>
+                  <p className="text-xs font-medium text-gray-400">SEDE</p>
 
-                  <p className="mt-1 text-[9px] font-semibold text-gray-700">{ultimaClase.sede}</p>
+                  <p className="mt-1 text-sm font-semibold text-gray-700">{ultimaClase.sede}</p>
                 </div>
 
                 <div>
-                  <p className="text-[7px] font-medium text-gray-400">PROFESOR</p>
+                  <p className="text-xs font-medium text-gray-400">PROFESOR</p>
 
-                  <p className="mt-1 text-[9px] font-semibold text-gray-700">
-                    {ultimaClase.profesor}
-                  </p>
+                  <p className="mt-1 text-sm font-semibold text-gray-700">{ultimaClase.profesor}</p>
                 </div>
 
                 <div>
-                  <p className="text-[7px] font-medium text-gray-400">DÍAS</p>
+                  <p className="text-xs font-medium text-gray-400">DÍAS</p>
 
-                  <p className="mt-1 text-[9px] font-semibold text-gray-700">
+                  <p className="mt-1 text-sm font-semibold text-gray-700">
                     {ultimaClase.frecuencia.join(', ')}
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-[7px] font-medium text-gray-400">HORARIO</p>
+                  <p className="text-xs font-medium text-gray-400">HORARIO</p>
 
-                  <p className="mt-1 text-[9px] font-semibold text-gray-700">
+                  <p className="mt-1 text-sm font-semibold text-gray-700">
                     {ultimaClase.horaInicio} - {ultimaClase.horaFin}
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-[7px] font-medium text-gray-400">TARIFA</p>
+                  <p className="text-xs font-medium text-gray-400">TARIFA</p>
 
-                  <p className="mt-1 text-[9px] font-semibold text-gray-700">
+                  <p className="mt-1 text-sm font-semibold text-gray-700">
                     S/ {ultimaClase.tarifa}
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-[7px] font-medium text-gray-400">CUPOS</p>
+                  <p className="text-xs font-medium text-gray-400">CUPOS</p>
 
-                  <p className="mt-1 text-[9px] font-semibold text-gray-700">{ultimaClase.cupos}</p>
+                  <p className="mt-1 text-sm font-semibold text-gray-700">{ultimaClase.cupos}</p>
                 </div>
               </div>
 
               <button
                 type="button"
                 onClick={() => irA('/clases')}
-                className="h-9 w-full rounded-xl border border-blue-200 bg-white text-[9px] font-semibold text-blue-500 hover:bg-blue-50"
+                className="h-9 w-full rounded-xl border border-blue-200 bg-white text-sm font-semibold text-blue-500 hover:bg-blue-50"
               >
                 Gestionar clases
               </button>
             </div>
           ) : (
-            <p className="text-[8px] text-gray-400">
+            <p className="text-xs text-gray-400">
               La información de la última clase creada aparecerá aquí.
             </p>
           )}
@@ -233,35 +221,35 @@ export default function CrearClase() {
         {/* FORMULARIO */}
 
         <section className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
-          <h2 className="text-[11px] font-bold text-gray-900">Configurar nueva clase</h2>
+          <h2 className="text-sm font-bold text-gray-900">Configurar nueva clase</h2>
 
           {/* VIGENCIA */}
 
           <div className="mt-4">
-            <p className="mb-2 text-[8px] font-medium tracking-wide text-gray-500">
+            <p className="mb-2 text-xs font-medium tracking-wide text-gray-500">
               VIGENCIA DE LA CLASE
             </p>
 
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 gap-3 min-[400px]:grid-cols-2">
               <div>
-                <p className="mb-1 text-[7px] text-gray-400">FECHA DE INICIO</p>
+                <p className="mb-1 text-xs text-gray-400">FECHA DE INICIO</p>
 
                 <input
                   type="date"
                   value={fechaInicio}
                   min={obtenerFechaHoy()}
                   onChange={(e) => setFechaInicio(e.target.value)}
-                  className="block h-9 w-full min-w-0 rounded-xl border border-gray-200 bg-gray-50 px-3 text-[9px] text-gray-700 outline-none focus:border-blue-500"
+                  className="block h-9 w-full min-w-0 rounded-xl border border-gray-200 bg-gray-50 px-3 text-sm text-gray-700 outline-none focus:border-blue-500"
                 />
               </div>
 
               <div>
-                <p className="mb-1 text-[7px] text-gray-400">DURACIÓN</p>
+                <p className="mb-1 text-xs text-gray-400">DURACIÓN</p>
 
                 <select
                   value={duracion}
                   onChange={(e) => setDuracion(e.target.value)}
-                  className="block h-9 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 text-[9px] text-gray-700 outline-none focus:border-blue-500"
+                  className="block h-9 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 text-sm text-gray-700 outline-none focus:border-blue-500"
                 >
                   <option value="">Seleccionar</option>
 
@@ -276,7 +264,7 @@ export default function CrearClase() {
               </div>
             </div>
 
-            <p className="mt-2 text-[7px] leading-4 text-gray-400">
+            <p className="mt-2 text-xs leading-4 text-gray-400">
               La fecha de finalización se calculará automáticamente.
             </p>
           </div>
@@ -284,7 +272,7 @@ export default function CrearClase() {
           {/* SEDE */}
 
           <div className="mt-4">
-            <p className="mb-2 text-[8px] font-medium tracking-wide text-gray-500">SEDE</p>
+            <p className="mb-2 text-xs font-medium tracking-wide text-gray-500">SEDE</p>
 
             <div className="grid grid-cols-3 gap-2">
               {['Callao', 'San Miguel', 'Ventanilla'].map((item) => (
@@ -293,7 +281,7 @@ export default function CrearClase() {
                   type="button"
                   onClick={() => setSede(item)}
                   className={
-                    'h-8 rounded-full border text-[8px] transition ' +
+                    'h-8 rounded-full border text-xs transition ' +
                     (sede === item
                       ? 'border-blue-500 bg-blue-50 font-semibold text-blue-600'
                       : 'border-gray-200 bg-white text-gray-500')
@@ -308,7 +296,7 @@ export default function CrearClase() {
           {/* NIVEL */}
 
           <div className="mt-4">
-            <p className="mb-2 text-[8px] font-medium tracking-wide text-gray-500">NIVEL</p>
+            <p className="mb-2 text-xs font-medium tracking-wide text-gray-500">NIVEL</p>
 
             <div className="grid grid-cols-3 gap-2">
               {['Básico', 'Intermedio', 'Avanzado'].map((item) => (
@@ -317,7 +305,7 @@ export default function CrearClase() {
                   type="button"
                   onClick={() => setNivel(item)}
                   className={
-                    'h-8 rounded-full border text-[8px] transition ' +
+                    'h-8 rounded-full border text-xs transition ' +
                     (nivel === item
                       ? 'border-blue-500 bg-blue-50 font-semibold text-blue-600'
                       : 'border-gray-200 bg-white text-gray-500')
@@ -332,28 +320,28 @@ export default function CrearClase() {
           {/* HORARIO */}
 
           <div className="mt-4">
-            <p className="mb-2 text-[8px] font-medium tracking-wide text-gray-500">HORARIO</p>
+            <p className="mb-2 text-xs font-medium tracking-wide text-gray-500">HORARIO</p>
 
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 gap-3 min-[400px]:grid-cols-2">
               <div>
-                <p className="mb-1 text-[7px] text-gray-400">HORA DE INICIO</p>
+                <p className="mb-1 text-xs text-gray-400">HORA DE INICIO</p>
 
                 <input
                   type="time"
                   value={horaInicio}
                   onChange={(e) => setHoraInicio(e.target.value)}
-                  className="block h-9 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 text-[9px] text-gray-700 outline-none focus:border-blue-500"
+                  className="block h-9 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 text-sm text-gray-700 outline-none focus:border-blue-500"
                 />
               </div>
 
               <div>
-                <p className="mb-1 text-[7px] text-gray-400">HORA DE FIN</p>
+                <p className="mb-1 text-xs text-gray-400">HORA DE FIN</p>
 
                 <input
                   type="time"
                   value={horaFin}
                   onChange={(e) => setHoraFin(e.target.value)}
-                  className="block h-9 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 text-[9px] text-gray-700 outline-none focus:border-blue-500"
+                  className="block h-9 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 text-sm text-gray-700 outline-none focus:border-blue-500"
                 />
               </div>
             </div>
@@ -362,7 +350,7 @@ export default function CrearClase() {
           {/* DÍAS */}
 
           <div className="mt-4">
-            <p className="mb-2 text-[8px] font-medium tracking-wide text-gray-500">
+            <p className="mb-2 text-xs font-medium tracking-wide text-gray-500">
               DÍAS DE ENTRENAMIENTO
             </p>
 
@@ -374,7 +362,7 @@ export default function CrearClase() {
                   title={dia}
                   onClick={() => seleccionarDia(dia)}
                   className={
-                    'h-8 rounded-full border text-[8px] font-semibold transition ' +
+                    'h-8 rounded-full border text-xs font-semibold transition ' +
                     (frecuencia.includes(dia)
                       ? 'border-blue-500 bg-blue-50 text-blue-600'
                       : 'border-gray-200 bg-white text-gray-400')
@@ -386,21 +374,19 @@ export default function CrearClase() {
             </div>
 
             {frecuencia.length > 0 && (
-              <p className="mt-2 text-[7px] text-gray-400">
-                Seleccionados: {frecuencia.join(', ')}
-              </p>
+              <p className="mt-2 text-xs text-gray-400">Seleccionados: {frecuencia.join(', ')}</p>
             )}
           </div>
 
           {/* PROFESOR */}
 
           <div className="mt-4">
-            <p className="mb-2 text-[8px] font-medium tracking-wide text-gray-500">PROFESOR</p>
+            <p className="mb-2 text-xs font-medium tracking-wide text-gray-500">PROFESOR</p>
 
             <select
               value={profesor}
               onChange={(e) => setProfesor(e.target.value)}
-              className="h-9 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 text-[9px] text-gray-700 outline-none"
+              className="h-9 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 text-sm text-gray-700 outline-none"
             >
               <option value="">Seleccionar profesor</option>
 
@@ -412,18 +398,14 @@ export default function CrearClase() {
             </select>
 
             {profesores.length === 0 && (
-              <p className="mt-2 text-[7px] text-gray-400">
-                No hay profesores activos disponibles.
-              </p>
+              <p className="mt-2 text-xs text-gray-400">No hay profesores activos disponibles.</p>
             )}
           </div>
 
           {/* TARIFA */}
 
           <div className="mt-4">
-            <p className="mb-2 text-[8px] font-medium tracking-wide text-gray-500">
-              TARIFA MENSUAL
-            </p>
+            <p className="mb-2 text-xs font-medium tracking-wide text-gray-500">TARIFA MENSUAL</p>
 
             <div className="grid grid-cols-3 gap-2">
               {['150', '300', '450'].map((precio) => (
@@ -432,7 +414,7 @@ export default function CrearClase() {
                   type="button"
                   onClick={() => setTarifa(precio)}
                   className={
-                    'h-8 rounded-full border text-[9px] font-semibold ' +
+                    'h-8 rounded-full border text-sm font-semibold ' +
                     (tarifa === precio
                       ? 'border-blue-500 bg-blue-50 text-blue-600'
                       : 'border-gray-200 text-gray-500')
@@ -447,7 +429,7 @@ export default function CrearClase() {
           {/* CUPOS */}
 
           <div className="mt-4">
-            <p className="mb-2 text-[8px] font-medium tracking-wide text-gray-500">
+            <p className="mb-2 text-xs font-medium tracking-wide text-gray-500">
               CUPOS DISPONIBLES
             </p>
 
@@ -457,7 +439,7 @@ export default function CrearClase() {
               value={cupos}
               onChange={(e) => setCupos(e.target.value)}
               placeholder="Ej. 10"
-              className="h-9 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 text-[9px] text-gray-700 outline-none focus:border-blue-500"
+              className="h-9 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 text-sm text-gray-700 outline-none focus:border-blue-500"
             />
           </div>
 
@@ -466,7 +448,7 @@ export default function CrearClase() {
           <button
             type="button"
             onClick={crearClase}
-            className="mt-5 h-9 w-full rounded-xl bg-blue-500 text-[9px] font-semibold text-white shadow-sm transition hover:bg-blue-600"
+            className="mt-5 h-9 w-full rounded-xl bg-blue-500 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-600"
           >
             Aceptar y publicar ciclo
           </button>
@@ -474,76 +456,12 @@ export default function CrearClase() {
           <button
             type="button"
             onClick={() => irA('/calendario')}
-            className="mt-2 h-9 w-full rounded-xl border border-gray-200 bg-white text-[9px] font-semibold text-gray-600 hover:bg-gray-50"
+            className="mt-2 h-9 w-full rounded-xl border border-gray-200 bg-white text-sm font-semibold text-gray-600 hover:bg-gray-50"
           >
             Ver calendario
           </button>
         </section>
       </main>
-
-      {/* NAVEGACIÓN DEL DOJO */}
-
-      <nav className="fixed bottom-0 left-0 right-0 z-50 mx-auto flex h-14 max-w-82.5 items-center justify-around border-t border-gray-200 bg-white">
-        {/* INICIO */}
-
-        <button
-          type="button"
-          onClick={() => irA('/')}
-          className="flex flex-col items-center gap-1 text-blue-500"
-        >
-          <span className="text-base">🏠</span>
-
-          <span className="text-[7px]">Inicio</span>
-        </button>
-
-        {/* ALUMNOS */}
-
-        <button
-          type="button"
-          onClick={() => irA('/postulaciones')}
-          className="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-500"
-        >
-          <span className="text-base">🥋</span>
-
-          <span className="text-[7px]">Postulaciones</span>
-        </button>
-
-        {/* CLASES */}
-
-        <button
-          type="button"
-          onClick={() => irA('/clases')}
-          className="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-500"
-        >
-          <span className="text-base">📅</span>
-
-          <span className="text-[7px]">Clases</span>
-        </button>
-
-        {/* PROFESORES */}
-
-        <button
-          type="button"
-          onClick={() => irA('/profesores')}
-          className="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-500"
-        >
-          <span className="text-base">👨‍🏫</span>
-
-          <span className="text-[7px]">Profesores</span>
-        </button>
-
-        {/* AJUSTES */}
-
-        <button
-          type="button"
-          onClick={() => irA('/configurar-convocatoria')}
-          className="flex flex-col items-center gap-1 text-gray-400 hover:text-blue-500"
-        >
-          <span className="text-base">⚙️</span>
-
-          <span className="text-[7px]">Ajustes</span>
-        </button>
-      </nav>
     </div>
   );
 }
