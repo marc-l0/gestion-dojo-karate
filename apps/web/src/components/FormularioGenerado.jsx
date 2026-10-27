@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { API_URL } from '../lib/api.js';
 import { enlaceFormulario } from '../lib/enlace-formulario.js';
+import CopiarEnlace from './CopiarEnlace.jsx';
 import QrFormulario from './QrFormulario.jsx';
 
 export default function FormularioGenerado() {
   const [clase, setClase] = useState(null);
-  const [copiado, setCopiado] = useState(false);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState('');
 
@@ -46,23 +46,6 @@ export default function FormularioGenerado() {
   }, []);
 
   const enlace = clase ? enlaceFormulario(clase) : '';
-
-  const copiarEnlace = async () => {
-    if (!enlace) {
-      return;
-    }
-
-    try {
-      await navigator.clipboard.writeText(enlace);
-      setCopiado(true);
-
-      setTimeout(() => {
-        setCopiado(false);
-      }, 2000);
-    } catch {
-      setCopiado(false);
-    }
-  };
 
   if (cargando)
     return (
@@ -125,21 +108,7 @@ export default function FormularioGenerado() {
             />
           )}
 
-          <div className="mt-6">
-            <p className="mb-2 text-xs font-semibold text-gray-700">Enlace del formulario</p>
-
-            <div className="flex items-center gap-2 rounded-xl border border-gray-200 bg-gray-50 p-3">
-              <p className="min-w-0 flex-1 truncate text-sm text-gray-500">{enlace}</p>
-
-              <button
-                type="button"
-                onClick={copiarEnlace}
-                className="shrink-0 rounded-lg bg-white px-3 py-1.5 text-sm font-semibold text-[#673ab7] shadow-sm transition hover:bg-[#f8f3ff]"
-              >
-                {copiado ? '¡Copiado!' : 'Copiar'}
-              </button>
-            </div>
-          </div>
+          <CopiarEnlace enlace={enlace} />
 
           <button
             type="button"

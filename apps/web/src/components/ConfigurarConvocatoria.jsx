@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { enlaceFormulario } from '../lib/enlace-formulario.js';
+import CopiarEnlace from './CopiarEnlace.jsx';
 import QrFormulario from './QrFormulario.jsx';
 
 export default function ConfigurarConvocatoria() {
@@ -10,7 +11,6 @@ export default function ConfigurarConvocatoria() {
   const [cerrandoGenerado, setCerrandoGenerado] = useState(false);
   const [desplazamiento, setDesplazamiento] = useState(0);
   const [inicioDeslizamiento, setInicioDeslizamiento] = useState(null);
-  const [copiado, setCopiado] = useState(false);
 
   const diasOrden = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
@@ -61,16 +61,6 @@ export default function ConfigurarConvocatoria() {
   }
 
   const enlace = enlaceFormulario(clase);
-
-  const copiarEnlace = async () => {
-    try {
-      await navigator.clipboard.writeText(enlace);
-      setCopiado(true);
-      setTimeout(() => setCopiado(false), 2000);
-    } catch {
-      setCopiado(false);
-    }
-  };
 
   const cerrarGenerado = () => {
     setCerrandoGenerado(true);
@@ -339,17 +329,7 @@ export default function ConfigurarConvocatoria() {
 
             {/* ENLACE */}
 
-            <div className="mt-3 flex items-center justify-between rounded-xl border border-gray-200 bg-gray-50 px-3 py-2">
-              <span className="truncate text-xs text-gray-500">{enlace}</span>
-
-              <button
-                type="button"
-                onClick={copiarEnlace}
-                className="ml-2 shrink-0 text-xs font-semibold text-purple-600"
-              >
-                {copiado ? '¡Copiado!' : 'Copiar'}
-              </button>
-            </div>
+            <CopiarEnlace enlace={enlace} />
 
             {/* WHATSAPP */}
 
