@@ -7,7 +7,7 @@ import { Postulacion } from '../interfaces/postulacion.interface.js';
 export class PostulacionesRepository {
   private readonly spreadsheetId = env.GOOGLE_SPREADSHEET_ID;
 
-  private readonly range = 'Postulaciones!A:Q';
+  private readonly range = 'Postulaciones!A:S';
 
   private async obtenerSheets() {
     return crearClienteSheets();
@@ -41,6 +41,8 @@ export class PostulacionesRepository {
       horaFin: fila[14],
       estado: fila[15],
       fechaPostulacion: fila[16],
+      consentimientoVersion: fila[17] ?? '',
+      consentimientoFecha: fila[18] ?? '',
     }));
   }
 
@@ -49,7 +51,7 @@ export class PostulacionesRepository {
 
     await sheets.spreadsheets.values.append({
       spreadsheetId: this.spreadsheetId,
-      range: 'Postulaciones!A:Q',
+      range: 'Postulaciones!A:S',
       valueInputOption: 'RAW',
       requestBody: {
         values: [
@@ -73,6 +75,8 @@ export class PostulacionesRepository {
             postulacion.horaFin,
             postulacion.estado,
             postulacion.fechaPostulacion,
+            postulacion.consentimientoVersion || '',
+            postulacion.consentimientoFecha || '',
           ],
         ],
       },

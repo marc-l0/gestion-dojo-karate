@@ -1,4 +1,5 @@
 ---
+import Sesion from "../components/Sesion.astro";
 import CrearClase from "../components/crearClase";
 import "../styles/global.css";
 import ProtegerPagina from "../components/ProtegerPagina.astro";
@@ -13,6 +14,7 @@ import ProtegerPagina from "../components/ProtegerPagina.astro";
   </head>
 
   <body class="bg-gray-100">
+    <Sesion />
     <CrearClase client:load />
   </body>
 </html>

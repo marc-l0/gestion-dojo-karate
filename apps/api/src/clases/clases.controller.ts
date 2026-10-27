@@ -1,10 +1,21 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UseGuards,
+  ValidationPipe,
+} from '@nestjs/common';
 
 import { Public } from '../common/decorators/public.decorator.js';
 
 import { ClasesService } from './clases.service.js';
 
 import { CrearClaseDto } from './dto/crear-clase.dto.js';
+import { CrearPostulacionDto } from './dto/crear-postulacion.dto.js';
+import { PostulacionesRateLimitGuard } from './postulaciones-rate-limit.guard.js';
 
 @Controller('clases')
 export class ClasesController {
@@ -42,9 +53,12 @@ export class ClasesController {
   // Pública: es el envío del formulario del QR.
   @Public()
   @Post('postulaciones')
+  @UseGuards(PostulacionesRateLimitGuard)
   crearPostulacion(
-    @Body()
-    datos: any,
+    @Body(
+      new ValidationPipe({ transform: true, whitelist: true, expectedType: CrearPostulacionDto }),
+    )
+    datos: CrearPostulacionDto,
   ) {
     return this.clasesService.crearPostulacion(datos);
   }

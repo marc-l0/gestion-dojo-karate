@@ -1,0 +1,24 @@
+<div class="mx-auto flex w-full max-w-xl flex-wrap items-center justify-between gap-2 px-4 py-3 text-sm text-gray-600">
+  <span>Administración · Dojo Karate</span>
+  <button id="cerrar-sesion" type="button" class="min-h-11 rounded-xl border border-purple-200 bg-white px-4 font-semibold text-purple-800">Cerrar sesión</button>
+  <p id="error-sesion" role="alert" class="hidden w-full text-red-700"></p>
+</div>
+<script>
+  import { cerrarSesion } from '../lib/api.js';
+  const boton = document.querySelector<HTMLButtonElement>('#cerrar-sesion');
+  boton?.addEventListener('click', async () => {
+    boton.disabled = true;
+    boton.textContent = 'Cerrando sesión…';
+    try {
+      await cerrarSesion();
+    } catch {
+      const error = document.querySelector<HTMLElement>('#error-sesion');
+      if (error) {
+        error.textContent = 'No se pudo cerrar la sesión. Comprueba tu conexión e intenta de nuevo.';
+        error.classList.remove('hidden');
+      }
+      boton.disabled = false;
+      boton.textContent = 'Cerrar sesión';
+    }
+  });
+</script>

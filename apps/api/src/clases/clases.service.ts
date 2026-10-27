@@ -1,10 +1,46 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ESTADOS_POSTULACION, ocupaCupo } from '@dojo/shared';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CrearClaseDto } from './dto/crear-clase.dto.js';
+import { CrearPostulacionDto } from './dto/crear-postulacion.dto.js';
 import { ClasesRepository } from './repositories/clases.repository.js';
 import { PostulacionesRepository } from './repositories/postulaciones.repository.js';
 
 @Injectable()
 export class ClasesService {
+  private readonly operaciones = new Map<number, Promise<void>>();
+  private ultimoId = 0;
+
+  // Serializa la lectura y escritura por clase dentro de esta instancia de la API.
+  private async enClase<T>(claseId: number, operacion: () => Promise<T>): Promise<T> {
+    const anterior = this.operaciones.get(claseId) ?? Promise.resolve();
+    let liberar!: () => void;
+    const actual = new Promise<void>((resolve) => {
+      liberar = resolve;
+    });
+    this.operaciones.set(claseId, actual);
+    await anterior;
+    try {
+      return await operacion();
+    } finally {
+      liberar();
+      if (this.operaciones.get(claseId) === actual) this.operaciones.delete(claseId);
+    }
+  }
+
+  private hoyEnLima() {
+    return new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'America/Lima',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).format(new Date());
+  }
+
   constructor(
     private readonly clasesRepository: ClasesRepository,
 
@@ -108,70 +144,105 @@ export class ClasesService {
     return this.clasesRepository.guardar(nuevaClase);
   }
 
-  async crearPostulacion(datos: any) {
-    const clases = await this.clasesRepository.obtenerTodas();
+  async crearPostulacion(datos: CrearPostulacionDto) {
+    return this.enClase(datos.claseId, async () => {
+      const clase = await this.obtenerClase(datos.claseId);
+      const hoy = this.hoyEnLima();
+      if (
+        !clase.fechaInicio ||
+        !clase.fechaFin ||
+        hoy < clase.fechaInicio ||
+        hoy > clase.fechaFin
+      ) {
+        throw new BadRequestException('Esta convocatoria no está vigente.');
+      }
+      if (clase.cuposDisponibles <= 0) {
+        throw new ConflictException('Esta clase ya no tiene cupos disponibles.');
+      }
 
-    const clase = clases.find((item) => Number(item.id) === Number(datos.claseId));
+      const nacimiento = datos.fechaNacimiento;
+      let edad = Number(hoy.slice(0, 4)) - Number(nacimiento.slice(0, 4));
+      if (hoy.slice(5) < nacimiento.slice(5)) edad -= 1;
+      if (nacimiento > hoy || edad > 100) {
+        throw new BadRequestException(
+          'La fecha de nacimiento debe corresponder a una edad de 0 a 100 años.',
+        );
+      }
+      if (
+        edad < 18 &&
+        (!datos.nombreCompletoApoderado || !datos.correoApoderado || !datos.telefonoApoderado)
+      ) {
+        throw new BadRequestException(
+          'Para menores de edad debes completar los datos del apoderado.',
+        );
+      }
 
-    if (!clase) {
-      throw new Error('Clase no encontrada');
-    }
+      const postulaciones = await this.postulacionesRepository.obtenerTodas();
+      const correo = datos.correo.trim().toLowerCase();
+      if (
+        postulaciones.some(
+          (item) =>
+            Number(item.claseId) === datos.claseId && item.correo?.trim().toLowerCase() === correo,
+        )
+      ) {
+        throw new ConflictException('Este correo ya tiene una postulación para esta clase.');
+      }
 
-    const postulacion = {
-      id: Date.now(),
+      this.ultimoId = Math.max(Date.now(), this.ultimoId + 1);
+      const postulacion = {
+        id: this.ultimoId,
+        nombre: datos.nombre,
+        telefono: datos.telefono,
+        correo,
+        fechaNacimiento: datos.fechaNacimiento,
+        nombreCompletoApoderado: edad < 18 ? datos.nombreCompletoApoderado : undefined,
+        correoApoderado: edad < 18 ? datos.correoApoderado : undefined,
+        telefonoApoderado: edad < 18 ? datos.telefonoApoderado : undefined,
+        claseId: clase.id,
+        nivel: clase.nivel,
+        sede: clase.sede,
+        profesor: clase.profesor,
+        frecuencia: clase.frecuencia,
+        horaInicio: clase.horaInicio,
+        horaFin: clase.horaFin,
+        estado: 'pendiente',
+        fechaPostulacion: new Date().toISOString(),
+        consentimientoVersion: '2026-10-27',
+        consentimientoFecha: new Date().toISOString(),
+      };
 
-      nombre: datos.nombre,
-
-      telefono: datos.telefono,
-
-      correo: datos.correo,
-
-      fechaNacimiento: datos.fechaNacimiento,
-
-      nombreCompletoApoderado: datos.nombreCompletoApoderado,
-
-      correoApoderado: datos.correoApoderado,
-
-      telefonoApoderado: datos.telefonoApoderado,
-
-      claseId: clase.id,
-
-      nivel: clase.nivel,
-
-      sede: clase.sede,
-
-      profesor: clase.profesor,
-
-      frecuencia: clase.frecuencia,
-
-      horaInicio: clase.horaInicio,
-
-      horaFin: clase.horaFin,
-
-      estado: 'pendiente',
-
-      fechaPostulacion: new Date().toISOString(),
-    };
-
-    return this.postulacionesRepository.guardar(postulacion);
+      await this.postulacionesRepository.guardar(postulacion);
+      // La ruta pública no devuelve datos personales ni datos del apoderado.
+      return {
+        id: postulacion.id,
+        estado: postulacion.estado,
+        mensaje: 'Postulación registrada correctamente.',
+      };
+    });
   }
 
   async actualizarEstadoPostulacion(id: number, estado: string) {
-    const postulaciones = await this.postulacionesRepository.obtenerTodas();
-
-    const postulacion = postulaciones.find((item) => item.id === id);
-
-    if (!postulacion) {
-      throw new Error('Postulación no encontrada');
+    if (!(ESTADOS_POSTULACION as readonly string[]).includes(estado)) {
+      throw new BadRequestException('Estado de postulación no válido.');
     }
+    const postulaciones = await this.postulacionesRepository.obtenerTodas();
+    const postulacion = postulaciones.find((item) => item.id === id);
+    if (!postulacion) throw new NotFoundException('Postulación no encontrada');
 
-    await this.postulacionesRepository.actualizarEstado(id, estado);
-
-    await this.actualizarCuposClase(postulacion.claseId);
-
-    return {
-      mensaje: 'Estado actualizado correctamente',
-    };
+    return this.enClase(postulacion.claseId, async () => {
+      const actuales = await this.postulacionesRepository.obtenerTodas();
+      const actual = actuales.find((item) => item.id === id);
+      if (!actual) throw new NotFoundException('Postulación no encontrada');
+      if (ocupaCupo(estado) && !ocupaCupo(actual.estado)) {
+        const clase = await this.obtenerClase(actual.claseId);
+        if (clase.cuposDisponibles <= 0) {
+          throw new ConflictException('Esta clase ya no tiene cupos disponibles.');
+        }
+      }
+      await this.postulacionesRepository.actualizarEstado(id, estado);
+      await this.actualizarCuposClase(actual.claseId);
+      return { mensaje: 'Estado actualizado correctamente' };
+    });
   }
 
   async actualizarCuposClase(claseId: number) {

@@ -55,6 +55,8 @@ export interface PostulacionDto {
 
   estado: string;
   fechaPostulacion: string;
+  consentimientoVersion?: string;
+  consentimientoFecha?: string;
 }
 
 export interface ProfesorDto {

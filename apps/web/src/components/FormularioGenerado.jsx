@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { enlaceFormulario } from '../lib/enlace-formulario.js';
+import QrFormulario from './QrFormulario.jsx';
 
 export default function FormularioGenerado() {
   const [clase, setClase] = useState(null);
@@ -45,7 +47,7 @@ export default function FormularioGenerado() {
             ←
           </button>
 
-          <h1 className="text-base font-semibold text-red-600">PRUEBA CAMBIO</h1>
+          <h1 className="text-base font-semibold text-red-600">Compartir convocatoria</h1>
         </header>
 
         <section className="rounded-3xl bg-white px-5 py-7 shadow-sm">
@@ -104,6 +106,14 @@ export default function FormularioGenerado() {
 
           <button
             type="button"
+            disabled={!enlace}
+            onClick={() => {
+              window.open(
+                `https://wa.me/?text=${encodeURIComponent(`Postula a la clase ${clase.nivel}: ${enlace}`)}`,
+                '_blank',
+                'noopener,noreferrer',
+              );
+            }}
             className="mt-5 flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#25d366] text-xs font-semibold text-white shadow-sm transition hover:bg-[#20bd5b] hover:shadow-md"
           >
             <span className="text-sm">◉</span>
@@ -113,7 +123,7 @@ export default function FormularioGenerado() {
           <button
             type="button"
             onClick={() => {
-              window.location.href = '/formulario';
+              window.location.href = enlace;
             }}
             className="mt-3 h-11 w-full rounded-xl border border-[#673ab7] bg-white text-xs font-semibold text-[#673ab7] transition hover:bg-[#f8f3ff]"
           >

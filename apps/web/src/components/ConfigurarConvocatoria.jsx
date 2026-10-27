@@ -304,7 +304,7 @@ export default function ConfigurarConvocatoria() {
         >
           <div
             className={
-              'w-full max-w-md rounded-t-3xl bg-white px-5 pb-6 pt-3 shadow-2xl ' +
+              'max-h-[90dvh] w-full max-w-md overflow-y-auto rounded-t-3xl bg-white px-5 pb-6 pt-3 shadow-2xl ' +
               (cerrandoGenerado
                 ? 'animate-[slideDown_250ms_ease-in_forwards]'
                 : 'animate-[slideUp_250ms_ease-out]')
@@ -370,6 +370,13 @@ export default function ConfigurarConvocatoria() {
 
             <button
               type="button"
+              onClick={() => {
+                window.open(
+                  `https://wa.me/?text=${encodeURIComponent(`Postula a la clase ${clase.nivel}: ${enlace}`)}`,
+                  '_blank',
+                  'noopener,noreferrer',
+                );
+              }}
               className="mt-3 h-10 w-full rounded-xl bg-green-500 text-[9px] font-bold text-white shadow-sm transition hover:bg-green-600"
             >
               ▣ Reenviar por WhatsApp
@@ -380,7 +387,7 @@ export default function ConfigurarConvocatoria() {
             <button
               type="button"
               onClick={() => {
-                window.location.href = '/formulario';
+                window.location.href = enlace;
               }}
               className="mt-2 h-10 w-full rounded-xl border border-purple-500 bg-white text-[9px] font-bold text-purple-600 transition hover:bg-purple-50"
             >

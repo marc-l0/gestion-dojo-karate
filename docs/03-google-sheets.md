@@ -24,7 +24,7 @@ La **fila 1 de cada pestaña son los encabezados**; el código la omite al leer.
 | L | `duracion` | `1 semana`, `2 semanas`, `3 semanas` o `1 mes` |
 | M | `fechaFin` | La calcula la API a partir de `fechaInicio` y `duracion` |
 
-### `Postulaciones` (columnas A a Q)
+### `Postulaciones` (columnas A a S)
 
 | Col | Campo | Notas |
 |---|---|---|
@@ -40,6 +40,8 @@ La **fila 1 de cada pestaña son los encabezados**; el código la omite al leer.
 | J–O | `nivel`, `sede`, `profesor`, `frecuencia`, `horaInicio`, `horaFin` | Copia de los datos de la clase al momento de postular |
 | P | `estado` | `pendiente`, `aceptado`, `aprobado`, `rechazado` o `ignorado` |
 | Q | `fechaPostulacion` | Fecha y hora ISO |
+| R | `consentimientoVersion` | Versión del aviso aceptado (`2026-10-27`) |
+| S | `consentimientoFecha` | Fecha y hora ISO de la aceptación |
 
 Las postulaciones con estado `aceptado` o `aprobado` descuentan un cupo de la clase.
 
@@ -69,3 +71,15 @@ La ruta se escribe como `credentials/google-service-account.json` (relativa), as
 
 - El identificador de la hoja de cálculo (`spreadsheetId`) está escrito dentro de los tres repositorios (`clases`, `postulaciones` y `profesores`). Conviene moverlo a una variable de entorno.
 - Cada operación vuelve a leer la pestaña completa. Con pocos datos no se nota; si la hoja crece, habrá que optimizarlo.
+
+## Validación de postulaciones
+
+La API valida nombre (3–120 caracteres), correo, teléfono de 9 dígitos y fecha de nacimiento (0–100 años). Los menores de 18 deben incluir nombre, correo y teléfono del apoderado. El consentimiento es obligatorio y se registra en las columnas R y S; añade esos encabezados a una hoja existente. Las filas antiguas pueden dejar esas columnas vacías.
+
+Se permite postular desde `fechaInicio` hasta `fechaFin`, ambos días incluidos, según la fecha de Perú (`America/Lima`). No se permite postular antes del inicio ni después del fin. El correo se normaliza y no puede repetirse para la misma clase, incluso si la postulación anterior fue rechazada. Puede usarse para otra clase.
+
+Las postulaciones pendientes no reservan vacante. Aceptar o aprobar consume cupo; rechazar o ignorar lo libera. La API comprueba nuevamente los cupos al aceptar. Las operaciones de postulación y aceptación se serializan por clase dentro de una instancia; Google Sheets no ofrece transacciones y esta protección no coordina varias instancias de la API.
+
+El formulario público admite 5 intentos por IP cada 15 minutos, incluidos los inválidos. El límite vive en memoria y se reinicia con el proceso. No habilites confianza indiscriminada en encabezados de proxy; si se despliega detrás de un proxy, configura sus direcciones de confianza y un almacén compartido de límites antes de usar varias instancias.
+
+El aviso del formulario es un texto inicial para la demo. Antes de usar datos reales, el cliente debe confirmar responsable, contacto para ejercer derechos y plazos de conservación. No representa una validación legal del aviso.

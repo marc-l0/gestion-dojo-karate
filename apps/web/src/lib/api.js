@@ -19,6 +19,10 @@ export async function apiFetch(ruta, opciones = {}) {
 }
 
 export async function cerrarSesion() {
-  await fetch(`${API_URL}/auth/logout`, { method: 'POST', credentials: 'include' });
+  const respuesta = await fetch(`${API_URL}/auth/logout`, {
+    method: 'POST',
+    credentials: 'include',
+  });
+  if (!respuesta.ok && respuesta.status !== 401) throw new Error('No se pudo cerrar la sesión');
   window.location.href = '/login';
 }

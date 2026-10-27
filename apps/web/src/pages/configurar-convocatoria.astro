@@ -1,4 +1,5 @@
 ---
+import Sesion from "../components/Sesion.astro";
 import ConfigurarConvocatoria from "../components/ConfigurarConvocatoria";
 import "../styles/global.css";
 import ProtegerPagina from "../components/ProtegerPagina.astro";
@@ -13,6 +14,7 @@ import ProtegerPagina from "../components/ProtegerPagina.astro";
   </head>
 
   <body class="bg-gray-100">
+    <Sesion />
     <ConfigurarConvocatoria client:load />
   </body>
 </html>
