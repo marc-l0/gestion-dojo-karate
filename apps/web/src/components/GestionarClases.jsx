@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { apiFetch } from '../lib/api.js';
+import TarjetaClase from './TarjetaClase.jsx';
 
 export default function GestionarClases() {
   const [clases, setClases] = useState([]);
@@ -644,114 +645,21 @@ export default function GestionarClases() {
           </section>
         ) : (
           <div className="space-y-3">
-            {visibles.map((clase) => {
-              const estado = obtenerEstadoClase(clase);
-
-              return (
-                <section
-                  key={clase.id}
-                  className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm"
-                >
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <p className="text-sm font-semibold text-gray-400">{clase.sede}</p>
-
-                      <h2 className="mt-1 text-base font-bold text-gray-900">
-                        Karate · {clase.nivel}
-                      </h2>
-                    </div>
-
-                    <span
-                      className={'rounded-full px-2.5 py-1 text-xs font-semibold ' + estado.estilo}
-                    >
-                      {estado.texto}
-                    </span>
-                  </div>
-
-                  <div className="mt-4 grid grid-cols-1 gap-3 min-[400px]:grid-cols-2">
-                    <div>
-                      <p className="text-xs font-medium text-gray-400">PROFESOR</p>
-
-                      <p className="mt-1 text-sm font-semibold text-gray-700">{clase.profesor}</p>
-                    </div>
-
-                    <div>
-                      <p className="text-xs font-medium text-gray-400">TARIFA</p>
-
-                      <p className="mt-1 text-sm font-semibold text-gray-700">S/ {clase.tarifa}</p>
-                    </div>
-
-                    <div>
-                      <p className="text-xs font-medium text-gray-400">DÍAS</p>
-
-                      <p className="mt-1 text-sm font-semibold text-gray-700">
-                        {Array.isArray(clase.frecuencia)
-                          ? ordenarDias(clase.frecuencia).join(', ')
-                          : clase.frecuencia}
-                      </p>
-                    </div>
-
-                    <div>
-                      <p className="text-xs font-medium text-gray-400">HORARIO</p>
-
-                      <p className="mt-1 text-sm font-semibold text-gray-700">
-                        {clase.horaInicio} - {clase.horaFin}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="mt-4 rounded-xl bg-gray-50 px-3 py-3">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-xs font-medium text-gray-400">CUPOS DISPONIBLES</p>
-
-                        <p className="mt-1 text-sm font-bold text-gray-800">
-                          {clase.cuposDisponibles} de {clase.cupos}
-                        </p>
-                      </div>
-
-                      <span className="text-xs text-gray-400">disponibles</span>
-                    </div>
-                  </div>
-
-                  <div className="mt-3 rounded-xl border border-gray-100 bg-white px-3 py-3">
-                    <p className="text-xs font-medium text-gray-400">VIGENCIA</p>
-
-                    {clase.fechaInicio && clase.fechaFin ? (
-                      <div className="mt-1">
-                        <p className="text-sm font-semibold text-gray-700">
-                          {formatearFecha(clase.fechaInicio)} - {formatearFecha(clase.fechaFin)}
-                        </p>
-
-                        <p className="mt-1 text-xs text-gray-400">Duración: {clase.duracion}</p>
-                      </div>
-                    ) : (
-                      <p className="mt-1 text-xs text-gray-400">
-                        Esta clase pertenece a una versión anterior y no tiene vigencia registrada.
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="mt-3 grid grid-cols-1 gap-3 min-[400px]:grid-cols-2">
-                    <button
-                      type="button"
-                      onClick={() => iniciarEdicion(clase)}
-                      className="h-9 rounded-xl border border-blue-200 bg-white text-sm font-semibold text-blue-500 hover:bg-blue-50"
-                    >
-                      Editar clase
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => eliminarClase(clase.id)}
-                      className="h-9 rounded-xl border border-red-200 bg-white text-sm font-semibold text-red-500 hover:bg-red-50"
-                    >
-                      Eliminar clase
-                    </button>
-                  </div>
-                </section>
-              );
-            })}
+            {visibles.map((clase) => (
+              <TarjetaClase
+                key={clase.id}
+                clase={clase}
+                estado={obtenerEstadoClase(clase)}
+                dias={
+                  Array.isArray(clase.frecuencia)
+                    ? ordenarDias(clase.frecuencia).join(', ')
+                    : clase.frecuencia
+                }
+                formatearFecha={formatearFecha}
+                onEditar={iniciarEdicion}
+                onEliminar={eliminarClase}
+              />
+            ))}
           </div>
         )}
       </main>

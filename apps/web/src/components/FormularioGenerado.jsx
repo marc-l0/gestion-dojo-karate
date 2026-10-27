@@ -1,17 +1,48 @@
 import { useEffect, useState } from 'react';
+import { API_URL } from '../lib/api.js';
 import { enlaceFormulario } from '../lib/enlace-formulario.js';
 import QrFormulario from './QrFormulario.jsx';
 
 export default function FormularioGenerado() {
   const [clase, setClase] = useState(null);
   const [copiado, setCopiado] = useState(false);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    const claseGuardada = localStorage.getItem('claseFormulario');
-
-    if (claseGuardada) {
-      setClase(JSON.parse(claseGuardada));
+    const controller = new AbortController();
+    async function cargarClase() {
+      try {
+        let id = new URLSearchParams(window.location.search).get('clase');
+        if (!id) {
+          try {
+            id = JSON.parse(localStorage.getItem('claseFormulario') ?? 'null')?.id;
+          } catch {
+            /* Sin selección válida. */
+          }
+        }
+        if (!id) throw new Error('Selecciona una clase desde el inicio para compartir su QR.');
+        const respuesta = await fetch(`${API_URL}/clases/${encodeURIComponent(id)}`, {
+          signal: controller.signal,
+        });
+        if (respuesta.status === 404)
+          throw new Error('Esta clase ya no existe o el enlace no es válido.');
+        if (!respuesta.ok)
+          throw new Error('No se pudo cargar la clase. Intenta de nuevo en unos minutos.');
+        setClase(await respuesta.json());
+      } catch (error) {
+        if (!controller.signal.aborted)
+          setError(
+            error instanceof TypeError
+              ? 'No se pudo conectar con el servidor. Comprueba tu conexión e intenta de nuevo.'
+              : error.message,
+          );
+      } finally {
+        if (!controller.signal.aborted) setCargando(false);
+      }
     }
+    cargarClase();
+    return () => controller.abort();
   }, []);
 
   const enlace = clase ? enlaceFormulario(clase) : '';
@@ -33,6 +64,27 @@ export default function FormularioGenerado() {
     }
   };
 
+  if (cargando)
+    return (
+      <p role="status" className="p-5 text-sm text-gray-600">
+        Cargando clase…
+      </p>
+    );
+  if (error)
+    return (
+      <div className="m-4 rounded-2xl border border-red-100 bg-white p-5">
+        <p role="alert" className="text-sm text-red-700">
+          {error}
+        </p>
+        <a
+          href="/"
+          className="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-blue-700"
+        >
+          Volver a clases
+        </a>
+      </div>
+    );
+
   return (
     <main className="min-h-0 bg-[#f5f3f8] px-4 py-6">
       <div className="mx-auto max-w-full">
@@ -44,7 +96,7 @@ export default function FormularioGenerado() {
               </div>
             </div>
 
-            <h2 className="text-lg font-bold text-gray-900">¡Formulario generado exitosamente!</h2>
+            <h2 className="text-lg font-bold text-gray-900">Comparte esta clase</h2>
 
             <p className="mt-2 text-xs text-gray-500">
               Tu formulario ya está listo para compartir.

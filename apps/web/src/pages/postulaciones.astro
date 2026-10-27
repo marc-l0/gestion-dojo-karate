@@ -141,6 +141,18 @@ import AdminLayout from "../layouts/AdminLayout.astro";
           "selectorClase",
         ) as HTMLSelectElement;
 
+        const claseSolicitada = new URLSearchParams(window.location.search).get("clase");
+        const avisoClase = document.createElement("p");
+        avisoClase.className = "mb-3 rounded-xl bg-amber-50 p-3 text-sm text-amber-900";
+        avisoClase.setAttribute("role", "status");
+        avisoClase.hidden = true;
+        contenedor.before(avisoClase);
+        const guardarClaseEnUrl = () => {
+          const url = new URL(window.location.href);
+          url.searchParams.set("clase", selectorClase.value);
+          history.replaceState(null, "", url);
+        };
+
         const botonEliminar = document.getElementById("eliminarPostulaciones");
 
         const botonCancelar = document.getElementById("cancelarSeleccion");
@@ -605,7 +617,13 @@ import AdminLayout from "../layouts/AdminLayout.astro";
         cargarSelectorClases();
 
         if (clases.length > 0) {
-          selectorClase.value = String(clases[0].id);
+          const elegida = clases.find((clase) => String(clase.id) === claseSolicitada);
+          selectorClase.value = String((elegida ?? clases[0]).id);
+          if (claseSolicitada && !elegida) {
+            avisoClase.textContent = "La clase del enlace ya no está disponible. Selecciona otra clase.";
+            avisoClase.hidden = false;
+          }
+          guardarClaseEnUrl();
 
           mostrarResumenCupos(selectorClase.value);
 
@@ -625,6 +643,8 @@ import AdminLayout from "../layouts/AdminLayout.astro";
         }
 
         selectorClase.addEventListener("change", () => {
+          avisoClase.hidden = true;
+          guardarClaseEnUrl();
           mostrarResumenCupos(selectorClase.value);
 
           mostrarPostulaciones(selectorClase.value);
@@ -678,6 +698,7 @@ import AdminLayout from "../layouts/AdminLayout.astro";
             }
 
             modoSeleccion = false;
+            const claseAnterior = selectorClase.value;
 
             await cargarDatos();
 
@@ -685,9 +706,10 @@ import AdminLayout from "../layouts/AdminLayout.astro";
 
             if (clases.length > 0) {
               selectorClase.value = String(
-                clases.find((clase) => String(clase.id) === selectorClase.value)
+                clases.find((clase) => String(clase.id) === claseAnterior)
                   ?.id ?? clases[0].id,
               );
+              guardarClaseEnUrl();
 
               mostrarResumenCupos(selectorClase.value);
 
