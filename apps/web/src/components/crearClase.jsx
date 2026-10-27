@@ -148,16 +148,16 @@ export default function CrearClase() {
       <main className="space-y-4 px-4 pb-6 pt-4">
         {/* ÚLTIMA CLASE CREADA */}
 
-        <section className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
-          <div className="mb-3">
-            <p className="text-sm font-semibold text-gray-400">ÚLTIMA CLASE CREADA</p>
+        {ultimaClase && (
+          <section className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+            <div className="mb-3">
+              <p className="text-sm font-semibold text-gray-400">ÚLTIMA CLASE CREADA</p>
 
-            <h2 className="mt-1 text-base font-bold text-gray-900">
-              {ultimaClase ? `Karate · ${ultimaClase.nivel}` : 'Todavía no hay una clase creada'}
-            </h2>
-          </div>
+              <h2 className="mt-1 text-base font-bold text-gray-900">
+                {`Karate · ${ultimaClase.nivel}`}
+              </h2>
+            </div>
 
-          {ultimaClase ? (
             <div className="space-y-3">
               <div className="grid grid-cols-1 gap-3 min-[400px]:grid-cols-2">
                 <div>
@@ -205,18 +205,14 @@ export default function CrearClase() {
 
               <button
                 type="button"
-                onClick={() => irA('/clases')}
+                onClick={() => irA('/')}
                 className="h-9 w-full rounded-xl border border-blue-200 bg-white text-sm font-semibold text-blue-500 hover:bg-blue-50"
               >
                 Gestionar clases
               </button>
             </div>
-          ) : (
-            <p className="text-xs text-gray-400">
-              La información de la última clase creada aparecerá aquí.
-            </p>
-          )}
-        </section>
+          </section>
+        )}
 
         {/* FORMULARIO */}
 
@@ -450,7 +446,7 @@ export default function CrearClase() {
             onClick={crearClase}
             className="mt-5 h-9 w-full rounded-xl bg-blue-500 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-600"
           >
-            Aceptar y publicar ciclo
+            Guardar clase
           </button>
 
           <button

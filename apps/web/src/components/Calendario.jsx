@@ -355,7 +355,7 @@ export default function Calendario() {
           <button
             type="button"
             onClick={() => {
-              window.location.href = '/';
+              window.location.href = '/clases';
             }}
             className="mt-3 h-9 w-full rounded-xl bg-blue-500 text-sm font-semibold text-white shadow-sm"
           >

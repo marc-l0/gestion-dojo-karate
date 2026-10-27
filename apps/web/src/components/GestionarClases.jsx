@@ -3,6 +3,9 @@ import { apiFetch } from '../lib/api.js';
 
 export default function GestionarClases() {
   const [clases, setClases] = useState([]);
+  const [vista, setVista] = useState('vigentes');
+  const [cargando, setCargando] = useState(true);
+  const [errorCarga, setErrorCarga] = useState('');
   const [profesores, setProfesores] = useState([]);
   const [editandoId, setEditandoId] = useState(null);
 
@@ -25,17 +28,13 @@ export default function GestionarClases() {
     return diasSemana.filter((dia) => dias.includes(dia));
   };
 
-  const obtenerFechaHoy = () => {
-    const hoy = new Date();
-
-    const año = hoy.getFullYear();
-
-    const mes = String(hoy.getMonth() + 1).padStart(2, '0');
-
-    const dia = String(hoy.getDate()).padStart(2, '0');
-
-    return año + '-' + mes + '-' + dia;
-  };
+  const obtenerFechaHoy = () =>
+    new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'America/Lima',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).format(new Date());
 
   const calcularFechaFin = (inicio, duracionSeleccionada) => {
     if (!inicio || !duracionSeleccionada) {
@@ -114,6 +113,8 @@ export default function GestionarClases() {
   };
 
   const cargarClases = async () => {
+    setCargando(true);
+    setErrorCarga('');
     try {
       const respuesta = await apiFetch('/clases');
 
@@ -127,7 +128,9 @@ export default function GestionarClases() {
     } catch (error) {
       console.error('Error al cargar clases:', error);
 
-      alert('No se pudieron cargar las clases');
+      setErrorCarga('No se pudieron cargar las clases. Comprueba tu conexión e intenta de nuevo.');
+    } finally {
+      setCargando(false);
     }
   };
 
@@ -327,6 +330,14 @@ export default function GestionarClases() {
       alert('No se pudo eliminar la clase');
     }
   };
+
+  const vigentes = clases.filter((clase) => obtenerEstadoClase(clase).texto === 'Vigente');
+  const prioridad = { Vigente: 0, 'Por iniciar': 1, Finalizada: 2 };
+  const visibles = (vista === 'vigentes' ? vigentes : [...clases]).sort(
+    (a, b) =>
+      prioridad[obtenerEstadoClase(a).texto] - prioridad[obtenerEstadoClase(b).texto] ||
+      (b.fechaInicio || '').localeCompare(a.fechaInicio || ''),
+  );
 
   return (
     <div className="min-h-0 bg-[#f7f9fb] text-gray-800">
@@ -551,30 +562,89 @@ export default function GestionarClases() {
         )}
 
         <section className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
-          <div className="flex items-center justify-between">
+          <p className="text-xs font-semibold uppercase tracking-wide text-blue-600">Tu dojo hoy</p>
+          <div className="mt-2 flex flex-wrap items-start justify-between gap-3">
             <div>
-              <h2 className="text-sm font-bold text-gray-900">Clases registradas</h2>
-
-              <p className="mt-1 text-xs text-gray-400">
-                Clases creadas actualmente en el sistema.
+              <h2 className="text-lg font-bold text-gray-900">Clases vigentes</h2>
+              <p className="mt-1 text-sm text-gray-500">
+                Consulta los horarios, profesores y cupos disponibles.
               </p>
             </div>
-
-            <span className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-500">
-              {clases.length} clases
-            </span>
+            <a
+              href="/clases"
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-700"
+            >
+              <span aria-hidden="true">+</span> Nueva clase
+            </a>
           </div>
         </section>
 
-        {clases.length === 0 ? (
-          <section className="rounded-2xl border border-gray-200 bg-white p-6 text-center shadow-sm">
-            <p className="text-sm font-semibold text-gray-500">No hay clases registradas.</p>
+        <fieldset className="flex gap-2" aria-label="Filtrar clases">
+          <button
+            type="button"
+            aria-pressed={vista === 'vigentes'}
+            onClick={() => setVista('vigentes')}
+            className={`flex-1 rounded-xl border px-3 py-2 text-sm font-semibold ${vista === 'vigentes' ? 'border-blue-200 bg-blue-50 text-blue-700' : 'border-gray-200 bg-white text-gray-600'}`}
+          >
+            Vigentes{!cargando && !errorCarga ? ` (${vigentes.length})` : ''}
+          </button>
+          <button
+            type="button"
+            aria-pressed={vista === 'todas'}
+            onClick={() => setVista('todas')}
+            className={`flex-1 rounded-xl border px-3 py-2 text-sm font-semibold ${vista === 'todas' ? 'border-blue-200 bg-blue-50 text-blue-700' : 'border-gray-200 bg-white text-gray-600'}`}
+          >
+            Todas{!cargando && !errorCarga ? ` (${clases.length})` : ''}
+          </button>
+        </fieldset>
 
-            <p className="mt-1 text-xs text-gray-400">Crea una clase desde la página principal.</p>
+        {cargando ? (
+          <p role="status" className="rounded-2xl bg-white p-5 text-sm text-gray-600">
+            Cargando clases…
+          </p>
+        ) : errorCarga ? (
+          <div
+            role="alert"
+            className="rounded-2xl border border-red-100 bg-red-50 p-5 text-sm text-red-800"
+          >
+            <p>{errorCarga}</p>
+            <button
+              type="button"
+              onClick={cargarClases}
+              className="mt-3 rounded-xl border border-red-200 px-4 font-semibold"
+            >
+              Reintentar
+            </button>
+          </div>
+        ) : visibles.length === 0 ? (
+          <section className="rounded-2xl border border-dashed border-gray-300 bg-white p-6 text-center">
+            <h2 className="text-base font-semibold text-gray-800">
+              {clases.length === 0 ? 'Todavía no hay clases registradas' : 'No hay clases vigentes'}
+            </h2>
+            <p className="mt-2 text-sm text-gray-500">
+              {clases.length === 0
+                ? 'Crea tu primera clase para comenzar a organizar tu dojo.'
+                : 'Puedes consultar las clases próximas y finalizadas, o crear una nueva.'}
+            </p>
+            <a
+              href="/clases"
+              className="mt-4 inline-flex min-h-11 items-center justify-center rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-700"
+            >
+              {clases.length === 0 ? 'Crear mi primera clase' : 'Crear una nueva clase'}
+            </a>
+            {clases.length > 0 && (
+              <button
+                type="button"
+                onClick={() => setVista('todas')}
+                className="mt-2 block w-full rounded-xl px-4 py-2 text-sm font-semibold text-blue-700"
+              >
+                Ver todas las clases
+              </button>
+            )}
           </section>
         ) : (
           <div className="space-y-3">
-            {clases.map((clase) => {
+            {visibles.map((clase) => {
               const estado = obtenerEstadoClase(clase);
 
               return (

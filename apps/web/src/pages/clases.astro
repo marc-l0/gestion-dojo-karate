@@ -1,7 +1,7 @@
 ---
 import AdminLayout from "../layouts/AdminLayout.astro";
-import GestionarClases from "../components/GestionarClases.jsx";
+import CrearClase from "../components/crearClase.jsx";
 ---
-<AdminLayout title="Clases" active="clases" backHref="/">
-  <GestionarClases client:load />
+<AdminLayout title="Nueva clase" active="clases" backHref="/" backLabel="Volver a clases">
+  <CrearClase client:load />
 </AdminLayout>
