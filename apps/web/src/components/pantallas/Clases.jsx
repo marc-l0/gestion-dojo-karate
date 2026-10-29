@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useOperacion } from '../../hooks/useOperacion.js';
 import { apiFetch, leerRespuesta } from '../../lib/api.js';
+import ConfirmarAccion from '../ConfirmarAccion.jsx';
 import Mensaje from '../Mensaje.jsx';
 import TarjetaClase from '../TarjetaClase.jsx';
 
@@ -12,6 +13,7 @@ export default function Clases() {
   const [errorCarga, setErrorCarga] = useState('');
   const [profesores, setProfesores] = useState([]);
   const [editandoId, setEditandoId] = useState(null);
+  const [clasePorEliminar, setClasePorEliminar] = useState(null);
 
   const [nivel, setNivel] = useState('');
   const [sede, setSede] = useState('');
@@ -294,15 +296,10 @@ export default function Clases() {
     });
   };
 
-  const eliminarClase = async (id) => {
-    const confirmar = confirm('¿Desea eliminar esta clase?');
-
-    if (!confirmar) {
-      return;
-    }
-
-    await ejecutar(async () => {
-      const respuesta = await apiFetch('/clases/' + id, {
+  const eliminarClase = async () => {
+    if (!clasePorEliminar) return;
+    const eliminado = await ejecutar(async () => {
+      const respuesta = await apiFetch('/clases/' + clasePorEliminar.id, {
         method: 'DELETE',
       });
 
@@ -311,6 +308,7 @@ export default function Clases() {
       await cargarClases();
       return 'Clase eliminada correctamente.';
     });
+    if (eliminado) setClasePorEliminar(null);
   };
 
   const vigentes = clases.filter((clase) => obtenerEstadoClase(clase).texto === 'Vigente');
@@ -639,13 +637,30 @@ export default function Clases() {
                 }
                 formatearFecha={formatearFecha}
                 onEditar={iniciarEdicion}
-                onEliminar={eliminarClase}
+                onEliminar={(id) => {
+                  setAviso(null);
+                  setClasePorEliminar(clases.find((clase) => clase.id === id));
+                }}
                 ocupado={ocupado || cargando}
               />
             ))}
           </div>
         )}
       </main>
+      {clasePorEliminar && (
+        <ConfirmarAccion
+          titulo="¿Eliminar esta clase?"
+          ocupado={ocupado}
+          aviso={aviso}
+          onCancelar={() => setClasePorEliminar(null)}
+          onConfirmar={eliminarClase}
+        >
+          <p className="break-words font-semibold text-gray-900">
+            Karate · {clasePorEliminar.nivel} · Sede {clasePorEliminar.sede}
+          </p>
+          <p className="mt-2">Esta acción no se puede deshacer.</p>
+        </ConfirmarAccion>
+      )}
     </div>
   );
 }

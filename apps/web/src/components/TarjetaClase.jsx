@@ -72,6 +72,7 @@ export default function TarjetaClase({
               disabled={ocupado}
               onClick={(event) => {
                 cerrarOpciones(event);
+                event.currentTarget.closest('details').querySelector('summary').focus();
                 onEliminar(clase.id);
               }}
               className="w-full rounded-lg px-3 text-left text-sm font-medium text-red-600 hover:bg-red-50"
