@@ -3,6 +3,6 @@ import AdminLayout from "../layouts/AdminLayout.astro";
 import Ajustes from "../components/Ajustes.jsx";
 import { version } from "../../package.json";
 ---
-<AdminLayout title="Ajustes" active="ajustes" backHref="/">
+<AdminLayout title="Ajustes" active="usuario" backHref="/usuario" backLabel="Volver a usuario">
   <Ajustes version={version} client:load />
 </AdminLayout>

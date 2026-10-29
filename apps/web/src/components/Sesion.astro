@@ -1,6 +1,6 @@
-<div class="app-session">
-  <button id="cerrar-sesion" type="button" class="app-session__button" aria-label="Cerrar sesión" title="Cerrar sesión"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H4V3h5M10 12h11m-4-4 4 4-4 4" /></svg><span class="app-session__label">Cerrar sesión</span></button>
-  <p id="error-sesion" role="alert" class="hidden app-session__error"></p>
+<div class="user-session">
+  <button id="cerrar-sesion" type="button" class="user-session__button" aria-label="Cerrar sesión" title="Cerrar sesión"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H4V3h5M10 12h11m-4-4 4 4-4 4" /></svg><span class="user-session__label">Cerrar sesión</span></button>
+  <p id="error-sesion" role="alert" class="hidden user-session__error"></p>
 </div>
 <script>
   import { cerrarSesion } from '../lib/api.js';
@@ -8,7 +8,7 @@
   boton?.addEventListener('click', async () => {
     boton.disabled = true;
     boton.setAttribute('aria-busy', 'true');
-    const etiqueta = boton.querySelector('.app-session__label');
+    const etiqueta = boton.querySelector('.user-session__label');
     if (etiqueta) etiqueta.textContent = 'Cerrando…';
     try {
       await cerrarSesion();

@@ -55,7 +55,9 @@ export default function Ajustes({ version }) {
         </fieldset>
       </section>
       <section className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
-        <h2 className="text-lg font-bold text-gray-900">Guía rápida</h2>
+        <h2 id="guia" className="scroll-mt-24 text-lg font-bold text-gray-900">
+          Guía rápida
+        </h2>
         <div className="mt-3 divide-y divide-gray-100 text-sm text-gray-600">
           <details className="py-2">
             <summary className="flex min-h-11 cursor-pointer items-center font-semibold text-gray-800">
@@ -93,13 +95,15 @@ export default function Ajustes({ version }) {
             </summary>
             <p className="pb-3 leading-6">
               Necesitas conexión con el servidor e internet para guardar y consultar los datos. Al
-              terminar en un equipo compartido, usa el botón de cerrar sesión de la parte superior.
+              terminar en un equipo compartido, entra a Usuario y pulsa Cerrar sesión.
             </p>
           </details>
         </div>
       </section>
       <section className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
-        <h2 className="text-lg font-bold text-gray-900">Acerca del sistema</h2>
+        <h2 id="acerca" className="scroll-mt-24 text-lg font-bold text-gray-900">
+          Acerca del sistema
+        </h2>
         <p className="mt-3 font-semibold text-gray-800">Gestión Dojo Karate</p>
         <p className="mt-1 text-sm text-gray-500">Versión {version}</p>
         <p className="mt-3 text-sm text-gray-600">
