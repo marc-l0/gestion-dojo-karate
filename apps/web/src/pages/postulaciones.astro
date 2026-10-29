@@ -1,7 +1,7 @@
 ---
-import AdminLayout from "../layouts/AdminLayout.astro";
-import Postulaciones from "../components/Postulaciones.jsx";
+import LayoutAdministracion from "../layouts/LayoutAdministracion.astro";
+import Postulaciones from "../components/pantallas/Postulaciones.jsx";
 ---
-<AdminLayout title="Postulaciones" active="postulaciones" backHref="/">
+<LayoutAdministracion title="Postulaciones" active="postulaciones" backHref="/">
   <Postulaciones client:load />
-</AdminLayout>
+</LayoutAdministracion>

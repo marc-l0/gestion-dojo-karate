@@ -1,7 +1,5 @@
 ---
-import AdminLayout from "../layouts/AdminLayout.astro";
-import FormularioGenerado from "../components/FormularioGenerado.jsx";
+// Ruta anterior: conservar enlaces guardados. Editar la pantalla en compartir-convocatoria.astro.
+import CompartirConvocatoria from './compartir-convocatoria.astro';
 ---
-<AdminLayout title="Compartir convocatoria" active="inicio" backHref="/" backLabel="Volver a clases">
-  <FormularioGenerado client:load />
-</AdminLayout>
+<CompartirConvocatoria />

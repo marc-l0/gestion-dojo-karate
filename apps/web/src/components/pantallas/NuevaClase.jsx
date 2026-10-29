@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useOperacion } from '../hooks/useOperacion.js';
-import { apiFetch, leerRespuesta } from '../lib/api.js';
-import Mensaje from './Mensaje.jsx';
+import { useOperacion } from '../../hooks/useOperacion.js';
+import { apiFetch, leerRespuesta } from '../../lib/api.js';
+import Mensaje from '../Mensaje.jsx';
 
-export default function CrearClase() {
+export default function NuevaClase() {
   const { ocupado, aviso, setAviso, ejecutar } = useOperacion();
   const [cargandoProfesores, setCargandoProfesores] = useState(true);
   const [nivel, setNivel] = useState('');

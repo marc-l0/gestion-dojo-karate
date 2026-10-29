@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useTema } from '../hooks/useTema.js';
-import Mensaje from './Mensaje.jsx';
+import { useTema } from '../../hooks/useTema.js';
+import Mensaje from '../Mensaje.jsx';
 
 const opciones = [
   { valor: 'claro', nombre: 'Claro', descripcion: 'Fondos claros y texto oscuro.' },

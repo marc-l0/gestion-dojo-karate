@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useOperacion } from '../hooks/useOperacion.js';
-import { apiFetch, leerRespuesta } from '../lib/api.js';
-import IndicadorCupos from './IndicadorCupos.jsx';
-import Mensaje from './Mensaje.jsx';
+import { useOperacion } from '../../hooks/useOperacion.js';
+import { apiFetch, leerRespuesta } from '../../lib/api.js';
+import IndicadorCupos from '../IndicadorCupos.jsx';
+import Mensaje from '../Mensaje.jsx';
 
 const normalizar = (texto) =>
   String(texto ?? '')

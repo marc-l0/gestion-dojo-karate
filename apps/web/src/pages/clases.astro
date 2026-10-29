@@ -1,7 +1,5 @@
 ---
-import AdminLayout from "../layouts/AdminLayout.astro";
-import CrearClase from "../components/crearClase.jsx";
+// Ruta anterior: conservar enlaces guardados. Editar la pantalla en nueva-clase.astro.
+import NuevaClase from './nueva-clase.astro';
 ---
-<AdminLayout title="Nueva clase" active="inicio" backHref="/" backLabel="Volver a clases">
-  <CrearClase client:load />
-</AdminLayout>
+<NuevaClase />

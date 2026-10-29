@@ -1,8 +1,8 @@
 ---
-import AdminLayout from "../layouts/AdminLayout.astro";
-import Ajustes from "../components/Ajustes.jsx";
+import LayoutAdministracion from "../layouts/LayoutAdministracion.astro";
+import Ajustes from "../components/pantallas/Ajustes.jsx";
 import { version } from "../../package.json";
 ---
-<AdminLayout title="Ajustes" active="usuario" backHref="/usuario" backLabel="Volver a usuario">
+<LayoutAdministracion title="Ajustes" active="usuario" backHref="/usuario" backLabel="Volver a usuario">
   <Ajustes version={version} client:load />
-</AdminLayout>
+</LayoutAdministracion>

@@ -76,8 +76,9 @@ apps/
     clases/                  controller, service, dto, interfaces y repositories (clases y postulaciones)
     profesores/              controller, service, interfaces y repositories
   web/src/
-    pages/                   una página por archivo (index, clases, profesores, postulaciones, calendario...)
-    components/              componentes de React (islas): formulario, calendario, gestión de clases y profesores
+    pages/                   rutas de las pantallas (index, nueva-clase, profesores, calendario...)
+    components/pantallas/    una pantalla React por archivo, con el nombre de su sección
+    components/              piezas compartidas: navegación, tarjetas, QR, mensajes y sesión
     layouts/                 moldes de página
     styles/                  estilos globales
 packages/shared/src/
@@ -85,6 +86,8 @@ packages/shared/src/
   types/api.ts               forma de los datos que viajan entre web y api
 docs/                        guías del proyecto
 ```
+
+Para localizar cada pantalla y sus componentes, consulta el [mapa de pantallas](docs/05-mapa-de-pantallas.md).
 
 ## Endpoints de la API
 

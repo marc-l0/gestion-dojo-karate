@@ -1,9 +1,9 @@
 import { Calendar, ConfigProvider, List, Modal, theme as temaAnt } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
-import { useTema } from '../hooks/useTema.js';
-import { apiFetch } from '../lib/api.js';
-import Mensaje from './Mensaje.jsx';
+import { useTema } from '../../hooks/useTema.js';
+import { apiFetch } from '../../lib/api.js';
+import Mensaje from '../Mensaje.jsx';
 import 'dayjs/locale/es';
 import locale from 'antd/locale/es_ES';
 

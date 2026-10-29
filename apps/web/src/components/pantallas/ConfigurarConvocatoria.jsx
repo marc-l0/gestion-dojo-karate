@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { enlaceFormulario } from '../lib/enlace-formulario.js';
-import CopiarEnlace from './CopiarEnlace.jsx';
-import QrFormulario from './QrFormulario.jsx';
+import { enlaceFormulario } from '../../lib/enlace-formulario.js';
+import CopiarEnlace from '../CopiarEnlace.jsx';
+import QrFormulario from '../QrFormulario.jsx';
 
 export default function ConfigurarConvocatoria() {
   const [clase, setClase] = useState(null);

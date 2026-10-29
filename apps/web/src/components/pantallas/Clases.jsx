@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useOperacion } from '../hooks/useOperacion.js';
-import { apiFetch, leerRespuesta } from '../lib/api.js';
-import Mensaje from './Mensaje.jsx';
-import TarjetaClase from './TarjetaClase.jsx';
+import { useOperacion } from '../../hooks/useOperacion.js';
+import { apiFetch, leerRespuesta } from '../../lib/api.js';
+import Mensaje from '../Mensaje.jsx';
+import TarjetaClase from '../TarjetaClase.jsx';
 
-export default function GestionarClases() {
+export default function Clases() {
   const { ocupado, aviso, setAviso, ejecutar } = useOperacion();
   const [clases, setClases] = useState([]);
   const [vista, setVista] = useState('vigentes');
@@ -554,7 +554,7 @@ export default function GestionarClases() {
               </p>
             </div>
             <a
-              href="/clases"
+              href="/nueva-clase"
               className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-700"
             >
               <span aria-hidden="true">+</span> Nueva clase
@@ -610,7 +610,7 @@ export default function GestionarClases() {
                 : 'Puedes consultar las clases próximas y finalizadas, o crear una nueva.'}
             </p>
             <a
-              href="/clases"
+              href="/nueva-clase"
               className="mt-4 inline-flex min-h-11 items-center justify-center rounded-xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white hover:bg-blue-700"
             >
               {clases.length === 0 ? 'Crear mi primera clase' : 'Crear una nueva clase'}

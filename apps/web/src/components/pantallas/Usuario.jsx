@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { apiFetch, leerRespuesta } from '../lib/api.js';
+import { apiFetch, leerRespuesta } from '../../lib/api.js';
 
 export default function Usuario() {
   const [usuario, setUsuario] = useState('');

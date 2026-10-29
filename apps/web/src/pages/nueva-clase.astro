@@ -1,0 +1,7 @@
+---
+import LayoutAdministracion from "../layouts/LayoutAdministracion.astro";
+import NuevaClase from "../components/pantallas/NuevaClase.jsx";
+---
+<LayoutAdministracion title="Nueva clase" active="inicio" backHref="/" backLabel="Volver a clases">
+  <NuevaClase client:load />
+</LayoutAdministracion>

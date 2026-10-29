@@ -100,7 +100,7 @@ export default function TarjetaClase({
           Ver postulaciones
         </a>
         <a
-          href={`/formulario-generado?clase=${encodeURIComponent(clase.id)}`}
+          href={`/compartir-convocatoria?clase=${encodeURIComponent(clase.id)}`}
           className="inline-flex min-h-11 items-center justify-center rounded-xl border border-blue-200 px-2 py-2 text-center text-sm font-semibold text-blue-700 hover:bg-blue-50"
         >
           Compartir QR

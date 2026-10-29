@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { API_URL } from '../lib/api.js';
-import { enlaceFormulario } from '../lib/enlace-formulario.js';
-import CopiarEnlace from './CopiarEnlace.jsx';
-import QrFormulario from './QrFormulario.jsx';
+import { API_URL } from '../../lib/api.js';
+import { enlaceFormulario } from '../../lib/enlace-formulario.js';
+import CopiarEnlace from '../CopiarEnlace.jsx';
+import QrFormulario from '../QrFormulario.jsx';
 
-export default function FormularioGenerado() {
+export default function CompartirConvocatoria() {
   const [clase, setClase] = useState(null);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState('');

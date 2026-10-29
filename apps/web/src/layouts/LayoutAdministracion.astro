@@ -1,7 +1,7 @@
 ---
 import NavegacionInferior from '../components/NavegacionInferior.astro';
 import ProtegerPagina from '../components/ProtegerPagina.astro';
-import Tema from '../components/Tema.astro';
+import InicializarTema from '../components/InicializarTema.astro';
 import '../styles/global.css';
 interface Props { title: string; active: string; backHref?: string; backLabel?: string; }
 const { title, active, backHref, backLabel = 'Volver a clases' } = Astro.props;
@@ -12,7 +12,7 @@ const { title, active, backHref, backLabel = 'Volver a clases' } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#ffffff" />
-    <Tema />
+    <InicializarTema />
     <title>{title} | Mi Dojo</title>
     <ProtegerPagina />
   </head>

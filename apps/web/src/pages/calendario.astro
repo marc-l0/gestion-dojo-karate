@@ -1,7 +1,7 @@
 ---
-import AdminLayout from "../layouts/AdminLayout.astro";
-import Calendario from "../components/Calendario.jsx";
+import LayoutAdministracion from "../layouts/LayoutAdministracion.astro";
+import Calendario from "../components/pantallas/Calendario.jsx";
 ---
-<AdminLayout title="Calendario" active="calendario" backHref="/">
+<LayoutAdministracion title="Calendario" active="calendario" backHref="/">
   <Calendario client:load />
-</AdminLayout>
+</LayoutAdministracion>

@@ -1,7 +1,7 @@
 ---
-import AdminLayout from "../layouts/AdminLayout.astro";
-import ConfigurarConvocatoria from "../components/ConfigurarConvocatoria.jsx";
+import LayoutAdministracion from "../layouts/LayoutAdministracion.astro";
+import ConfigurarConvocatoria from "../components/pantallas/ConfigurarConvocatoria.jsx";
 ---
-<AdminLayout title="Configurar convocatoria" active="calendario" backHref="/calendario" backLabel="Volver al calendario">
+<LayoutAdministracion title="Configurar convocatoria" active="calendario" backHref="/calendario" backLabel="Volver al calendario">
   <ConfigurarConvocatoria client:load />
-</AdminLayout>
+</LayoutAdministracion>

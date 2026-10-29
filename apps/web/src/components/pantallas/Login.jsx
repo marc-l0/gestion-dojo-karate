@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { API_URL } from '../lib/api.js';
+import { API_URL } from '../../lib/api.js';
 
 // Solo se permite volver a rutas internas del sitio (evita redirecciones a otros dominios).
 function destinoSeguro(volver) {

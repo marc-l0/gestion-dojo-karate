@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useOperacion } from '../hooks/useOperacion.js';
-import { apiFetch, leerRespuesta } from '../lib/api.js';
-import Mensaje from './Mensaje.jsx';
+import { useOperacion } from '../../hooks/useOperacion.js';
+import { apiFetch, leerRespuesta } from '../../lib/api.js';
+import Mensaje from '../Mensaje.jsx';
 
-export default function GestionarProfesores() {
+export default function Profesores() {
   const [profesores, setProfesores] = useState([]);
   const [nombre, setNombre] = useState('');
   const [cargando, setCargando] = useState(true);

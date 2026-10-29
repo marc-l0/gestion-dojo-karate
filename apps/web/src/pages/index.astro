@@ -1,7 +1,7 @@
 ---
-import AdminLayout from "../layouts/AdminLayout.astro";
-import GestionarClases from "../components/GestionarClases.jsx";
+import LayoutAdministracion from "../layouts/LayoutAdministracion.astro";
+import Clases from "../components/pantallas/Clases.jsx";
 ---
-<AdminLayout title="Clases" active="inicio">
-  <GestionarClases client:load />
-</AdminLayout>
+<LayoutAdministracion title="Clases" active="inicio">
+  <Clases client:load />
+</LayoutAdministracion>

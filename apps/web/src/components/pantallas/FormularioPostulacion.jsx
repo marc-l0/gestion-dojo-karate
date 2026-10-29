@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { API_URL } from '../lib/api.js';
-import IndicadorCupos from './IndicadorCupos.jsx';
+import { API_URL } from '../../lib/api.js';
+import IndicadorCupos from '../IndicadorCupos.jsx';
 
 const fechaEnLima = () =>
   new Intl.DateTimeFormat('en-CA', {
@@ -12,7 +12,7 @@ const fechaEnLima = () =>
 const campo =
   'mt-2 block min-h-12 w-full min-w-0 rounded-xl border border-purple-100 bg-white px-3 py-2 text-base text-gray-900 outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-200 disabled:bg-gray-100';
 
-export default function Formulario() {
+export default function FormularioPostulacion() {
   const [clase, setClase] = useState(null);
   const [cargando, setCargando] = useState(true);
   const [errorClase, setErrorClase] = useState('');

@@ -1,7 +1,7 @@
 ---
-import AdminLayout from "../layouts/AdminLayout.astro";
-import GestionarProfesores from "../components/GestionarProfesores.jsx";
+import LayoutAdministracion from "../layouts/LayoutAdministracion.astro";
+import Profesores from "../components/pantallas/Profesores.jsx";
 ---
-<AdminLayout title="Profesores" active="profesores" backHref="/">
-  <GestionarProfesores client:load />
-</AdminLayout>
+<LayoutAdministracion title="Profesores" active="profesores" backHref="/">
+  <Profesores client:load />
+</LayoutAdministracion>
