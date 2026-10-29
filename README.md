@@ -46,6 +46,10 @@ pnpm dev
 - Web: http://localhost:4321
 - API: http://localhost:3000
 
+Para trabajar cada día, ejecuta `pnpm dev` desde la raíz: inicia el frontend y el backend en una sola terminal. Usa `Ctrl+C` para detener ambos. Si antes dejaste el frontend en segundo plano, detenlo primero con `pnpm stop:web`, y detén cualquier API que siga abierta en otra terminal para evitar puertos ocupados.
+
+El frontend escucha también en la red local para probar desde un celular. Usa `http://IP-DE-LA-LAPTOP:4321` y mantén `PUBLIC_API_URL` en `apps/web/.env` y `WEB_URL` en `apps/api/.env` con esa misma IP y sus puertos correspondientes (3000 y 4321). Ambos dispositivos deben estar en la misma red.
+
 > Si instalaste antes de ejecutar `git init`, los hooks de commits no quedan activos. Actívalos con `pnpm run prepare`.
 
 ## Scripts principales
@@ -54,8 +58,9 @@ Desde la raíz del proyecto:
 
 | Comando | Qué hace |
 |---|---|
-| `pnpm dev` | Levanta web, api y shared en modo desarrollo |
+| `pnpm dev` | Compila shared e inicia frontend y backend en una terminal |
 | `pnpm dev:web` / `pnpm dev:api` | Levanta solo una app |
+| `pnpm stop:web` | Detiene el frontend si se inició en segundo plano |
 | `pnpm build` | Compila todo |
 | `pnpm typecheck` | Revisa los tipos de TypeScript |
 | `pnpm test` | Pruebas unitarias con Vitest |

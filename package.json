@@ -10,6 +10,7 @@
     "dev": "turbo run dev",
     "dev:web": "turbo run dev --filter=web",
     "dev:api": "turbo run dev --filter=api",
+    "stop:web": "pnpm --filter web exec astro dev stop",
     "build": "turbo run build",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
