@@ -1,0 +1,8 @@
+---
+import AdminLayout from "../layouts/AdminLayout.astro";
+import Ajustes from "../components/Ajustes.jsx";
+import { version } from "../../package.json";
+---
+<AdminLayout title="Ajustes" active="ajustes" backHref="/">
+  <Ajustes version={version} client:load />
+</AdminLayout>

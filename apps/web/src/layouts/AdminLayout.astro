@@ -2,6 +2,7 @@
 import NavegacionInferior from '../components/NavegacionInferior.astro';
 import ProtegerPagina from '../components/ProtegerPagina.astro';
 import Sesion from '../components/Sesion.astro';
+import Tema from '../components/Tema.astro';
 import '../styles/global.css';
 interface Props { title: string; active: string; backHref?: string; backLabel?: string; }
 const { title, active, backHref, backLabel = 'Volver a clases' } = Astro.props;
@@ -12,6 +13,7 @@ const { title, active, backHref, backLabel = 'Volver a clases' } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#ffffff" />
+    <Tema />
     <title>{title} | Dojo Karate</title>
     <ProtegerPagina />
   </head>
@@ -27,6 +29,9 @@ const { title, active, backHref, backLabel = 'Volver a clases' } = Astro.props;
             <p>DOJO KARATE</p>
             <h1>{title}</h1>
           </div>
+          <a href="/ajustes" class="app-back app-settings" aria-label="Ajustes" title="Ajustes" aria-current={active === 'ajustes' ? 'page' : undefined}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9.5 3-.6 2.1-1.8 1-2.1-.5-2.5 4.3L4 11.5v2l-1.5 1.6L5 19.4l2.1-.5 1.8 1 .6 2.1h5l.6-2.1 1.8-1 2.1.5 2.5-4.3-1.5-1.6v-2l1.5-1.6L19 5.6l-2.1.5-1.8-1L14.5 3z" /><circle cx="12" cy="12.5" r="3" /></svg>
+          </a>
           <Sesion />
         </div>
       </header>

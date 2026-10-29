@@ -34,7 +34,7 @@ export default function QrFormulario({
   return (
     <>
       <div className={claseContenedor}>
-        <div ref={marco} className={claseMarco}>
+        <div ref={marco} className={`qr-surface ${claseMarco}`}>
           <QRCodeCanvas
             value={url}
             size={512}

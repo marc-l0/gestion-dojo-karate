@@ -420,13 +420,7 @@ export default function Postulaciones() {
           </div>
         </>
       )}
-      <div className="grid grid-cols-2 gap-2">
-        <a
-          href="/clases"
-          className="inline-flex min-h-11 items-center justify-center rounded-xl border border-gray-200 bg-white px-3 text-sm font-semibold text-blue-700"
-        >
-          Nueva clase
-        </a>
+      <div className="grid gap-2">
         <a
           href="/"
           className="inline-flex min-h-11 items-center justify-center rounded-xl border border-gray-200 bg-white px-3 text-sm font-semibold text-blue-700"

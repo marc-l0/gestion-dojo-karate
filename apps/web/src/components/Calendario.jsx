@@ -1,6 +1,7 @@
-import { Calendar, ConfigProvider, List, Modal } from 'antd';
+import { Calendar, ConfigProvider, List, Modal, theme as temaAnt } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
+import { useTema } from '../hooks/useTema.js';
 import { apiFetch } from '../lib/api.js';
 import Mensaje from './Mensaje.jsx';
 import 'dayjs/locale/es';
@@ -9,6 +10,7 @@ import locale from 'antd/locale/es_ES';
 dayjs.locale('es');
 
 export default function Calendario() {
+  const { oscuro } = useTema();
   const [aviso, setAviso] = useState(null);
   const [cargando, setCargando] = useState(true);
   const [clases, setClases] = useState([]);
@@ -273,24 +275,27 @@ export default function Calendario() {
   };
 
   return (
-    <div className="min-h-0 bg-[#f7f9fb] pb-6 text-gray-800">
-      <main className="mx-auto max-w-full space-y-4 px-4 pt-4" aria-busy={cargando}>
-        <Mensaje aviso={aviso} />
-        {cargando && (
-          <p role="status" className="text-sm text-gray-600">
-            Cargando calendario…
-          </p>
-        )}
-        <div>
-          <p className="text-sm font-semibold uppercase tracking-wide text-gray-400">
-            PROGRAMACIÓN
-          </p>
+    <ConfigProvider
+      locale={locale}
+      theme={{ algorithm: oscuro ? temaAnt.darkAlgorithm : temaAnt.defaultAlgorithm }}
+    >
+      <div className="min-h-0 bg-[#f7f9fb] pb-6 text-gray-800">
+        <main className="mx-auto max-w-full space-y-4 px-4 pt-4" aria-busy={cargando}>
+          <Mensaje aviso={aviso} />
+          {cargando && (
+            <p role="status" className="text-sm text-gray-600">
+              Cargando calendario…
+            </p>
+          )}
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-wide text-gray-400">
+              PROGRAMACIÓN
+            </p>
 
-          <h2 className="mt-1 text-lg font-bold text-gray-900">Calendario de clases</h2>
-        </div>
+            <h2 className="mt-1 text-lg font-bold text-gray-900">Calendario de clases</h2>
+          </div>
 
-        <section className="rounded-2xl border border-gray-200 bg-white p-3 shadow-sm">
-          <ConfigProvider locale={locale}>
+          <section className="rounded-2xl border border-gray-200 bg-white p-3 shadow-sm">
             <Calendar
               fullCellRender={cellRender}
               onSelect={onSelect}
@@ -329,89 +334,89 @@ export default function Calendario() {
                 );
               }}
             />
-          </ConfigProvider>
-        </section>
+          </section>
 
-        <section className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-semibold text-gray-400">CLASES PROGRAMADAS</p>
+          <section className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-semibold text-gray-400">CLASES PROGRAMADAS</p>
 
-              <p className="mt-1 text-xs text-gray-600">Selecciona un día para ver sus clases.</p>
+                <p className="mt-1 text-xs text-gray-600">Selecciona un día para ver sus clases.</p>
+              </div>
+
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-green-50 text-sm">
+                ✓
+              </div>
             </div>
+          </section>
 
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-green-50 text-sm">
-              ✓
-            </div>
-          </div>
-        </section>
+          <section className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+            <p className="text-sm font-semibold text-gray-400">ACCIONES</p>
 
-        <section className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
-          <p className="text-sm font-semibold text-gray-400">ACCIONES</p>
-
-          <button
-            type="button"
-            onClick={() => {
-              window.location.href = '/clases';
-            }}
-            className="mt-3 h-9 w-full rounded-xl bg-blue-500 text-sm font-semibold text-white shadow-sm"
-          >
-            Crear nueva clase
-          </button>
-        </section>
-      </main>
-
-      <Modal
-        title={
-          fechaSeleccionada ? 'Clases del ' + fechaSeleccionada.format('DD/MM/YYYY') : 'Clases'
-        }
-        open={modalVisible}
-        onCancel={() => setModalVisible(false)}
-        footer={null}
-      >
-        <List
-          dataSource={fechaSeleccionada ? obtenerClasesDelDia(fechaSeleccionada) : []}
-          renderItem={(clase) => (
-            <List.Item
+            <button
+              type="button"
               onClick={() => {
-                setClaseSeleccionada(clase);
+                window.location.href = '/';
               }}
-              style={{
-                cursor: 'pointer',
-
-                backgroundColor: claseSeleccionada?.id === clase.id ? '#eff6ff' : 'transparent',
-
-                borderRadius: '12px',
-
-                padding: '10px',
-              }}
+              className="mt-3 h-9 w-full rounded-xl bg-blue-500 text-sm font-semibold text-white shadow-sm"
             >
-              <List.Item.Meta
-                title={<span className="font-semibold">Karate · {clase.nivel}</span>}
-                description={
-                  clase.horaInicio +
-                  ' - ' +
-                  clase.horaFin +
-                  ' · ' +
-                  clase.sede +
-                  ' · ' +
-                  clase.profesor
-                }
-              />
-            </List.Item>
-          )}
-        />
+              Ver clases
+            </button>
+          </section>
+        </main>
 
-        {claseSeleccionada && (
-          <button
-            type="button"
-            onClick={seleccionarConvocatoria}
-            className="mt-4 h-10 w-full cursor-pointer rounded-xl bg-blue-500 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-600 hover:shadow-md"
-          >
-            Ver Convocatoria
-          </button>
-        )}
-      </Modal>
-    </div>
+        <Modal
+          title={
+            fechaSeleccionada ? 'Clases del ' + fechaSeleccionada.format('DD/MM/YYYY') : 'Clases'
+          }
+          open={modalVisible}
+          onCancel={() => setModalVisible(false)}
+          footer={null}
+        >
+          <List
+            dataSource={fechaSeleccionada ? obtenerClasesDelDia(fechaSeleccionada) : []}
+            renderItem={(clase) => (
+              <List.Item
+                onClick={() => {
+                  setClaseSeleccionada(clase);
+                }}
+                style={{
+                  cursor: 'pointer',
+
+                  backgroundColor: claseSeleccionada?.id === clase.id ? '#eff6ff' : 'transparent',
+
+                  borderRadius: '12px',
+
+                  padding: '10px',
+                }}
+              >
+                <List.Item.Meta
+                  title={<span className="font-semibold">Karate · {clase.nivel}</span>}
+                  description={
+                    clase.horaInicio +
+                    ' - ' +
+                    clase.horaFin +
+                    ' · ' +
+                    clase.sede +
+                    ' · ' +
+                    clase.profesor
+                  }
+                />
+              </List.Item>
+            )}
+          />
+
+          {claseSeleccionada && (
+            <button
+              type="button"
+              onClick={seleccionarConvocatoria}
+              className="mt-4 h-10 w-full cursor-pointer rounded-xl bg-blue-500 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-600 hover:shadow-md"
+            >
+              Ver Convocatoria
+            </button>
+          )}
+        </Modal>
+      </div>
+    </ConfigProvider>
   );
 }

@@ -1,0 +1,32 @@
+<script is:inline>
+  (() => {
+    const clave = 'dojo-tema';
+    const sistema = window.matchMedia('(prefers-color-scheme: dark)');
+    const validar = (valor) => ['claro', 'oscuro', 'automatico'].includes(valor) ? valor : 'automatico';
+    const leer = () => { try { return validar(localStorage.getItem(clave)); } catch { return 'automatico'; } };
+    let preferencia = leer();
+    function aplicar() {
+      const oscuro = preferencia === 'oscuro' || (preferencia === 'automatico' && sistema.matches);
+      document.documentElement.dataset.tema = oscuro ? 'oscuro' : 'claro';
+      document.documentElement.style.colorScheme = oscuro ? 'dark' : 'light';
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', oscuro ? '#151f2e' : '#ffffff');
+      window.dispatchEvent(new Event('dojo:tema'));
+    }
+    window.dojoTema = {
+      preferencia: () => preferencia,
+      cambiar: (valor) => {
+        preferencia = validar(valor);
+        let guardado = true;
+        try { localStorage.setItem(clave, preferencia); } catch { guardado = false; }
+        aplicar();
+        return guardado;
+      },
+    };
+    if (sistema.addEventListener) sistema.addEventListener('change', aplicar);
+    else sistema.addListener(aplicar);
+    window.addEventListener('storage', (event) => {
+      if (event.key === clave || event.key === null) { preferencia = leer(); aplicar(); }
+    });
+    aplicar();
+  })();
+</script>

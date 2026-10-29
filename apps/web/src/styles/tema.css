@@ -1,0 +1,137 @@
+:root {
+  color-scheme: light;
+  --page-background: #f7f9fb;
+  --surface: #fff;
+  --surface-subtle: #f1f5f9;
+  --text-primary: #172033;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --accent: #2563eb;
+  --accent-soft: #eff6ff;
+  --danger: #b91c1c;
+  --danger-soft: #fff1f2;
+  --danger-border: #fecaca;
+}
+:root[data-tema="oscuro"] {
+  color-scheme: dark;
+  --page-background: #0b1220;
+  --surface: #151f2e;
+  --surface-subtle: #1b293b;
+  --text-primary: #eef2f7;
+  --text-secondary: #cbd5e1;
+  --text-muted: #a1b1c6;
+  --border: #334155;
+  --accent: #93c5fd;
+  --accent-soft: #172e4f;
+  --danger: #fda4af;
+  --danger-soft: #3d202b;
+  --danger-border: #7f3546;
+}
+
+/* Colores de los componentes existentes bajo la misma preferencia global. */
+html[data-tema="oscuro"] body {
+  background: var(--page-background);
+  color: var(--text-primary);
+}
+html[data-tema="oscuro"] .bg-white {
+  background-color: var(--surface);
+}
+html[data-tema="oscuro"] :is(.bg-gray-100, [class~="bg-[#f7f9fb]"], [class~="bg-[#f5f3f8]"]) {
+  background-color: var(--page-background);
+}
+html[data-tema="oscuro"] :is(.bg-gray-50, .bg-gray-200) {
+  background-color: var(--surface-subtle);
+}
+html[data-tema="oscuro"]
+  :is(.bg-blue-50, .bg-purple-50, [class~="bg-[#f4edff]"], [class~="bg-[#f8f3ff]"]) {
+  background-color: var(--accent-soft);
+}
+html[data-tema="oscuro"] .bg-green-50 {
+  background-color: #14372f;
+}
+html[data-tema="oscuro"] :is(.bg-amber-50, .bg-yellow-50) {
+  background-color: #3d3018;
+}
+html[data-tema="oscuro"] .bg-red-50 {
+  background-color: var(--danger-soft);
+}
+html[data-tema="oscuro"] :is(.text-gray-900, .text-gray-800) {
+  color: var(--text-primary);
+}
+html[data-tema="oscuro"] :is(.text-gray-700, .text-gray-600) {
+  color: var(--text-secondary);
+}
+html[data-tema="oscuro"] :is(.text-gray-500, .text-gray-400) {
+  color: var(--text-muted);
+}
+html[data-tema="oscuro"]
+  :is(
+    .text-blue-500,
+    .text-blue-600,
+    .text-blue-700,
+    .text-blue-800,
+    .text-blue-900,
+    .text-purple-600,
+    .text-purple-700,
+    .text-purple-900,
+    [class~="text-[#673ab7]"]
+  ) {
+  color: var(--accent);
+}
+html[data-tema="oscuro"]
+  :is(.text-green-500, .text-green-600, .text-green-700, .text-green-800, .text-green-900) {
+  color: #86efac;
+}
+html[data-tema="oscuro"] :is(.text-amber-600, .text-amber-800, .text-amber-900, .text-yellow-600) {
+  color: #fcd34d;
+}
+html[data-tema="oscuro"] :is(.text-red-500, .text-red-600, .text-red-700, .text-red-800) {
+  color: var(--danger);
+}
+html[data-tema="oscuro"]
+  :is(
+    .border-gray-100,
+    .border-gray-200,
+    .border-gray-300,
+    .border-purple-100,
+    .border-purple-200,
+    .border-blue-100,
+    .border-blue-200,
+    .border-blue-300,
+    [class~="border-[#d9c5f5]"]
+  ) {
+  border-color: var(--border);
+}
+html[data-tema="oscuro"] :is(.border-red-100, .border-red-200) {
+  border-color: var(--danger-border);
+}
+html[data-tema="oscuro"] :is(.border-green-100, .border-green-200) {
+  border-color: #285949;
+}
+html[data-tema="oscuro"] .divide-gray-100 > :not(:last-child) {
+  border-color: var(--border);
+}
+html[data-tema="oscuro"] :is(input, textarea)::placeholder {
+  color: #94a3b8;
+}
+html[data-tema="oscuro"] :is([class~="hover:bg-gray-50"], [class~="hover:bg-gray-100"]):hover {
+  background-color: var(--surface-subtle);
+}
+html[data-tema="oscuro"]
+  :is(
+    [class~="hover:bg-blue-50"],
+    [class~="hover:bg-purple-50"],
+    [class~="hover:bg-[#f8f3ff]"],
+    [class~="hover:bg-[#f0e7ff]"]
+  ):hover {
+  background-color: var(--accent-soft);
+}
+html[data-tema="oscuro"] [class~="hover:bg-red-50"]:hover {
+  background-color: var(--danger-soft);
+}
+/* El área de impresión y descarga del QR siempre mantiene contraste negro/blanco. */
+html[data-tema="oscuro"] .qr-surface {
+  background: #fff;
+  border-color: #fff;
+}
