@@ -1,182 +1,158 @@
-import { useEffect, useState } from 'react';
-import { apiFetch } from '../lib/api.js';
+import { useCallback, useEffect, useState } from 'react';
+import { useOperacion } from '../hooks/useOperacion.js';
+import { apiFetch, leerRespuesta } from '../lib/api.js';
+import Mensaje from './Mensaje.jsx';
 
 export default function GestionarProfesores() {
   const [profesores, setProfesores] = useState([]);
   const [nombre, setNombre] = useState('');
-
-  const cargarProfesores = async () => {
+  const [cargando, setCargando] = useState(true);
+  const { ocupado, aviso, setAviso, ejecutar } = useOperacion();
+  const cargar = useCallback(async () => {
+    setCargando(true);
     try {
-      const respuesta = await apiFetch('/profesores');
-
-      if (!respuesta.ok) {
-        throw new Error('No se pudieron cargar los profesores');
-      }
-
-      const datos = await respuesta.json();
-
+      const datos = await leerRespuesta(
+        await apiFetch('/profesores'),
+        'No se pudieron cargar los profesores. Intenta de nuevo.',
+      );
       setProfesores(datos);
-    } catch (error) {
-      console.error('Error al cargar profesores:', error);
-
-      alert('No se pudieron cargar los profesores');
+    } catch {
+      setAviso({
+        tipo: 'error',
+        texto: 'No se pudieron cargar los profesores. Comprueba tu conexión e intenta de nuevo.',
+      });
+    } finally {
+      setCargando(false);
     }
-  };
-
+  }, [setAviso]);
   useEffect(() => {
-    cargarProfesores();
-  }, []);
+    cargar();
+  }, [cargar]);
 
-  const agregarProfesor = async () => {
+  async function agregarProfesor(event) {
+    event.preventDefault();
     if (!nombre.trim()) {
-      alert('Ingrese el nombre del profesor');
+      setAviso({ tipo: 'error', texto: 'Escribe el nombre del profesor.' });
       return;
     }
-
-    try {
-      const respuesta = await apiFetch('/profesores', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          nombre: nombre.trim(),
+    await ejecutar(async () => {
+      const resultado = await leerRespuesta(
+        await apiFetch('/profesores', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nombre: nombre.trim() }),
         }),
-      });
-
-      const resultado = await respuesta.json();
-
-      if (!respuesta.ok) {
-        alert(resultado.message || 'No se pudo agregar el profesor');
-
-        return;
-      }
-
+        'No se pudo agregar el profesor. Intenta de nuevo.',
+      );
+      if (resultado.profesor) setProfesores((previos) => [...previos, resultado.profesor]);
+      else await cargar();
       setNombre('');
-
-      await cargarProfesores();
-    } catch (error) {
-      console.error('Error al agregar profesor:', error);
-
-      alert('No se pudo agregar el profesor');
-    }
-  };
-
-  const cambiarEstado = async (id, estado) => {
-    try {
-      const respuesta = await apiFetch('/profesores/estado', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          id: id,
-          estado: estado,
+      return 'Profesor agregado correctamente.';
+    });
+  }
+  async function cambiarEstado(id, estado) {
+    if (estado === 'inactivo' && !window.confirm('¿Desea desactivar este profesor?')) return;
+    await ejecutar(async () => {
+      await leerRespuesta(
+        await apiFetch('/profesores/estado', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, estado }),
         }),
-      });
-
-      if (!respuesta.ok) {
-        throw new Error('No se pudo actualizar el profesor');
-      }
-
-      await cargarProfesores();
-    } catch (error) {
-      console.error('Error al cambiar estado:', error);
-
-      alert('No se pudo actualizar el profesor');
-    }
-  };
-
+        'No se pudo actualizar el profesor. Intenta de nuevo.',
+      );
+      setProfesores((previos) =>
+        previos.map((item) => (item.id === id ? { ...item, estado } : item)),
+      );
+      return estado === 'activo'
+        ? 'Profesor activado correctamente.'
+        : 'Profesor desactivado correctamente.';
+    });
+  }
   return (
-    <div className="min-h-0 bg-[#f7f9fb] text-gray-800">
-      <main className="space-y-4 px-4 pb-10 pt-4">
-        {/* AGREGAR PROFESOR */}
-
-        <section className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
-          <h2 className="text-sm font-bold text-gray-900">Agregar profesor</h2>
-
-          <p className="mt-1 text-xs text-gray-400">Registra un nuevo profesor en el sistema.</p>
-
-          <input
-            type="text"
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
-            placeholder="Nombre del profesor"
-            className="mt-4 h-9 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 text-sm text-gray-700 outline-none focus:border-blue-500"
-          />
-
-          <button
-            type="button"
-            onClick={agregarProfesor}
-            className="mt-2 h-9 w-full rounded-xl bg-blue-500 text-sm font-semibold text-white hover:bg-blue-600"
-          >
-            Agregar profesor
-          </button>
-        </section>
-
-        {/* LISTA DE PROFESORES */}
-
-        <section className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
-          <h2 className="text-sm font-bold text-gray-900">Profesores registrados</h2>
-
-          <p className="mt-1 text-xs text-gray-400">
-            Los profesores inactivos no aparecerán al crear nuevas clases.
+    <main className="space-y-4 px-4 pb-6 pt-4" aria-busy={ocupado || cargando}>
+      <Mensaje aviso={aviso} />
+      <form
+        onSubmit={agregarProfesor}
+        className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm"
+      >
+        <h2 className="font-bold text-gray-900">Agregar profesor</h2>
+        <p className="mt-1 text-sm text-gray-500">Registra un nuevo profesor en el sistema.</p>
+        <label htmlFor="nombre-profesor" className="mt-4 block text-sm font-medium text-gray-700">
+          Nombre del profesor
+        </label>
+        <input
+          id="nombre-profesor"
+          type="text"
+          value={nombre}
+          onChange={(event) => setNombre(event.target.value)}
+          disabled={ocupado}
+          required
+          maxLength={120}
+          placeholder="Nombre del profesor"
+          className="mt-2 rounded-xl border border-gray-200 bg-gray-50 px-3 text-base"
+        />
+        <button
+          type="submit"
+          disabled={ocupado || cargando}
+          className="mt-3 w-full rounded-xl bg-blue-600 px-3 py-2 text-sm font-semibold text-white disabled:opacity-50"
+        >
+          {ocupado ? 'Guardando…' : 'Agregar profesor'}
+        </button>
+      </form>
+      <section className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+        <h2 className="font-bold text-gray-900">Profesores registrados</h2>
+        <p className="mt-1 text-sm text-gray-500">
+          Los profesores inactivos no aparecerán al crear nuevas clases.
+        </p>
+        {cargando ? (
+          <p role="status" className="mt-4 text-sm text-gray-600">
+            Cargando profesores…
           </p>
-
-          <div className="mt-4 space-y-2">
-            {profesores.length === 0 ? (
-              <p className="text-sm text-gray-400">No hay profesores registrados.</p>
-            ) : (
-              profesores.map((profesor) => {
-                const activo = profesor.estado === 'activo';
-
-                return (
-                  <div
-                    key={profesor.id}
-                    className="flex items-center justify-between rounded-xl bg-gray-50 px-3 py-3"
-                  >
-                    <div>
-                      <p className="text-sm font-semibold text-gray-800">{profesor.nombre}</p>
-
-                      <p
-                        className={
-                          'mt-0.5 text-xs ' + (activo ? 'text-green-500' : 'text-gray-400')
-                        }
-                      >
-                        {activo ? 'Activo' : 'Inactivo'}
-                      </p>
-                    </div>
-
-                    {activo ? (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const confirmar = confirm('¿Desea desactivar este profesor?');
-
-                          if (confirmar) {
-                            cambiarEstado(profesor.id, 'inactivo');
-                          }
-                        }}
-                        className="rounded-full border border-red-200 px-3 py-1.5 text-xs font-semibold text-red-500"
-                      >
-                        Desactivar
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => cambiarEstado(profesor.id, 'activo')}
-                        className="rounded-full border border-green-200 px-3 py-1.5 text-xs font-semibold text-green-500"
-                      >
-                        Activar
-                      </button>
-                    )}
-                  </div>
-                );
-              })
-            )}
+        ) : profesores.length === 0 ? (
+          <div className="mt-4 text-sm text-gray-500">
+            <p>No hay profesores para mostrar.</p>
+            <button
+              type="button"
+              onClick={cargar}
+              disabled={ocupado}
+              className="mt-2 font-semibold text-blue-700"
+            >
+              Actualizar lista
+            </button>
           </div>
-        </section>
-      </main>
-    </div>
+        ) : (
+          <div className="mt-4 space-y-2">
+            {profesores.map((profesor) => (
+              <div
+                key={profesor.id}
+                className="flex items-center justify-between gap-3 rounded-xl bg-gray-50 p-3"
+              >
+                <div>
+                  <p className="break-words text-sm font-semibold text-gray-800">
+                    {profesor.nombre}
+                  </p>
+                  <p
+                    className={`mt-1 text-xs ${profesor.estado === 'activo' ? 'text-green-700' : 'text-gray-500'}`}
+                  >
+                    {profesor.estado === 'activo' ? 'Activo' : 'Inactivo'}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  disabled={ocupado}
+                  onClick={() =>
+                    cambiarEstado(profesor.id, profesor.estado === 'activo' ? 'inactivo' : 'activo')
+                  }
+                  className="shrink-0 rounded-xl border border-gray-200 px-3 text-sm font-semibold text-blue-700 disabled:opacity-50"
+                >
+                  {profesor.estado === 'activo' ? 'Desactivar' : 'Activar'}
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+    </main>
   );
 }

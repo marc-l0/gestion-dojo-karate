@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react';
-import { apiFetch } from '../lib/api.js';
+import { useOperacion } from '../hooks/useOperacion.js';
+import { apiFetch, leerRespuesta } from '../lib/api.js';
+import Mensaje from './Mensaje.jsx';
 
 export default function CrearClase() {
+  const { ocupado, aviso, setAviso, ejecutar } = useOperacion();
+  const [cargandoProfesores, setCargandoProfesores] = useState(true);
   const [nivel, setNivel] = useState('');
   const [sede, setSede] = useState('');
   const [frecuencia, setFrecuencia] = useState([]);
@@ -56,8 +60,13 @@ export default function CrearClase() {
         const profesoresActivos = datos.filter((item) => item.estado === 'activo');
 
         setProfesores(profesoresActivos);
-      } catch (error) {
-        console.error('Error al cargar profesores:', error);
+      } catch {
+        setAviso({
+          tipo: 'error',
+          texto: 'No se pudieron cargar los profesores. Comprueba tu conexión y recarga la página.',
+        });
+      } finally {
+        setCargandoProfesores(false);
       }
     };
 
@@ -77,12 +86,12 @@ export default function CrearClase() {
       !fechaInicio ||
       !duracion
     ) {
-      alert('Por favor rellene todos los campos');
+      setAviso({ tipo: 'error', texto: 'Completa todos los campos antes de guardar la clase.' });
       return;
     }
 
     if (horaFin <= horaInicio) {
-      alert('La hora de fin debe ser posterior a la hora de inicio');
+      setAviso({ tipo: 'error', texto: 'La hora de fin debe ser posterior a la hora de inicio.' });
       return;
     }
 
@@ -99,28 +108,21 @@ export default function CrearClase() {
       duracion,
     };
 
-    try {
+    await ejecutar(async () => {
       const respuesta = await apiFetch('/clases', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(nuevaClase),
       });
-
-      const resultado = await respuesta.json();
-
-      if (!respuesta.ok) {
-        alert(resultado.message || 'No se pudo crear la clase');
-        return;
-      }
+      const resultado = await leerRespuesta(
+        respuesta,
+        'No se pudo crear la clase. Intenta de nuevo.',
+      );
 
       setUltimaClase({
         ...nuevaClase,
         ...resultado,
       });
-
-      alert('Clase creada correctamente');
 
       setNivel('');
       setSede('');
@@ -132,11 +134,8 @@ export default function CrearClase() {
       setCupos('');
       setFechaInicio('');
       setDuracion('');
-    } catch (error) {
-      console.error('Error al crear la clase:', error);
-
-      alert('No se pudo crear la clase');
-    }
+      return 'Clase creada correctamente.';
+    });
   };
 
   const irA = (ruta) => {
@@ -145,7 +144,13 @@ export default function CrearClase() {
 
   return (
     <div className="min-h-0 bg-[#f7f9fb] text-gray-800">
-      <main className="space-y-4 px-4 pb-6 pt-4">
+      <main className="space-y-4 px-4 pb-6 pt-4" aria-busy={ocupado}>
+        <Mensaje aviso={aviso} />
+        {cargandoProfesores && (
+          <p role="status" className="text-sm text-gray-600">
+            Cargando profesores…
+          </p>
+        )}
         {/* ÚLTIMA CLASE CREADA */}
 
         {ultimaClase && (
@@ -216,7 +221,11 @@ export default function CrearClase() {
 
         {/* FORMULARIO */}
 
-        <section className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+        <fieldset
+          disabled={ocupado}
+          aria-label="Nueva clase"
+          className="min-w-0 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm"
+        >
           <h2 className="text-sm font-bold text-gray-900">Configurar nueva clase</h2>
 
           {/* VIGENCIA */}
@@ -444,9 +453,10 @@ export default function CrearClase() {
           <button
             type="button"
             onClick={crearClase}
+            disabled={ocupado || cargandoProfesores}
             className="mt-5 h-9 w-full rounded-xl bg-blue-500 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-600"
           >
-            Guardar clase
+            {ocupado ? 'Guardando…' : 'Guardar clase'}
           </button>
 
           <button
@@ -456,7 +466,7 @@ export default function CrearClase() {
           >
             Ver calendario
           </button>
-        </section>
+        </fieldset>
       </main>
     </div>
   );

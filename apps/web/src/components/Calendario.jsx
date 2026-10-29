@@ -2,12 +2,15 @@ import { Calendar, ConfigProvider, List, Modal } from 'antd';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { apiFetch } from '../lib/api.js';
+import Mensaje from './Mensaje.jsx';
 import 'dayjs/locale/es';
 import locale from 'antd/locale/es_ES';
 
 dayjs.locale('es');
 
 export default function Calendario() {
+  const [aviso, setAviso] = useState(null);
+  const [cargando, setCargando] = useState(true);
   const [clases, setClases] = useState([]);
   const [fechaSeleccionada, setFechaSeleccionada] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -30,8 +33,13 @@ export default function Calendario() {
         }));
 
         setClases(clasesConId);
-      } catch (error) {
-        console.error('Error al cargar las clases:', error);
+      } catch {
+        setAviso({
+          tipo: 'error',
+          texto: 'No se pudieron cargar las clases. Comprueba tu conexión y recarga la página.',
+        });
+      } finally {
+        setCargando(false);
       }
     };
 
@@ -243,11 +251,19 @@ export default function Calendario() {
       !claseSeleccionada.fechaFin ||
       claseSeleccionada.fechaInicio > claseSeleccionada.fechaFin
     ) {
-      window.alert('Completa las fechas de la clase antes de generar su convocatoria.');
+      setModalVisible(false);
+      setAviso({
+        tipo: 'error',
+        texto: 'Completa las fechas de la clase antes de generar su convocatoria.',
+      });
       return;
     }
     if (hoy > claseSeleccionada.fechaFin) {
-      window.alert('Esta clase ya finalizó y no se puede generar una convocatoria.');
+      setModalVisible(false);
+      setAviso({
+        tipo: 'error',
+        texto: 'Esta clase ya finalizó y no se puede generar una convocatoria.',
+      });
       return;
     }
 
@@ -258,7 +274,13 @@ export default function Calendario() {
 
   return (
     <div className="min-h-0 bg-[#f7f9fb] pb-6 text-gray-800">
-      <main className="mx-auto max-w-full space-y-4 px-4 pt-4">
+      <main className="mx-auto max-w-full space-y-4 px-4 pt-4" aria-busy={cargando}>
+        <Mensaje aviso={aviso} />
+        {cargando && (
+          <p role="status" className="text-sm text-gray-600">
+            Cargando calendario…
+          </p>
+        )}
         <div>
           <p className="text-sm font-semibold uppercase tracking-wide text-gray-400">
             PROGRAMACIÓN

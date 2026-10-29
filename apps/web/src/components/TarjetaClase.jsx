@@ -1,3 +1,4 @@
+import IndicadorCupos from './IndicadorCupos.jsx';
 export default function TarjetaClase({
   clase,
   estado,
@@ -5,6 +6,7 @@ export default function TarjetaClase({
   formatearFecha,
   onEditar,
   onEliminar,
+  ocupado = false,
 }) {
   const tituloId = `clase-${clase.id}`;
   const cerrarOpciones = (event) => {
@@ -56,6 +58,7 @@ export default function TarjetaClase({
           <div className="class-card__menu-panel">
             <button
               type="button"
+              disabled={ocupado}
               onClick={(event) => {
                 cerrarOpciones(event);
                 onEditar(clase);
@@ -66,6 +69,7 @@ export default function TarjetaClase({
             </button>
             <button
               type="button"
+              disabled={ocupado}
               onClick={(event) => {
                 cerrarOpciones(event);
                 onEliminar(clase.id);
@@ -84,13 +88,9 @@ export default function TarjetaClase({
           {clase.horaInicio} – {clase.horaFin}
         </p>
       </div>
-      <p
-        className={`mt-3 rounded-xl px-3 py-2 text-sm font-semibold ${Number(clase.cuposDisponibles) > 0 ? 'bg-blue-50 text-blue-800' : 'bg-amber-50 text-amber-900'}`}
-      >
-        {Number(clase.cuposDisponibles) > 0
-          ? `${clase.cuposDisponibles} de ${clase.cupos} cupos disponibles`
-          : 'Sin cupos disponibles'}
-      </p>
+      <div className="mt-3">
+        <IndicadorCupos disponibles={clase.cuposDisponibles} total={clase.cupos} />
+      </div>
 
       <div className="mt-3 grid grid-cols-2 gap-2">
         <a

@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
-import { apiFetch } from '../lib/api.js';
+import { useOperacion } from '../hooks/useOperacion.js';
+import { apiFetch, leerRespuesta } from '../lib/api.js';
+import Mensaje from './Mensaje.jsx';
 import TarjetaClase from './TarjetaClase.jsx';
 
 export default function GestionarClases() {
+  const { ocupado, aviso, setAviso, ejecutar } = useOperacion();
   const [clases, setClases] = useState([]);
   const [vista, setVista] = useState('vigentes');
   const [cargando, setCargando] = useState(true);
@@ -244,12 +247,12 @@ export default function GestionarClases() {
       fechaInicio === '' ||
       duracion === ''
     ) {
-      alert('Por favor rellene todos los campos');
+      setAviso({ tipo: 'error', texto: 'Completa todos los campos antes de guardar los cambios.' });
 
       return;
     }
 
-    try {
+    await ejecutar(async () => {
       const frecuenciaOrdenada = ordenarDias(frecuencia);
 
       const respuesta = await apiFetch('/clases/' + editandoId, {
@@ -282,24 +285,13 @@ export default function GestionarClases() {
         }),
       });
 
-      const resultado = await respuesta.json();
-
-      if (!respuesta.ok) {
-        alert(resultado.message || 'No se pudo actualizar la clase');
-
-        return;
-      }
-
-      alert('Clase actualizada correctamente');
+      await leerRespuesta(respuesta, 'No se pudo actualizar la clase. Intenta de nuevo.');
 
       cancelarEdicion();
 
       await cargarClases();
-    } catch (error) {
-      console.error('Error al actualizar clase:', error);
-
-      alert('No se pudo actualizar la clase');
-    }
+      return 'Clase actualizada correctamente.';
+    });
   };
 
   const eliminarClase = async (id) => {
@@ -309,27 +301,16 @@ export default function GestionarClases() {
       return;
     }
 
-    try {
+    await ejecutar(async () => {
       const respuesta = await apiFetch('/clases/' + id, {
         method: 'DELETE',
       });
 
-      const resultado = await respuesta.json();
-
-      if (!respuesta.ok) {
-        alert(resultado.message || 'No se pudo eliminar la clase');
-
-        return;
-      }
-
-      alert('Clase eliminada correctamente');
+      await leerRespuesta(respuesta, 'No se pudo eliminar la clase. Intenta de nuevo.');
 
       await cargarClases();
-    } catch (error) {
-      console.error('Error al eliminar clase:', error);
-
-      alert('No se pudo eliminar la clase');
-    }
+      return 'Clase eliminada correctamente.';
+    });
   };
 
   const vigentes = clases.filter((clase) => obtenerEstadoClase(clase).texto === 'Vigente');
@@ -342,7 +323,8 @@ export default function GestionarClases() {
 
   return (
     <div className="min-h-0 bg-[#f7f9fb] text-gray-800">
-      <main className="space-y-4 px-4 pb-10 pt-4">
+      <main className="space-y-4 px-4 pb-10 pt-4" aria-busy={ocupado}>
+        <Mensaje aviso={aviso} />
         {editandoId !== null && (
           <section className="relative z-10 rounded-2xl border-2 border-blue-100 bg-white p-4 shadow-sm">
             <div className="mb-4">
@@ -357,7 +339,7 @@ export default function GestionarClases() {
               </p>
             </div>
 
-            <div className="space-y-3">
+            <fieldset disabled={ocupado} aria-label="Editar clase" className="min-w-0 space-y-3">
               <div>
                 <label className="text-xs font-semibold text-gray-500">NIVEL</label>
 
@@ -546,7 +528,7 @@ export default function GestionarClases() {
                     onClick={aceptarEdicion}
                     className="h-9 rounded-xl border border-blue-200 bg-white text-sm font-semibold text-blue-500 hover:bg-blue-50"
                   >
-                    Aceptar
+                    {ocupado ? 'Guardando…' : 'Aceptar'}
                   </button>
 
                   <button
@@ -558,7 +540,7 @@ export default function GestionarClases() {
                   </button>
                 </div>
               </div>
-            </div>
+            </fieldset>
           </section>
         )}
 
@@ -658,6 +640,7 @@ export default function GestionarClases() {
                 formatearFecha={formatearFecha}
                 onEditar={iniciarEdicion}
                 onEliminar={eliminarClase}
+                ocupado={ocupado || cargando}
               />
             ))}
           </div>

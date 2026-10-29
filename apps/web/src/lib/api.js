@@ -26,3 +26,13 @@ export async function cerrarSesion() {
   if (!respuesta.ok && respuesta.status !== 401) throw new Error('No se pudo cerrar la sesión');
   window.location.href = '/login';
 }
+
+/** Lee mensajes de validación sin mostrar errores internos del servidor. */
+export async function leerRespuesta(respuesta, mensajeError) {
+  const datos = await respuesta.json().catch(() => ({}));
+  if (!respuesta.ok) {
+    const detalle = Array.isArray(datos.message) ? datos.message.join(' ') : datos.message;
+    throw new Error(respuesta.status >= 500 ? mensajeError : detalle || mensajeError);
+  }
+  return datos;
+}

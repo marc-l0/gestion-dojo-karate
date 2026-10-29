@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { API_URL } from '../lib/api.js';
+import IndicadorCupos from './IndicadorCupos.jsx';
 
 const fechaEnLima = () =>
   new Intl.DateTimeFormat('en-CA', {
@@ -19,6 +20,7 @@ export default function Formulario() {
   const [fechaNacimiento, setFechaNacimiento] = useState('');
   const [enviando, setEnviando] = useState(false);
   const [enviado, setEnviado] = useState(false);
+  const [solicitud, setSolicitud] = useState(null);
   const [reintento, setReintento] = useState(0);
   const bloqueo = useRef(false);
   const aviso = useRef(null);
@@ -113,6 +115,8 @@ export default function Formulario() {
             : mensaje || 'No se pudo registrar la postulación. Intenta de nuevo.',
         );
       }
+      const resultado = await respuesta.json().catch(() => ({}));
+      setSolicitud(resultado.id ? `SOL-${resultado.id}` : null);
       setEnviado(true);
     } catch (error) {
       setErrorEnvio(
@@ -141,9 +145,9 @@ export default function Formulario() {
       <p className="mt-2 text-sm text-purple-900">
         Fechas de la clase: {clase.fechaInicio} al {clase.fechaFin}
       </p>
-      <p className="mt-2 font-medium text-purple-900">
-        {clase.cuposDisponibles} vacantes disponibles
-      </p>
+      <div className="mt-3">
+        <IndicadorCupos disponibles={clase.cuposDisponibles} total={clase.cupos} />
+      </div>
     </section>
   );
 
@@ -168,6 +172,18 @@ export default function Formulario() {
           aria-label="Confirmación de postulación"
         >
           <p className="text-lg font-bold text-green-800">¡Postulación enviada!</p>
+          {solicitud && (
+            <div className="rounded-xl border border-green-100 bg-green-50 p-4">
+              <p className="text-sm text-green-800">Número de solicitud</p>
+              <p className="mt-1 break-all font-mono text-lg font-bold text-green-900">
+                {solicitud}
+              </p>
+              <p className="mt-2 text-sm text-green-800">
+                Guarda este número o una captura de esta pantalla para consultar tu postulación con
+                el dojo.
+              </p>
+            </div>
+          )}
           {resumenClase}
           <p className="font-semibold text-gray-900">Pendiente de confirmación</p>
           <p className="text-gray-600">

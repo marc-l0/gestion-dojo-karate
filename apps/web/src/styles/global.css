@@ -299,3 +299,10 @@
 .class-card__details[open] .class-card__chevron {
   transform: rotate(180deg);
 }
+
+.admin-content button:disabled {
+  cursor: not-allowed;
+}
+.admin-content fieldset:disabled {
+  opacity: 0.7;
+}
