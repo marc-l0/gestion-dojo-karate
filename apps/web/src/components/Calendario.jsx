@@ -383,7 +383,8 @@ export default function Calendario() {
                 style={{
                   cursor: 'pointer',
 
-                  backgroundColor: claseSeleccionada?.id === clase.id ? '#eff6ff' : 'transparent',
+                  backgroundColor:
+                    claseSeleccionada?.id === clase.id ? 'var(--accent-soft)' : 'transparent',
 
                   borderRadius: '12px',
 
@@ -391,15 +392,19 @@ export default function Calendario() {
                 }}
               >
                 <List.Item.Meta
-                  title={<span className="font-semibold">Karate · {clase.nivel}</span>}
+                  title={
+                    <span className="font-semibold text-gray-900">Karate · {clase.nivel}</span>
+                  }
                   description={
-                    clase.horaInicio +
-                    ' - ' +
-                    clase.horaFin +
-                    ' · ' +
-                    clase.sede +
-                    ' · ' +
-                    clase.profesor
+                    <span className="text-gray-700">
+                      {clase.horaInicio +
+                        ' - ' +
+                        clase.horaFin +
+                        ' · ' +
+                        clase.sede +
+                        ' · ' +
+                        clase.profesor}
+                    </span>
                   }
                 />
               </List.Item>
