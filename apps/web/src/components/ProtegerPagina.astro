@@ -16,15 +16,19 @@
     document.documentElement.style.visibility = "visible";
   };
 
-  fetch(`${API_URL}/auth/me`, { credentials: "include" })
+  const irAlLogin = () => {
+    const volver = window.location.pathname + window.location.search;
+    window.location.replace(`/login?volver=${encodeURIComponent(volver)}`);
+  };
+
+  fetch(`${API_URL}/auth/me`, { credentials: "include", cache: "no-store" })
     .then((respuesta) => {
       if (respuesta.ok) {
         mostrar();
         return;
       }
 
-      const volver = window.location.pathname + window.location.search;
-      window.location.href = `/login?volver=${encodeURIComponent(volver)}`;
+      irAlLogin();
     })
-    .catch(mostrar);
+    .catch(irAlLogin);
 </script>

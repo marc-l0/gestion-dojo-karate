@@ -60,7 +60,7 @@ export default function CompartirConvocatoria() {
           {error}
         </p>
         <a
-          href="/"
+          href="/clases"
           className="mt-4 inline-flex min-h-11 items-center text-sm font-semibold text-blue-700"
         >
           Volver a clases

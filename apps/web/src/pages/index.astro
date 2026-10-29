@@ -1,7 +1,4 @@
 ---
-import LayoutAdministracion from "../layouts/LayoutAdministracion.astro";
-import Clases from "../components/pantallas/Clases.jsx";
+// La entrada de la aplicación siempre presenta el inicio de sesión.
+return Astro.redirect('/login');
 ---
-<LayoutAdministracion title="Clases" active="inicio">
-  <Clases client:load />
-</LayoutAdministracion>

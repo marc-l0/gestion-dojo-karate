@@ -4,7 +4,8 @@ Las rutas están en `apps/web/src/pages/`. El contenido interactivo de cada pant
 
 | Pantalla | Ruta | Archivo en `pages/` | Archivo en `components/pantallas/` |
 | --- | --- | --- | --- |
-| Clases (inicio) | `/` | `index.astro` | `Clases.jsx` |
+| Entrada al login | `/` | `index.astro` | Redirige a `/login` |
+| Clases | `/clases` | `clases.astro` | `Clases.jsx` |
 | Nueva clase | `/nueva-clase` | `nueva-clase.astro` | `NuevaClase.jsx` |
 | Postulaciones | `/postulaciones` | `postulaciones.astro` | `Postulaciones.jsx` |
 | Calendario | `/calendario` | `calendario.astro` | `Calendario.jsx` |
@@ -32,7 +33,9 @@ En `apps/web/src/components/` quedan las piezas que pueden usarse en varias pant
 
 ## Enlaces anteriores
 
-`pages/clases.astro` y `pages/formulario-generado.astro` son alias de compatibilidad: renderizan las páginas nuevas, sin duplicar su contenido ni perder parámetros como `?clase=ID`. Para modificar esas pantallas, editar `nueva-clase.astro` o `compartir-convocatoria.astro` y sus componentes.
+`pages/formulario-generado.astro` es un alias de compatibilidad: renderiza `compartir-convocatoria.astro`, sin duplicar su contenido ni perder parámetros como `?clase=ID`.
+
+La ruta principal `/` lleva siempre al login. Al iniciar sesión se abre `/clases`, salvo que haya una pantalla privada pendiente en `?volver=...`. Las páginas privadas solo se muestran después de comprobar la sesión; si la comprobación falla, llevan al login. La creación de clases está en `/nueva-clase`.
 
 La dirección pública `/formulario?clase=ID` se conserva para que sigan funcionando los QR compartidos.
 

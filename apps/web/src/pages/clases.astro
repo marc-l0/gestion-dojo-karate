@@ -1,5 +1,7 @@
 ---
-// Ruta anterior: conservar enlaces guardados. Editar la pantalla en nueva-clase.astro.
-import NuevaClase from './nueva-clase.astro';
+import LayoutAdministracion from "../layouts/LayoutAdministracion.astro";
+import Clases from "../components/pantallas/Clases.jsx";
 ---
-<NuevaClase />
+<LayoutAdministracion title="Clases" active="inicio">
+  <Clases client:load />
+</LayoutAdministracion>

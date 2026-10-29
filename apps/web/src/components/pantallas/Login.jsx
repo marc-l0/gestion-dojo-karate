@@ -4,7 +4,7 @@ import { API_URL } from '../../lib/api.js';
 // Solo se permite volver a rutas internas del sitio (evita redirecciones a otros dominios).
 function destinoSeguro(volver) {
   const valido = volver?.startsWith('/') && !volver.startsWith('//') && !volver.startsWith('/\\');
-  return valido ? volver : '/';
+  return valido && volver !== '/' && !/^\/login(?:[?#]|$)/.test(volver) ? volver : '/clases';
 }
 
 export default function Login() {

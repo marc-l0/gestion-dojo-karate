@@ -422,7 +422,7 @@ export default function Postulaciones() {
       )}
       <div className="grid gap-2">
         <a
-          href="/"
+          href="/clases"
           className="inline-flex min-h-11 items-center justify-center rounded-xl border border-gray-200 bg-white px-3 text-sm font-semibold text-blue-700"
         >
           Ver clases
