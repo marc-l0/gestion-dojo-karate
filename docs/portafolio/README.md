@@ -10,3 +10,7 @@ Presentación breve en formato horizontal de cuatro páginas:
 4. Tecnologías, participación individual y estado del proyecto.
 
 Las capturas muestran la aplicación ejecutándose con datos ficticios y un enlace de demostración bajo `midojo.example`. El QR del PDF es ilustrativo. No contiene datos de clientes ni credenciales. La presentación describe el proyecto como una versión funcional en desarrollo.
+
+## Capturas de la aplicación
+
+[Descargar las seis capturas en ZIP](Mi-Dojo-Capturas.zip). También están disponibles individualmente en la carpeta [capturas](capturas/), en PNG de 780 × 1688 píxeles.
