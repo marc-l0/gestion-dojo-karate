@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import IndicadorCupos from './IndicadorCupos.jsx';
 export default function TarjetaClase({
   clase,
@@ -8,6 +9,14 @@ export default function TarjetaClase({
   onEliminar,
   ocupado = false,
 }) {
+  const menu = useRef(null);
+  useEffect(() => {
+    const cerrarAlTocarFuera = (event) => {
+      if (menu.current && !menu.current.contains(event.target)) menu.current.open = false;
+    };
+    document.addEventListener('pointerdown', cerrarAlTocarFuera);
+    return () => document.removeEventListener('pointerdown', cerrarAlTocarFuera);
+  }, []);
   const tituloId = `clase-${clase.id}`;
   const cerrarOpciones = (event) => {
     event.currentTarget.closest('details').open = false;
@@ -31,16 +40,21 @@ export default function TarjetaClase({
           {estado.texto}
         </span>
         <details
+          ref={menu}
           className="class-card__menu"
           name="opciones-clase"
-          onBlur={(event) => {
-            if (!event.currentTarget.contains(event.relatedTarget))
-              event.currentTarget.open = false;
-          }}
           onKeyDown={(event) => {
             if (event.key === 'Escape') {
               event.currentTarget.open = false;
               event.currentTarget.querySelector('summary').focus();
+            }
+            if (event.key === 'Tab') {
+              // En táctil, blur puede llegar con relatedTarget=null antes del click.
+              // Solo cerrar por foco al navegar con el teclado, después de moverlo.
+              requestAnimationFrame(() => {
+                if (menu.current && !menu.current.contains(document.activeElement))
+                  menu.current.open = false;
+              });
             }
           }}
         >

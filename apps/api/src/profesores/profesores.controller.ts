@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post } from '@nestjs/common';
 
 import { ProfesoresService } from './profesores.service.js';
 
@@ -22,5 +22,10 @@ export class ProfesoresController {
     datos: { id: number; estado: string },
   ) {
     return this.profesoresService.cambiarEstado(datos.id, datos.estado);
+  }
+
+  @Delete(':id')
+  eliminarProfesor(@Param('id', ParseIntPipe) id: number) {
+    return this.profesoresService.eliminarProfesor(id);
   }
 }

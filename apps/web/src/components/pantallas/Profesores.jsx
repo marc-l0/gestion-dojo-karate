@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useOperacion } from '../../hooks/useOperacion.js';
 import { apiFetch, leerRespuesta } from '../../lib/api.js';
+import ConfirmarAccion from '../ConfirmarAccion.jsx';
 import Mensaje from '../Mensaje.jsx';
 
 export default function Profesores() {
   const [profesores, setProfesores] = useState([]);
   const [nombre, setNombre] = useState('');
   const [cargando, setCargando] = useState(true);
+  const [accionPendiente, setAccionPendiente] = useState(null);
   const { ocupado, aviso, setAviso, ejecutar } = useOperacion();
   const cargar = useCallback(async () => {
     setCargando(true);
@@ -51,8 +53,7 @@ export default function Profesores() {
     });
   }
   async function cambiarEstado(id, estado) {
-    if (estado === 'inactivo' && !window.confirm('¿Desea desactivar este profesor?')) return;
-    await ejecutar(async () => {
+    const actualizado = await ejecutar(async () => {
       await leerRespuesta(
         await apiFetch('/profesores/estado', {
           method: 'POST',
@@ -68,6 +69,24 @@ export default function Profesores() {
         ? 'Profesor activado correctamente.'
         : 'Profesor desactivado correctamente.';
     });
+    if (actualizado) setAccionPendiente(null);
+  }
+  async function eliminarProfesor() {
+    if (!accionPendiente) return;
+    const id = accionPendiente.profesor.id;
+    const eliminado = await ejecutar(async () => {
+      await leerRespuesta(
+        await apiFetch(`/profesores/${encodeURIComponent(id)}`, { method: 'DELETE' }),
+        'No se pudo eliminar el profesor. Intenta de nuevo.',
+      );
+      setProfesores((previos) => previos.filter((profesor) => profesor.id !== id));
+      return 'Profesor eliminado correctamente.';
+    });
+    if (eliminado) setAccionPendiente(null);
+  }
+  function confirmarAccion(profesor, tipo) {
+    setAviso(null);
+    setAccionPendiente({ profesor, tipo });
   }
   return (
     <main className="space-y-4 px-4 pb-6 pt-4" aria-busy={ocupado || cargando}>
@@ -126,9 +145,9 @@ export default function Profesores() {
             {profesores.map((profesor) => (
               <div
                 key={profesor.id}
-                className="flex items-center justify-between gap-3 rounded-xl bg-gray-50 p-3"
+                className="flex flex-wrap items-center justify-between gap-3 rounded-xl bg-gray-50 p-3"
               >
-                <div>
+                <div className="min-w-0 flex-1 basis-32">
                   <p className="break-words text-sm font-semibold text-gray-800">
                     {profesor.nombre}
                   </p>
@@ -138,21 +157,64 @@ export default function Profesores() {
                     {profesor.estado === 'activo' ? 'Activo' : 'Inactivo'}
                   </p>
                 </div>
-                <button
-                  type="button"
-                  disabled={ocupado}
-                  onClick={() =>
-                    cambiarEstado(profesor.id, profesor.estado === 'activo' ? 'inactivo' : 'activo')
-                  }
-                  className="shrink-0 rounded-xl border border-gray-200 px-3 text-sm font-semibold text-blue-700 disabled:opacity-50"
-                >
-                  {profesor.estado === 'activo' ? 'Desactivar' : 'Activar'}
-                </button>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    disabled={ocupado || cargando}
+                    onClick={() =>
+                      profesor.estado === 'activo'
+                        ? confirmarAccion(profesor, 'desactivar')
+                        : cambiarEstado(profesor.id, 'activo')
+                    }
+                    className="shrink-0 rounded-xl border border-gray-200 px-3 text-sm font-semibold text-blue-700 disabled:opacity-50"
+                  >
+                    {profesor.estado === 'activo' ? 'Desactivar' : 'Activar'}
+                  </button>
+                  <button
+                    type="button"
+                    disabled={ocupado || cargando}
+                    onClick={() => confirmarAccion(profesor, 'eliminar')}
+                    aria-label={`Eliminar a ${profesor.nombre}`}
+                    className="min-h-11 rounded-xl border border-red-200 px-3 text-sm font-semibold text-red-700 disabled:opacity-50"
+                  >
+                    Eliminar
+                  </button>
+                </div>
               </div>
             ))}
           </div>
         )}
       </section>
+      {accionPendiente && (
+        <ConfirmarAccion
+          titulo={
+            accionPendiente.tipo === 'eliminar'
+              ? '¿Eliminar este profesor?'
+              : '¿Desactivar este profesor?'
+          }
+          textoConfirmar={
+            accionPendiente.tipo === 'eliminar' ? 'Eliminar profesor' : 'Desactivar profesor'
+          }
+          textoOcupado={accionPendiente.tipo === 'eliminar' ? 'Eliminando…' : 'Desactivando…'}
+          ocupado={ocupado}
+          aviso={aviso}
+          onCancelar={() => setAccionPendiente(null)}
+          onConfirmar={() =>
+            accionPendiente.tipo === 'eliminar'
+              ? eliminarProfesor()
+              : cambiarEstado(accionPendiente.profesor.id, 'inactivo')
+          }
+        >
+          <p className="break-words font-semibold text-gray-900">
+            {accionPendiente.profesor.nombre}
+          </p>
+          <p className="mt-2">
+            {accionPendiente.tipo === 'eliminar'
+              ? 'Se quitará de la lista de profesores. Las clases registradas conservarán su nombre. Esta acción no se puede deshacer.'
+              : 'Dejará de aparecer al crear nuevas clases. Podrás volver a activarlo cuando lo necesites.'}
+          </p>
+        </ConfirmarAccion>
+      )}
     </main>
   );
 }

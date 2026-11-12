@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Profesor } from './interfaces/profesor.interface.js';
 import { ProfesoresRepository } from './repositories/profesores.repository.js';
 
@@ -43,5 +43,12 @@ export class ProfesoresService {
 
   async cambiarEstado(id: number, estado: string) {
     return this.profesoresRepository.actualizarEstado(id, estado);
+  }
+
+  async eliminarProfesor(id: number) {
+    if (!Number.isSafeInteger(id) || id <= 0) {
+      throw new BadRequestException('El identificador del profesor no es válido');
+    }
+    return this.profesoresRepository.eliminar(id);
   }
 }

@@ -8,6 +8,8 @@ export default function ConfirmarAccion({
   aviso,
   onCancelar,
   onConfirmar,
+  textoConfirmar = 'Eliminar clase',
+  textoOcupado = 'Eliminando…',
 }) {
   const dialogo = useRef(null);
   const cancelar = useRef(null);
@@ -64,7 +66,7 @@ export default function ConfirmarAccion({
           onClick={onConfirmar}
           className="min-h-11 rounded-xl bg-red-600 px-3 py-2 text-sm font-semibold text-white hover:bg-red-700 disabled:opacity-60"
         >
-          {ocupado ? 'Eliminando…' : 'Eliminar clase'}
+          {ocupado ? textoOcupado : textoConfirmar}
         </button>
       </div>
     </dialog>

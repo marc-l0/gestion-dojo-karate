@@ -109,6 +109,9 @@ Para localizar cada pantalla y sus componentes, consulta el [mapa de pantallas](
 | `GET` | `/profesores` | Lista los profesores |
 | `POST` | `/profesores` | Crea un profesor |
 | `POST` | `/profesores/estado` | Activa o desactiva un profesor |
+| `DELETE` | `/profesores/:id` | Elimina un profesor con sesión de administrador |
+
+La eliminación de profesores quita su fila de la hoja `Profesores`. Las clases y postulaciones existentes conservan el nombre guardado; no se eliminan en cascada. Las eliminaciones y los cambios de estado de profesores se ejecutan en orden dentro de cada instancia de la API para evitar desplazamientos de fila entre esas acciones simultáneas.
 
 ## Cambios realizados (2026-10-07)
 
