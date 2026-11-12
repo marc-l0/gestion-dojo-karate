@@ -71,7 +71,7 @@ export default function NuevaClase() {
     };
 
     cargarProfesores();
-  }, []);
+  }, [setAviso]);
 
   const crearClase = async () => {
     if (
@@ -249,23 +249,36 @@ export default function NuevaClase() {
               </div>
 
               <div>
-                <p className="mb-1 text-xs text-gray-400">DURACIÓN</p>
+                <label htmlFor="duracion-clase" className="mb-1 block text-xs text-gray-400">
+                  DURACIÓN
+                </label>
 
-                <select
-                  value={duracion}
-                  onChange={(e) => setDuracion(e.target.value)}
-                  className="block h-9 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 text-sm text-gray-700 outline-none focus:border-blue-500"
-                >
-                  <option value="">Seleccionar</option>
+                <div className="relative">
+                  <select
+                    id="duracion-clase"
+                    value={duracion}
+                    onChange={(e) => setDuracion(e.target.value)}
+                    className="block h-9 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 text-sm text-gray-700 outline-none focus:border-blue-500"
+                  >
+                    <option value="" disabled hidden />
 
-                  <option value="1 semana">1 semana</option>
+                    <option value="1 semana">1 semana</option>
 
-                  <option value="2 semanas">2 semanas</option>
+                    <option value="2 semanas">2 semanas</option>
 
-                  <option value="3 semanas">3 semanas</option>
+                    <option value="3 semanas">3 semanas</option>
 
-                  <option value="1 mes">1 mes</option>
-                </select>
+                    <option value="1 mes">1 mes</option>
+                  </select>
+                  {!duracion && (
+                    <span
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-y-0 left-3 right-8 flex items-center text-sm text-gray-500"
+                    >
+                      Seleccionar duración
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -386,21 +399,37 @@ export default function NuevaClase() {
           {/* PROFESOR */}
 
           <div className="mt-4">
-            <p className="mb-2 text-xs font-medium tracking-wide text-gray-500">PROFESOR</p>
-
-            <select
-              value={profesor}
-              onChange={(e) => setProfesor(e.target.value)}
-              className="h-9 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 text-sm text-gray-700 outline-none"
+            <label
+              htmlFor="profesor-clase"
+              className="mb-2 block text-xs font-medium tracking-wide text-gray-500"
             >
-              <option value="">Seleccionar profesor</option>
+              PROFESOR
+            </label>
 
-              {profesores.map((item) => (
-                <option key={item.id} value={item.nombre}>
-                  {item.nombre}
-                </option>
-              ))}
-            </select>
+            <div className="relative">
+              <select
+                id="profesor-clase"
+                value={profesor}
+                onChange={(e) => setProfesor(e.target.value)}
+                className="h-9 w-full rounded-xl border border-gray-200 bg-gray-50 px-3 text-sm text-gray-700 outline-none"
+              >
+                <option value="" disabled hidden />
+
+                {profesores.map((item) => (
+                  <option key={item.id} value={item.nombre}>
+                    {item.nombre}
+                  </option>
+                ))}
+              </select>
+              {!profesor && (
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-y-0 left-3 right-8 flex items-center text-sm text-gray-500"
+                >
+                  Seleccionar profesor
+                </span>
+              )}
+            </div>
 
             {profesores.length === 0 && (
               <p className="mt-2 text-xs text-gray-400">No hay profesores activos disponibles.</p>
