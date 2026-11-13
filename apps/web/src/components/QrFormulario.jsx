@@ -86,8 +86,8 @@ export default function QrFormulario({
 
       {enLocalhost && (
         <p className="mt-2 text-center text-[9px] leading-4 text-amber-600">
-          Estás en localhost: este QR solo abre el formulario en esta computadora. Publica el sitio
-          para usarlo desde otros dispositivos.
+          Este enlace solo funciona en esta computadora. Para compartir el QR, abre el sistema con
+          una dirección accesible desde el celular.
         </p>
       )}
 

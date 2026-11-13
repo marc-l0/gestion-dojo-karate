@@ -5,8 +5,6 @@ import QrFormulario from '../QrFormulario.jsx';
 
 export default function ConfigurarConvocatoria() {
   const [clase, setClase] = useState(null);
-  const [whatsapp, setWhatsapp] = useState(true);
-  const [correo, setCorreo] = useState(true);
   const [mostrarGenerado, setMostrarGenerado] = useState(false);
   const [cerrandoGenerado, setCerrandoGenerado] = useState(false);
   const [desplazamiento, setDesplazamiento] = useState(0);
@@ -33,10 +31,14 @@ export default function ConfigurarConvocatoria() {
   };
 
   useEffect(() => {
-    const claseGuardada = localStorage.getItem('claseFormulario');
-
-    if (claseGuardada) {
-      setClase(JSON.parse(claseGuardada));
+    try {
+      const claseGuardada = localStorage.getItem('claseFormulario');
+      if (claseGuardada) {
+        const seleccion = JSON.parse(claseGuardada);
+        if (seleccion?.id) setClase(seleccion);
+      }
+    } catch {
+      setClase(null);
     }
   }, []);
 
@@ -73,14 +75,6 @@ export default function ConfigurarConvocatoria() {
   };
 
   const generarFormulario = () => {
-    localStorage.setItem(
-      'configuracionConvocatoria',
-      JSON.stringify({
-        whatsapp,
-        correo,
-      }),
-    );
-
     setMostrarGenerado(true);
   };
 
@@ -122,13 +116,7 @@ export default function ConfigurarConvocatoria() {
 
         <section>
           <div className="mb-3 flex items-center gap-2">
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-purple-600 text-xs font-bold text-white">
-              1
-            </span>
-
-            <h2 className="text-sm font-bold text-gray-900">
-              Selección de clase y carga automática
-            </h2>
+            <h2 className="text-sm font-bold text-gray-900">Datos de la clase</h2>
           </div>
 
           {/* NIVEL */}
@@ -150,7 +138,7 @@ export default function ConfigurarConvocatoria() {
               <span className="h-1.5 w-1.5 rounded-full bg-green-500"></span>
 
               <p className="text-sm font-bold uppercase tracking-wide text-green-600">
-                Datos cargados automáticamente
+                Horario y profesor
               </p>
             </div>
 
@@ -197,64 +185,6 @@ export default function ConfigurarConvocatoria() {
                 </span>
               </div>
             </div>
-
-            {/* CONTACTO DEL DOCENTE */}
-
-            <div className="mt-5 rounded-xl border border-green-100 bg-green-50 p-4">
-              <p className="text-xs font-bold text-green-700">Contacto del docente</p>
-
-              <p className="mt-1 text-sm text-green-600">
-                📱 WhatsApp: {clase.telefonoProfesor || 'No registrado'}
-              </p>
-
-              <p className="text-sm text-green-600">
-                ✉ Correo: {clase.correoProfesor || 'No registrado'}
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* PASO 2 */}
-
-        <section>
-          <div className="mb-4 flex items-center gap-2">
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-purple-600 text-xs font-bold text-white">
-              2
-            </span>
-
-            <h2 className="text-sm font-bold text-gray-900">Canales de notificación automática</h2>
-          </div>
-
-          <div className="rounded-2xl border border-gray-200 bg-white p-5">
-            <label className="flex cursor-pointer items-start gap-3">
-              <input
-                type="checkbox"
-                checked={whatsapp}
-                onChange={(e) => {
-                  setWhatsapp(e.target.checked);
-                }}
-                className="mt-0.5 h-4 w-4 cursor-pointer accent-purple-600"
-              />
-
-              <span className="text-sm leading-5 text-gray-600">
-                Enviar notificación automática por WhatsApp al docente y postulante
-              </span>
-            </label>
-
-            <label className="mt-3 flex cursor-pointer items-start gap-3">
-              <input
-                type="checkbox"
-                checked={correo}
-                onChange={(e) => {
-                  setCorreo(e.target.checked);
-                }}
-                className="mt-0.5 h-4 w-4 cursor-pointer accent-purple-600"
-              />
-
-              <span className="text-sm leading-5 text-gray-600">
-                Enviar confirmación oficial por correo electrónico
-              </span>
-            </label>
           </div>
         </section>
 
@@ -266,7 +196,7 @@ export default function ConfigurarConvocatoria() {
             onClick={generarFormulario}
             className="h-12 w-full rounded-xl bg-purple-600 text-sm font-bold text-white shadow-sm transition hover:bg-purple-700 hover:shadow-md"
           >
-            Generar formulario de convocatoria
+            Ver opciones para compartir
           </button>
         </div>
       </main>
@@ -308,9 +238,7 @@ export default function ConfigurarConvocatoria() {
             {/* TÍTULO */}
 
             <div className="mt-3 text-center">
-              <h2 className="text-sm font-bold text-gray-900">
-                ¡Formulario generado exitosamente!
-              </h2>
+              <h2 className="text-sm font-bold text-gray-900">Convocatoria lista para compartir</h2>
 
               <p className="mt-1 text-sm text-gray-500">
                 {clase.nivel || clase.nombre || 'Clase'} · Sede {clase.sede}

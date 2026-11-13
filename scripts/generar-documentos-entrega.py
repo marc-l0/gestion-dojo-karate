@@ -15,7 +15,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.platypus import SimpleDocTemplate, Paragraph
 
 ROOT = Path(__file__).resolve().parent.parent
-DESTINO = ROOT / 'apps/web/public/documentos'
+DESTINO = ROOT / 'docs/entrega/pdf'
 DESTINO.mkdir(parents=True, exist_ok=True)
 # Fuente Unicode opcional. Helvetica mantiene el generador utilizable en otros equipos.
 FUENTE, NEGRITA = 'Helvetica', 'Helvetica-Bold'

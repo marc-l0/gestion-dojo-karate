@@ -12,7 +12,7 @@ Las rutas están en `apps/web/src/pages/`. El contenido interactivo de cada pant
 | Profesores | `/profesores` | `profesores.astro` | `Profesores.jsx` |
 | Usuario | `/usuario` | `usuario.astro` | `Usuario.jsx` |
 | Ajustes | `/ajustes` | `ajustes.astro` | `Ajustes.jsx` |
-| Configurar convocatoria | `/configurar-convocatoria` | `configurar-convocatoria.astro` | `ConfigurarConvocatoria.jsx` |
+| Convocatoria desde el calendario | `/configurar-convocatoria` | `configurar-convocatoria.astro` | `ConfigurarConvocatoria.jsx` |
 | Compartir convocatoria | `/compartir-convocatoria` | `compartir-convocatoria.astro` | `CompartirConvocatoria.jsx` |
 | Formulario de postulación público | `/formulario?clase=ID` | `formulario.astro` | `FormularioPostulacion.jsx` |
 | Iniciar sesión | `/login` | `login.astro` | `Login.jsx` |

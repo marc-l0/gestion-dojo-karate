@@ -25,7 +25,7 @@ Los datos se guardan en una hoja de cálculo de Google. La estructura del almace
 - Formulario público con validaciones, consentimiento, datos del apoderado para menores de edad y número de solicitud al completar el envío.
 - Búsqueda y filtros de postulaciones por clase y estado, aceptación, rechazo y eliminación de solicitudes. Las pendientes no reservan vacante; las aceptadas o aprobadas consumen cupos.
 - Navegación móvil compartida, avisos dentro de la app y temas claro, oscuro o automático.
-- Documentos PDF descargables desde **Usuario > Ajustes > Documentación y entrega**: guía del administrador, procedimiento manual de respaldo y recuperación, y lista de pruebas de aceptación.
+- Guía rápida de uso y preferencias de apariencia desde **Usuario > Ajustes**. La documentación de entrega se conserva por separado en [docs/entrega](docs/entrega/README.md).
 
 ## Guías del proyecto
 
@@ -169,7 +169,6 @@ apps/
     google/                  cliente de Google Sheets
   api/test/                  pruebas HTTP con repositorios simulados
   web/
-    public/documentos/       PDF de operación y entrega, y ZIP descargable
     src/
       pages/                 rutas del sistema y formulario público
       components/pantallas/  contenido React de cada pantalla
@@ -252,7 +251,7 @@ Las clases se identifican por id, pero actualmente guardan al profesor por nombr
 - Se corrigió la descarga del QR como archivo PNG y se añadió una alternativa para abrir y guardar la imagen desde el celular.
 - Se ajustó el campo de nacimiento del formulario público y se pasaron las fechas del aviso y resumen al formato español.
 - Se agregó la detección de horarios superpuestos del mismo profesor al crear y editar clases, considerando fechas, días y horas entre sedes.
-- Se añadieron la guía del administrador, el procedimiento manual de respaldo y recuperación y la lista de 18 pruebas para la entrega, disponibles en PDF y ZIP desde Ajustes.
+- Se añadieron la guía del administrador, el procedimiento manual de respaldo y recuperación y la lista de 18 pruebas para la entrega, preparadas en PDF y ZIP como documentación externa de entrega.
 
 Las fechas del registro corresponden a la zona horaria de Perú (`America/Lima`).
 

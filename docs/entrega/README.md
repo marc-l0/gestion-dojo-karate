@@ -6,7 +6,7 @@ El nombre definitivo del sistema queda a elección del cliente. Estos documentos
 - [Respaldo y recuperación](respaldo-recuperacion.md): procedimiento manual, frecuencia propuesta y registro para completar con el responsable.
 - [Validación y aceptación](validacion-entrega.md): 18 casos de prueba, registro de resultados, pendientes y condiciones de soporte para acordar con el cliente.
 
-Los PDF y el ZIP están en `apps/web/public/documentos/` y se pueden descargar desde **Usuario > Ajustes > Documentación y entrega**. Para regenerarlos después de editar los Markdown, ejecutar `python3 scripts/generar-documentos-entrega.py` en un entorno con ReportLab instalado. No se requiere Python para ejecutar la aplicación.
+Los PDF y el ZIP están en la carpeta [pdf](pdf/) como documentación externa de entrega. No se publican dentro de la aplicación. Para regenerarlos después de editar los Markdown, ejecutar `python3 scripts/generar-documentos-entrega.py` en un entorno con ReportLab instalado. No se requiere Python para ejecutar la aplicación.
 
 ## Regla de disponibilidad de profesores
 

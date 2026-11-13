@@ -58,7 +58,7 @@ Registrar para cada caso: resultado (Aprobado / Pendiente / Observado), fecha y 
 
 17. Respaldo y recuperación: con la persona asignada, crear una copia de prueba, verificar las tres pestañas y ensayar la recuperación siguiendo el procedimiento. Registrar el resultado sin alterar datos reales.
 
-18. Capacitación y documentación: el administrador realiza el recorrido principal con la guía, localiza los documentos en Ajustes y sabe a quién reportar incidencias.
+18. Capacitación y documentación: el administrador realiza el recorrido principal con la guía, dispone de la documentación entregada y sabe a quién reportar incidencias.
 
 ## 3. Registro de resultados
 
