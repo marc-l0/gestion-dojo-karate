@@ -12,7 +12,7 @@ Es un **monorepo**: un solo repositorio con varios proyectos que se administran 
 | `apps/api` | Node.js 24 + NestJS 12 + Google Sheets (`googleapis`) | API REST, autenticación, reglas de negocio y persistencia |
 | `packages/shared` | TypeScript | Tipos, estados y reglas compartidos que utiliza la API |
 
-Los datos se guardan en una hoja de cálculo de Google, no en una base de datos tradicional. Ver [Datos en Google Sheets](docs/03-google-sheets.md).
+Los datos se guardan en una hoja de cálculo de Google. La estructura del almacenamiento se detalla en [Datos en Google Sheets](docs/03-google-sheets.md).
 
 ## Funcionalidades principales
 
@@ -47,7 +47,7 @@ Los datos se guardan en una hoja de cálculo de Google, no en una base de datos 
 
 ## Puesta en marcha
 
-Los comandos siguientes están preparados para **PowerShell en Windows**, desde la carpeta donde quieras descargar el proyecto. Las dependencias se instalan juntas mediante pnpm; no se instalan React, NestJS o Turborepo por separado.
+La puesta en marcha se realiza mediante **PowerShell en Windows**, desde la carpeta seleccionada para alojar el proyecto. Las dependencias se instalan de forma conjunta mediante pnpm.
 
 ```powershell
 # 1. Descargar la rama que contiene esta versión
@@ -66,9 +66,9 @@ Copy-Item apps/web/.env.example apps/web/.env
 New-Item -ItemType Directory -Force apps/api/credentials
 ```
 
-Guarda la llave JSON de la cuenta de servicio como `apps/api/credentials/google-service-account.json`. Prepara las pestañas **Clases**, **Profesores** y **Postulaciones**, con encabezados en la primera fila y las columnas en el orden indicado en la [guía de Google Sheets](docs/03-google-sheets.md). En hojas anteriores, verifica que Postulaciones incluya las columnas R y S de consentimiento.
+La llave JSON de la cuenta de servicio se guarda en `apps/api/credentials/google-service-account.json`. Se requieren las pestañas **Clases**, **Profesores** y **Postulaciones**, con encabezados en la primera fila y las columnas en el orden indicado en la [guía de Google Sheets](docs/03-google-sheets.md). En las hojas existentes se verifica que Postulaciones incluya las columnas R y S de consentimiento.
 
-Completa los dos archivos `.env` antes de arrancar. La API valida las variables obligatorias y no iniciará si faltan o no cumplen los requisitos.
+Los dos archivos `.env` se configuran antes del arranque. La API valida las variables obligatorias y detiene el inicio cuando faltan valores o no se cumplen los requisitos.
 
 | Archivo | Variable | Qué configurar |
 |---|---|---|
@@ -85,15 +85,15 @@ Completa los dos archivos `.env` antes de arrancar. La API valida las variables 
 | `apps/api/.env` | `COOKIE_DOMAIN` | Vacío en local; definir según los dominios elegidos al publicar |
 | `apps/web/.env` | `PUBLIC_API_URL` | Dirección de la API, por ejemplo `http://localhost:3000` |
 
-Puedes generar un secreto nuevo en tu computadora con:
+La generación de un nuevo secreto se realiza localmente mediante el siguiente comando:
 
 ```powershell
 node -e "console.log(require('node:crypto').randomBytes(48).toString('base64'))"
 ```
 
-Los `.env` y la carpeta `credentials/` están ignorados por Git. Guarda esos archivos por un medio privado al trasladar el proyecto a otra computadora. Solo la URL pública de la API corresponde al frontend; las contraseñas y credenciales permanecen en el backend.
+Los `.env` y la carpeta `credentials/` están ignorados por Git. Su traslado a otra computadora se realiza por un medio privado. La URL pública de la API se configura en el frontend; las contraseñas y credenciales permanecen en el backend.
 
-Una vez completada la configuración:
+Una vez completada la configuración, se inicia el sistema con:
 
 ```powershell
 pnpm dev
@@ -102,13 +102,13 @@ pnpm dev
 - Web: http://localhost:4321 (abre el login).
 - API: http://localhost:3000 (no es la interfaz del sistema).
 
-Para trabajar cada día, ejecuta `pnpm dev` desde la raíz: inicia el frontend y el backend en una sola terminal y mantiene la compilación del paquete compartido. Usa **Ctrl+C** para detener los procesos. Si antes dejaste el frontend en segundo plano, detenlo con `pnpm stop:web`; detén también cualquier API abierta por separado para evitar puertos ocupados.
+El arranque diario se realiza con `pnpm dev` desde la raíz del proyecto. Se inician el frontend y el backend en una sola terminal y se mantiene la compilación del paquete compartido. Los procesos se detienen con **Ctrl+C**. Cuando existe un frontend iniciado en segundo plano, se detiene con `pnpm stop:web`; también se detienen las instancias de la API abiertas por separado para liberar los puertos.
 
-> Al clonar el repositorio no necesitas ejecutar `git init`. Si necesitas reactivar los hooks de Git después de instalar, usa `pnpm run prepare`.
+> La clonación del repositorio ya incluye la inicialización de Git. La reactivación de los hooks después de instalar se realiza con `pnpm run prepare`.
 
 ### Actualizar una copia existente
 
-Detén la aplicación antes de actualizar y comprueba que estás en la rama de esta versión:
+Antes de actualizar, se detiene la aplicación y se comprueba la rama correspondiente a esta versión mediante los siguientes comandos:
 
 ```powershell
 git fetch origin
@@ -117,22 +117,22 @@ git pull --ff-only origin feature/postulaciones-movil
 pnpm dev
 ```
 
-Si la actualización modifica las dependencias o el lockfile, ejecuta `pnpm install --frozen-lockfile` antes de `pnpm dev`. Si Git informa de cambios locales que serían sobrescritos, guárdalos mediante un commit o un respaldo con `git stash` antes de continuar.
+Cuando la actualización modifica las dependencias o el lockfile, se ejecuta `pnpm install --frozen-lockfile` antes de `pnpm dev`. Si Git informa de cambios locales que serían sobrescritos, estos se conservan mediante un commit o un respaldo con `git stash` antes de continuar.
 
 ### Probar desde un celular
 
-Conecta el celular y la computadora a la misma red. Sustituye `IP-DE-TU-PC` por la dirección de red de la computadora:
+La prueba desde un celular requiere que ambos dispositivos se encuentren conectados a la misma red. En la siguiente configuración, `IP-DE-LA-PC` representa la dirección de red de la computadora:
 
 | Configuración | Valor para la red local |
 |---|---|
-| `apps/web/.env`: `PUBLIC_API_URL` | `http://IP-DE-TU-PC:3000` |
-| `apps/api/.env`: `WEB_URL` | `http://IP-DE-TU-PC:4321` |
+| `apps/web/.env`: `PUBLIC_API_URL` | `http://IP-DE-LA-PC:3000` |
+| `apps/api/.env`: `WEB_URL` | `http://IP-DE-LA-PC:4321` |
 | `apps/api/.env`: `COOKIE_DOMAIN` | Vacío |
-| Dirección que debes abrir | `http://IP-DE-TU-PC:4321` |
+| Dirección de acceso desde el navegador | `http://IP-DE-LA-PC:4321` |
 
-Reinicia ambos servicios después de cambiar la configuración y permite el acceso de Node.js en la red privada si el firewall lo solicita. Usa el mismo hostname o IP para web y API; no mezcles `localhost` con la IP al probar la sesión.
+Después de modificar la configuración, se reinician ambos servicios. Cuando el firewall lo solicita, se habilita el acceso de Node.js en la red privada. La web y la API se acceden mediante el mismo hostname o IP para mantener el funcionamiento de la sesión.
 
-El frontend ya escucha en la red local. Si cambia la IP de la computadora, actualiza los `.env`, reinicia y vuelve a generar los enlaces y QR. `localhost` en el celular se refiere al propio celular, no a la computadora que ejecuta el proyecto.
+El frontend escucha en la red local. Cuando cambia la IP de la computadora, se actualizan los `.env`, se reinician los servicios y se generan nuevamente los enlaces y QR. En el celular, `localhost` corresponde al propio dispositivo; el acceso al sistema se realiza mediante la IP de la computadora.
 
 ## Scripts principales
 
@@ -154,7 +154,7 @@ Desde la raíz del proyecto:
 | `pnpm commit` | Asistente para escribir el commit con el formato correcto |
 | `postinstall` | Se ejecuta después de instalar dependencias: compila `packages/shared`, que usa la API |
 
-Las comprobaciones recientes de desarrollo incluyen las compilaciones de web y API, typecheck, pruebas unitarias y HTTP, y verificaciones de navegación con Playwright en tamaños móviles y de escritorio. Las verificaciones de navegador no forman parte de un comando de pruebas versionado del frontend. Para una entrega, ejecutar también la [lista de aceptación](docs/entrega/validacion-entrega.md) con el cliente.
+Las comprobaciones recientes de desarrollo incluyen las compilaciones de web y API, typecheck, pruebas unitarias y HTTP, y verificaciones de navegación con Playwright en tamaños móviles y de escritorio. Las verificaciones de navegador no forman parte de un comando de pruebas versionado del frontend. La validación de entrega se completa con la ejecución de la [lista de aceptación](docs/entrega/validacion-entrega.md) junto con el cliente.
 
 ## Estructura
 
@@ -185,7 +185,7 @@ scripts/                     generador opcional de los PDF de entrega
 docs/                        guías, entrega y material de presentación
 ```
 
-Para localizar cada pantalla y su ruta, consulta el [mapa de pantallas](docs/05-mapa-de-pantallas.md).
+La ubicación de cada pantalla y su ruta se detalla en el [mapa de pantallas](docs/05-mapa-de-pantallas.md).
 
 ## Endpoints de la API
 
@@ -288,11 +288,11 @@ El repositorio contiene las siguientes configuraciones. Su ejecución depende de
 | `.github/dependabot.yml` | Propone actualizaciones de GitHub Actions hacia `develop` |
 | `renovate.json` | Configura actualizaciones de dependencias de npm hacia `develop`; requiere habilitar la app Renovate |
 
-El workflow de CI no se dispara por un push aislado a `feature/postulaciones-movil`; se ejecuta al abrir o actualizar un PR. Antes de utilizarlo como requisito de entrega, revisar su ejecución en Actions y la estructura del bloque `env` del paso de pruebas e2e para que las variables queden dentro de ese bloque.
+El workflow de CI no se dispara por un push aislado a `feature/postulaciones-movil`; se ejecuta al abrir o actualizar un PR. Su uso como requisito de entrega requiere verificar la ejecución en Actions y la estructura del bloque `env` del paso de pruebas e2e, de modo que las variables queden dentro de ese bloque.
 
 ### Configuración del repositorio (una sola vez, en Settings)
 
-Estas son indicaciones para el responsable del repositorio; no implican que los ajustes ya estén aplicados. Algunas opciones dependen del plan y la visibilidad del repositorio.
+La configuración siguiente se encuentra sujeta a verificación en GitHub; su presencia en la documentación no acredita que los ajustes estén aplicados. La disponibilidad de algunas opciones depende del plan y la visibilidad del repositorio.
 
 1. **Ramas**: al adoptar Gitflow, crear `develop` desde `main` y marcarla como rama por defecto (**General > Default branch**). La versión de demostración descrita aquí está en `feature/postulaciones-movil`.
 2. **Rules > Rulesets**: configurar reglas para `main` y `develop` que exijan PR y los checks `Lint, tipos, tests y build`, `Tests e2e del api`, `Validar Conventional Commits` y `Validar ramas de Gitflow`, una vez comprobado que esos workflows funcionan. Bloquear el force push y el borrado de las ramas protegidas.
