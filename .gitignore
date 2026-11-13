@@ -31,3 +31,8 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
+
+# Material personal de preparación de reuniones
+/docs/entrega/apoyo/
+Guion-de-puesta-en-marcha.*
+Archivos-de-apoyo-para-la-reunion.zip
