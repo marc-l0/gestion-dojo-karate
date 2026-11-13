@@ -182,6 +182,16 @@ describe('Postulaciones y cupos', () => {
     expect(actualizarEstado).toHaveBeenCalledTimes(1);
     expect((await service.obtenerClase(1)).cuposDisponibles).toBe(0);
   });
+  it('con tres cupos, un aceptado y un pendiente conserva dos vacantes; aceptar el segundo deja una', async () => {
+    clase.cupos = 3;
+    const primera = await service.crearPostulacion(datos);
+    const segunda = await service.crearPostulacion({ ...datos, correo: 'segundo@example.com' });
+    await service.actualizarEstadoPostulacion(primera.id, 'aceptado');
+    expect((await service.obtenerClase(1)).cuposDisponibles).toBe(2);
+    expect(postulaciones.find((item) => item.id === segunda.id)?.estado).toBe('pendiente');
+    await service.actualizarEstadoPostulacion(segunda.id, 'aceptado');
+    expect((await service.obtenerClase(1)).cuposDisponibles).toBe(1);
+  });
   it('cambiar aceptado a aprobado no requiere una vacante adicional y rechazar libera la vacante', async () => {
     const primera = await service.crearPostulacion(datos);
     await service.actualizarEstadoPostulacion(primera.id, 'aceptado');

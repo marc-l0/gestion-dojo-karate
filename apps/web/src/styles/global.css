@@ -329,3 +329,71 @@
   color: var(--danger);
   font-size: 0.875rem;
 }
+
+/* Calendario: contraste coherente con las superficies y el texto de la app. */
+.dojo-calendar__day {
+  display: flex;
+  min-height: 3.25rem;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: var(--surface-subtle);
+  color: var(--text-primary);
+}
+.dojo-calendar__number {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+}
+.dojo-calendar .ant-picker-cell:not(.ant-picker-cell-in-view) .dojo-calendar__number {
+  color: #475569;
+}
+html[data-tema="oscuro"]
+  .dojo-calendar
+  .ant-picker-cell:not(.ant-picker-cell-in-view)
+  .dojo-calendar__number {
+  color: #a1b1c6;
+}
+.dojo-calendar__day.is-today {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.dojo-calendar__day.is-selected {
+  border-color: var(--accent);
+  background: #1d4ed8;
+  color: #ffffff;
+}
+.dojo-calendar .ant-picker-cell .dojo-calendar__day.is-selected .dojo-calendar__number {
+  color: #ffffff;
+}
+.dojo-calendar__count {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 0.375rem;
+  padding: 0.125rem 0.25rem;
+  background: #dcfce7;
+  color: #166534;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1rem;
+}
+html[data-tema="oscuro"] .dojo-calendar__count {
+  background: #14372f;
+  color: #86efac;
+}
+.dojo-calendar__day.is-selected .dojo-calendar__count {
+  background: #1e40af;
+  color: #ffffff;
+}
+.dojo-calendar__dot {
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 50%;
+  background: currentColor;
+}

@@ -181,38 +181,14 @@ export default function Calendario() {
 
     return (
       <div
-        className={
-          'flex h-full min-h-13 flex-col items-center justify-center rounded-xl border border-gray-100 transition ' +
-          (esSeleccionado
-            ? 'border-blue-500 bg-blue-500 text-white'
-            : esHoy
-              ? 'border-blue-100 bg-blue-50'
-              : 'border-gray-100')
-        }
+        className={`dojo-calendar__day${esHoy ? ' is-today' : ''}${esSeleccionado ? ' is-selected' : ''}`}
       >
-        <span
-          className={
-            'text-sm font-medium ' +
-            (esSeleccionado ? 'text-white' : esHoy ? 'text-blue-600' : 'text-gray-700')
-          }
-        >
-          {value.format('DD')}
-        </span>
+        <span className="dojo-calendar__number">{value.format('DD')}</span>
 
         {clasesDelDia.length > 0 && (
-          <div className="mt-1 flex items-center gap-1">
-            <span
-              className={
-                'h-1.5 w-1.5 rounded-full ' + (esSeleccionado ? 'bg-white' : 'bg-green-500')
-              }
-            ></span>
-
-            <span
-              className={
-                'text-xs font-semibold leading-none ' +
-                (esSeleccionado ? 'text-white' : 'text-green-600')
-              }
-            >
+          <div className="dojo-calendar__count">
+            <span className="dojo-calendar__dot" aria-hidden="true" />
+            <span>
               {clasesDelDia.length}
               <span className="sr-only">
                 {clasesDelDia.length === 1 ? ' clase programada' : ' clases programadas'}
@@ -277,9 +253,21 @@ export default function Calendario() {
   return (
     <ConfigProvider
       locale={locale}
-      theme={{ algorithm: oscuro ? temaAnt.darkAlgorithm : temaAnt.defaultAlgorithm }}
+      theme={{
+        algorithm: oscuro ? temaAnt.darkAlgorithm : temaAnt.defaultAlgorithm,
+        token: {
+          colorBgContainer: oscuro ? '#151f2e' : '#ffffff',
+          colorBgElevated: oscuro ? '#151f2e' : '#ffffff',
+          colorText: oscuro ? '#eef2f7' : '#172033',
+          colorTextSecondary: oscuro ? '#cbd5e1' : '#334155',
+          colorTextTertiary: oscuro ? '#a1b1c6' : '#64748b',
+          colorBorder: oscuro ? '#475569' : '#cbd5e1',
+          colorBorderSecondary: oscuro ? '#334155' : '#e2e8f0',
+          colorPrimary: oscuro ? '#93c5fd' : '#2563eb',
+        },
+      }}
     >
-      <div className="min-h-0 bg-[#f7f9fb] pb-6 text-gray-800">
+      <div className="dojo-calendar min-h-0 bg-[#f7f9fb] pb-6 text-gray-800">
         <main className="mx-auto max-w-full space-y-4 px-4 pt-4" aria-busy={cargando}>
           <Mensaje aviso={aviso} />
           {cargando && (
@@ -313,6 +301,7 @@ export default function Calendario() {
                   <div className="mb-3 flex items-center justify-between">
                     <button
                       type="button"
+                      aria-label="Mes anterior"
                       onClick={mesAnterior}
                       className="flex h-7 w-7 items-center justify-center rounded-full text-gray-400 transition hover:bg-gray-100"
                     >
@@ -325,6 +314,7 @@ export default function Calendario() {
 
                     <button
                       type="button"
+                      aria-label="Mes siguiente"
                       onClick={mesSiguiente}
                       className="flex h-7 w-7 items-center justify-center rounded-full text-gray-400 transition hover:bg-gray-100"
                     >
@@ -358,7 +348,7 @@ export default function Calendario() {
               onClick={() => {
                 window.location.href = '/clases';
               }}
-              className="mt-3 h-9 w-full rounded-xl bg-blue-500 text-sm font-semibold text-white shadow-sm"
+              className="mt-3 h-9 w-full rounded-xl bg-blue-600 text-sm font-semibold text-white shadow-sm hover:bg-blue-700"
             >
               Ver clases
             </button>
@@ -415,7 +405,7 @@ export default function Calendario() {
             <button
               type="button"
               onClick={seleccionarConvocatoria}
-              className="mt-4 h-10 w-full cursor-pointer rounded-xl bg-blue-500 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-600 hover:shadow-md"
+              className="mt-4 h-10 w-full cursor-pointer rounded-xl bg-blue-600 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-700 hover:shadow-md"
             >
               Ver Convocatoria
             </button>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useOperacion } from '../../hooks/useOperacion.js';
 import { apiFetch, leerRespuesta } from '../../lib/api.js';
 import ConfirmarAccion from '../ConfirmarAccion.jsx';
@@ -118,11 +118,11 @@ export default function Clases() {
     };
   };
 
-  const cargarClases = async () => {
+  const cargarClases = useCallback(async () => {
     setCargando(true);
     setErrorCarga('');
     try {
-      const respuesta = await apiFetch('/clases');
+      const respuesta = await apiFetch('/clases', { cache: 'no-store' });
 
       if (!respuesta.ok) {
         throw new Error('No se pudieron cargar las clases');
@@ -138,9 +138,9 @@ export default function Clases() {
     } finally {
       setCargando(false);
     }
-  };
+  }, []);
 
-  const cargarProfesores = async () => {
+  const cargarProfesores = useCallback(async () => {
     try {
       const respuesta = await apiFetch('/profesores');
 
@@ -154,12 +154,17 @@ export default function Clases() {
     } catch (error) {
       console.error('Error al cargar profesores:', error);
     }
-  };
+  }, []);
 
   useEffect(() => {
     cargarClases();
     cargarProfesores();
-  }, []);
+    const actualizarAlVolver = (event) => {
+      if (event.persisted) cargarClases();
+    };
+    window.addEventListener('pageshow', actualizarAlVolver);
+    return () => window.removeEventListener('pageshow', actualizarAlVolver);
+  }, [cargarClases, cargarProfesores]);
 
   useEffect(() => {
     if (fechaInicio && duracion) {
