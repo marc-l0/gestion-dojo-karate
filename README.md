@@ -18,6 +18,7 @@ Los datos se guardan en una hoja de cálculo de Google, no en una base de datos.
 2. [Commits convencionales](docs/02-commits-convencionales.md): cómo escribir los mensajes de commit.
 3. [Datos en Google Sheets](docs/03-google-sheets.md): pestañas, columnas y credenciales.
 4. [Calidad de código](docs/04-calidad-de-codigo.md): Biome, Husky, pruebas con Vitest y CI.
+5. [Documentación de entrega](docs/entrega/README.md): guía del administrador, respaldo y recuperación, pruebas de aceptación y PDF descargables desde Ajustes.
 
 ## Requisitos
 

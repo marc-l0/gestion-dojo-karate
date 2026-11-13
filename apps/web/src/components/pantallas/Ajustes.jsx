@@ -66,7 +66,18 @@ export default function Ajustes({ version }) {
             <p className="pb-3 leading-6">
               En Clases verás las vigentes. Usa Todas para ver las próximas y finalizadas. Pulsa
               Nueva clase para registrar horario, profesor, fechas y cupos. El menú de tres puntos
-              permite editar o eliminar.
+              permite editar o eliminar. El sistema avisa si el profesor tiene otra clase que
+              coincide en fecha, día y hora.
+            </p>
+          </details>
+          <details className="py-2">
+            <summary className="flex min-h-11 cursor-pointer items-center font-semibold text-gray-800">
+              Administrar profesores
+            </summary>
+            <p className="pb-3 leading-6">
+              En Profesores puedes registrar, activar, desactivar o eliminar. Desactivar permite
+              conservar el registro para usarlo después; eliminar lo quita definitivamente de la
+              lista. Las clases ya registradas conservan el nombre del profesor.
             </p>
           </details>
           <details className="py-2">
@@ -99,6 +110,55 @@ export default function Ajustes({ version }) {
             </p>
           </details>
         </div>
+      </section>
+      <section className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+        <h2 id="documentos" className="scroll-mt-24 text-lg font-bold text-gray-900">
+          Documentación y entrega
+        </h2>
+        <p className="mt-2 text-sm text-gray-500">
+          Descarga las guías para operar el sistema, realizar copias de seguridad y revisar la
+          entrega.
+        </p>
+        <div className="mt-3 divide-y divide-gray-100">
+          {[
+            [
+              'guia-administrador',
+              'Guía del administrador',
+              'Clases, profesores, convocatorias y postulaciones.',
+            ],
+            [
+              'respaldo-recuperacion',
+              'Respaldo y recuperación',
+              'Procedimiento manual y comprobaciones para recuperar los datos.',
+            ],
+            [
+              'validacion-entrega',
+              'Lista de pruebas para la entrega',
+              'Para completar junto con el responsable del negocio.',
+            ],
+          ].map(([archivo, titulo, descripcion]) => (
+            <a
+              key={archivo}
+              href={`/documentos/${archivo}.pdf`}
+              download
+              className="flex min-h-16 flex-col justify-center gap-1 py-3"
+            >
+              <span className="font-semibold text-blue-700">{titulo} · PDF</span>
+              <span className="text-sm text-gray-500">{descripcion}</span>
+            </a>
+          ))}
+        </div>
+        <a
+          href="/documentos/documentacion-entrega.zip"
+          download
+          className="mt-3 flex min-h-11 items-center justify-center rounded-xl border border-blue-200 bg-blue-50 px-3 py-2 text-center text-sm font-semibold text-blue-700"
+        >
+          Descargar todos los documentos
+        </a>
+        <p className="mt-3 text-sm text-gray-500">
+          Las copias son manuales y debe realizarlas el responsable asignado. La lista de entrega
+          queda pendiente hasta que el cliente haga las pruebas y dé su conformidad.
+        </p>
       </section>
       <section className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
         <h2 id="acerca" className="scroll-mt-24 text-lg font-bold text-gray-900">
