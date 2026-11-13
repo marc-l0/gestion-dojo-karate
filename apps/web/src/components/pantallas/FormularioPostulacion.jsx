@@ -10,7 +10,21 @@ const fechaEnLima = () =>
     day: '2-digit',
   }).format(new Date());
 const campo =
-  'mt-2 block min-h-12 w-full min-w-0 rounded-xl border border-purple-100 bg-white px-3 py-2 text-base text-gray-900 outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-200 disabled:bg-gray-100';
+  'mt-2 block box-border min-h-12 w-full min-w-0 max-w-full rounded-xl border border-purple-100 bg-white px-3 py-2 text-base text-gray-900 outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-200 disabled:bg-gray-100';
+
+const fechaEnEspanol = (fecha) => {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(fecha ?? '')) return 'fecha por confirmar';
+  const valor = new Date(`${fecha}T12:00:00Z`);
+  if (Number.isNaN(valor.getTime())) return 'fecha por confirmar';
+  return new Intl.DateTimeFormat('es-PE', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  })
+    .format(valor)
+    .replace(/ de (\d{4})$/, ' del $1');
+};
 
 export default function FormularioPostulacion() {
   const [clase, setClase] = useState(null);
@@ -143,7 +157,8 @@ export default function FormularioPostulacion() {
         {clase.horaInicio} – {clase.horaFin}
       </p>
       <p className="mt-2 text-sm text-purple-900">
-        Fechas de la clase: {clase.fechaInicio} al {clase.fechaFin}
+        Fechas de la clase: del {fechaEnEspanol(clase.fechaInicio)} al{' '}
+        {fechaEnEspanol(clase.fechaFin)}
       </p>
       <div className="mt-3">
         <IndicadorCupos disponibles={clase.cuposDisponibles} total={clase.cupos} />
@@ -152,7 +167,7 @@ export default function FormularioPostulacion() {
   );
 
   return (
-    <main className="mx-auto min-h-dvh w-full max-w-xl px-4 py-6 sm:py-10">
+    <main className="formulario-postulacion mx-auto min-h-dvh w-full max-w-xl px-4 py-6 sm:py-10">
       <header className="mb-6">
         <p className="text-sm font-semibold text-purple-700">Mi Dojo</p>
         <h1 className="mt-2 text-2xl font-bold text-gray-900">
@@ -220,7 +235,8 @@ export default function FormularioPostulacion() {
           )}
           {convocatoriaAbierta && hoy < clase.fechaInicio && (
             <p className="rounded-xl bg-blue-50 p-4 text-sm text-blue-900">
-              La clase empieza el {clase.fechaInicio}. Ya puedes enviar tu postulación.
+              La clase empieza el {fechaEnEspanol(clase.fechaInicio)}. Ya puedes enviar tu
+              postulación.
             </p>
           )}
           {sinCupos && (

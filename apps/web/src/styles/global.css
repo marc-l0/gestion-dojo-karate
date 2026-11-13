@@ -1,6 +1,26 @@
 @import "tailwindcss";
 @import "./tema.css";
 
+/* El campo nativo de fecha de iOS también debe encajar en el formulario público. */
+.formulario-postulacion input[type="date"] {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  height: 3rem;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.formulario-postulacion input[type="date"]::-webkit-date-and-time-value {
+  min-height: 1.5em;
+  text-align: left;
+}
+.formulario-postulacion input[type="date"]::-webkit-datetime-edit {
+  min-width: 0;
+  padding: 0;
+}
+
 @keyframes slideUp {
   from {
     transform: translateY(100%);
