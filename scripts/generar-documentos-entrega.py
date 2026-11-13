@@ -24,24 +24,22 @@ if (carpeta / 'DejaVuSans.ttf').exists():
     pdfmetrics.registerFont(TTFont('Entrega', str(carpeta / 'DejaVuSans.ttf')))
     pdfmetrics.registerFont(TTFont('EntregaBold', str(carpeta / 'DejaVuSans-Bold.ttf')))
     FUENTE, NEGRITA = 'Entrega', 'EntregaBold'
-AZUL = colors.HexColor('#24558a')
-TEXTO = colors.HexColor('#18293f')
-GRIS = colors.HexColor('#526178')
+NEGRO = colors.black
 ESTILOS = {
-    'titulo': ParagraphStyle('titulo', fontName=NEGRITA, fontSize=25, leading=31, textColor=TEXTO, spaceAfter=13),
-    'seccion': ParagraphStyle('seccion', fontName=NEGRITA, fontSize=12, leading=17, textColor=AZUL, spaceBefore=9, spaceAfter=6, keepWithNext=True),
-    'texto': ParagraphStyle('texto', fontName=FUENTE, fontSize=9.5, leading=13.7, textColor=TEXTO, spaceAfter=5, alignment=TA_LEFT),
-    'lista': ParagraphStyle('lista', fontName=FUENTE, fontSize=9.5, leading=13.7, textColor=TEXTO, spaceAfter=5, leftIndent=10),
+    'titulo': ParagraphStyle('titulo', fontName=NEGRITA, fontSize=25, leading=31, textColor=NEGRO, spaceAfter=13),
+    'seccion': ParagraphStyle('seccion', fontName=NEGRITA, fontSize=12, leading=17, textColor=NEGRO, spaceBefore=9, spaceAfter=6, keepWithNext=True),
+    'texto': ParagraphStyle('texto', fontName=FUENTE, fontSize=9.5, leading=13.7, textColor=NEGRO, spaceAfter=5, alignment=TA_LEFT),
+    'lista': ParagraphStyle('lista', fontName=FUENTE, fontSize=9.5, leading=13.7, textColor=NEGRO, spaceAfter=5, leftIndent=10),
 }
 
 def pie(canvas, doc):
     ancho, alto = A4
     canvas.saveState()
-    canvas.setFillColor(AZUL)
+    canvas.setFillColor(NEGRO)
     canvas.rect(0, alto - 8, ancho, 8, fill=1, stroke=0)
-    canvas.setStrokeColor(colors.HexColor('#d9e3ee'))
+    canvas.setStrokeColor(NEGRO)
     canvas.line(44, 40, ancho - 44, 40)
-    canvas.setFillColor(GRIS)
+    canvas.setFillColor(NEGRO)
     canvas.setFont(FUENTE, 7.5)
     canvas.drawString(44, 27, 'Sistema de gestión de clases | Documentación de entrega')
     canvas.drawRightString(ancho - 44, 27, f'Página {doc.page}')
