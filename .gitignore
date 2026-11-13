@@ -41,3 +41,6 @@ Archivos-de-apoyo-para-la-reunion.zip
 /docs/entrega/
 /docs/portafolio/
 /scripts/generar-documentos-entrega.py
+
+# Transferencias temporales fuera del código de la aplicación
+/descarga-temporal/
