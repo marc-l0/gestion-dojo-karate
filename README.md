@@ -1,57 +1,138 @@
 # Gestión Dojo Karate
 
-Sistema web para gestionar un dojo de karate: crear y administrar **clases**, registrar **profesores**, recibir **postulaciones** de alumnos mediante un formulario y llevar el control de cupos.
+Sistema web adaptable a celulares para gestionar un dojo de karate: crear y administrar **clases**, registrar **profesores**, compartir **convocatorias** y recibir **postulaciones** de alumnos con control de cupos.
+
+El nombre provisional que aparece en la aplicación es **Mi Dojo**. El nombre definitivo y la identidad visual quedan a elección del cliente. Actualmente existe una **versión funcional en desarrollo para demostración local**; la publicación en internet y la aceptación de entrega deben validarse por separado.
 
 Es un **monorepo**: un solo repositorio con varios proyectos que se administran con **pnpm workspaces + Turborepo**.
 
 | Carpeta | Tecnología | Qué es |
 |---|---|---|
-| `apps/web` | Astro 7 + React 19 + Ant Design + Tailwind 4 | Lo que ve el usuario en el navegador |
-| `apps/api` | NestJS 12 + Google Sheets (`googleapis`) | La API REST que aplica las reglas y guarda los datos |
-| `packages/shared` | TypeScript | Tipos, estados y reglas que usan web y api |
+| `apps/web` | Astro 7 + React 19 + Tailwind CSS 4 + Ant Design 6 | Pantallas de administración y formulario público |
+| `apps/api` | Node.js 24 + NestJS 12 + Google Sheets (`googleapis`) | API REST, autenticación, reglas de negocio y persistencia |
+| `packages/shared` | TypeScript | Tipos, estados y reglas compartidos que utiliza la API |
 
-Los datos se guardan en una hoja de cálculo de Google, no en una base de datos. Ver [Datos en Google Sheets](docs/03-google-sheets.md).
+Los datos se guardan en una hoja de cálculo de Google, no en una base de datos tradicional. Ver [Datos en Google Sheets](docs/03-google-sheets.md).
+
+## Funcionalidades principales
+
+- Inicio de sesión del administrador con JWT en cookies HTTP-only. La dirección principal abre el login; después se accede a Clases.
+- Creación, edición y eliminación de clases, con fechas, sede, nivel, profesor, días, horario, tarifa y cupos.
+- Detección de horarios superpuestos del mismo profesor, incluso entre sedes, al crear o editar clases. Las clases consecutivas están permitidas.
+- Vista de clases vigentes, próximas y finalizadas, y calendario de entrenamiento.
+- Registro, activación, desactivación y eliminación de profesores. Las clases y solicitudes existentes conservan el nombre guardado del profesor.
+- Convocatorias disponibles desde la creación de la clase, con enlace, código QR negro sobre fondo blanco, descarga PNG y alternativa para guardar la imagen en móvil.
+- Formulario público con validaciones, consentimiento, datos del apoderado para menores de edad y número de solicitud al completar el envío.
+- Búsqueda y filtros de postulaciones por clase y estado, aceptación, rechazo y eliminación de solicitudes. Las pendientes no reservan vacante; las aceptadas o aprobadas consumen cupos.
+- Navegación móvil compartida, avisos dentro de la app y temas claro, oscuro o automático.
+- Documentos PDF descargables desde **Usuario > Ajustes > Documentación y entrega**: guía del administrador, procedimiento manual de respaldo y recuperación, y lista de pruebas de aceptación.
 
 ## Guías del proyecto
 
 1. [Flujo de trabajo con Git (Gitflow)](docs/01-gitflow.md): ramas `main`, `develop`, `feature`, `release` y `hotfix`.
 2. [Commits convencionales](docs/02-commits-convencionales.md): cómo escribir los mensajes de commit.
-3. [Datos en Google Sheets](docs/03-google-sheets.md): pestañas, columnas y credenciales.
+3. [Datos en Google Sheets](docs/03-google-sheets.md): pestañas, columnas, credenciales y validación de postulaciones.
 4. [Calidad de código](docs/04-calidad-de-codigo.md): Biome, Husky, pruebas con Vitest y CI.
-5. [Documentación de entrega](docs/entrega/README.md): guía del administrador, respaldo y recuperación, pruebas de aceptación y PDF descargables desde Ajustes.
+5. [Mapa de pantallas](docs/05-mapa-de-pantallas.md): rutas y archivos de cada sección.
+6. [Documentación de entrega](docs/entrega/README.md): operación, respaldo, recuperación, pruebas y condiciones por acordar con el cliente.
+7. [Presentación y capturas](docs/portafolio/README.md): PDF y capturas con datos ficticios para mostrar el proyecto.
 
 ## Requisitos
 
-- Node.js 24 (ver `.nvmrc`)
-- pnpm 12 (viene fijado en `package.json`; con `corepack enable` se instala solo)
-- La llave JSON de la cuenta de servicio de Google (ver [la guía 3](docs/03-google-sheets.md))
+- **Git** para descargar y actualizar el repositorio.
+- **Node.js 24**, la versión indicada en `.nvmrc`.
+- **pnpm 12.6.0**, fijado en el campo `packageManager` de `package.json`. Usar la misma versión evita conflictos entre Corepack, pnpm global y las tareas de Turborepo.
+- Una cuenta de Google, un proyecto con **Google Sheets API habilitada**, una cuenta de servicio y una hoja compartida con esa cuenta como **Editor**.
+- Internet para consultar y guardar datos en Google Sheets.
 
 ## Puesta en marcha
 
-```bash
-# 1. Git e instalación (git init antes de instalar, para que se activen los hooks)
-git init
-pnpm install
+Los comandos siguientes están preparados para **PowerShell en Windows**, desde la carpeta donde quieras descargar el proyecto. Las dependencias se instalan juntas mediante pnpm; no se instalan React, NestJS o Turborepo por separado.
 
-# 2. Variables de entorno (opcional: la API usa el puerto 3000 por defecto)
-cp apps/api/.env.example apps/api/.env
+```powershell
+# 1. Descargar la rama que contiene esta versión
+git clone --branch feature/postulaciones-movil https://github.com/marc-l0/gestion-dojo-karate.git
+cd gestion-dojo-karate
 
-# 3. Credenciales de Google: copia tu llave aquí (la carpeta está ignorada por Git)
-mkdir -p apps/api/credentials
-cp /ruta/a/tu/llave.json apps/api/credentials/google-service-account.json
+# 2. Instalar pnpm y las dependencias del proyecto
+npm install --global pnpm@12.6.0
+pnpm install --frozen-lockfile
 
-# 4. Levantar todo
+# 3. Crear los archivos de configuración local
+Copy-Item apps/api/.env.example apps/api/.env
+Copy-Item apps/web/.env.example apps/web/.env
+
+# 4. Crear la carpeta donde se guardará la credencial de Google
+New-Item -ItemType Directory -Force apps/api/credentials
+```
+
+Guarda la llave JSON de la cuenta de servicio como `apps/api/credentials/google-service-account.json`. Prepara las pestañas **Clases**, **Profesores** y **Postulaciones**, con encabezados en la primera fila y las columnas en el orden indicado en la [guía de Google Sheets](docs/03-google-sheets.md). En hojas anteriores, verifica que Postulaciones incluya las columnas R y S de consentimiento.
+
+Completa los dos archivos `.env` antes de arrancar. La API valida las variables obligatorias y no iniciará si faltan o no cumplen los requisitos.
+
+| Archivo | Variable | Qué configurar |
+|---|---|---|
+| `apps/api/.env` | `NODE_ENV` | `development` para la demostración local |
+| `apps/api/.env` | `PORT` | Puerto de la API; por defecto, `3000` |
+| `apps/api/.env` | `WEB_URL` | Dirección exacta de la web, por ejemplo `http://localhost:4321` |
+| `apps/api/.env` | `JWT_SECRET` | Secreto aleatorio de al menos 32 caracteres; sustituir el ejemplo |
+| `apps/api/.env` | `JWT_EXPIRES_IN_SECONDS` | Duración de la sesión; por defecto, `28800` segundos (8 horas) |
+| `apps/api/.env` | `ADMIN_USUARIO` | Usuario del administrador, de al menos 3 caracteres |
+| `apps/api/.env` | `ADMIN_PASSWORD` | Contraseña del administrador, de al menos 12 caracteres; sustituir el ejemplo |
+| `apps/api/.env` | `GOOGLE_SPREADSHEET_ID` | Identificador de la hoja de cálculo, tomado de su URL |
+| `apps/api/.env` | `GOOGLE_CREDENTIALS_PATH` | Por defecto, `credentials/google-service-account.json`, relativo a `apps/api` |
+| `apps/api/.env` | `GOOGLE_CREDENTIALS_JSON` | Alternativa al archivo: JSON de la credencial configurado de forma privada en el alojamiento |
+| `apps/api/.env` | `COOKIE_DOMAIN` | Vacío en local; definir según los dominios elegidos al publicar |
+| `apps/web/.env` | `PUBLIC_API_URL` | Dirección de la API, por ejemplo `http://localhost:3000` |
+
+Puedes generar un secreto nuevo en tu computadora con:
+
+```powershell
+node -e "console.log(require('node:crypto').randomBytes(48).toString('base64'))"
+```
+
+Los `.env` y la carpeta `credentials/` están ignorados por Git. Guarda esos archivos por un medio privado al trasladar el proyecto a otra computadora. Solo la URL pública de la API corresponde al frontend; las contraseñas y credenciales permanecen en el backend.
+
+Una vez completada la configuración:
+
+```powershell
 pnpm dev
 ```
 
-- Web: http://localhost:4321
-- API: http://localhost:3000
+- Web: http://localhost:4321 (abre el login).
+- API: http://localhost:3000 (no es la interfaz del sistema).
 
-Para trabajar cada día, ejecuta `pnpm dev` desde la raíz: inicia el frontend y el backend en una sola terminal. Usa `Ctrl+C` para detener ambos. Si antes dejaste el frontend en segundo plano, detenlo primero con `pnpm stop:web`, y detén cualquier API que siga abierta en otra terminal para evitar puertos ocupados.
+Para trabajar cada día, ejecuta `pnpm dev` desde la raíz: inicia el frontend y el backend en una sola terminal y mantiene la compilación del paquete compartido. Usa **Ctrl+C** para detener los procesos. Si antes dejaste el frontend en segundo plano, detenlo con `pnpm stop:web`; detén también cualquier API abierta por separado para evitar puertos ocupados.
 
-El frontend escucha también en la red local para probar desde un celular. Usa `http://IP-DE-LA-LAPTOP:4321` y mantén `PUBLIC_API_URL` en `apps/web/.env` y `WEB_URL` en `apps/api/.env` con esa misma IP y sus puertos correspondientes (3000 y 4321). Ambos dispositivos deben estar en la misma red.
+> Al clonar el repositorio no necesitas ejecutar `git init`. Si necesitas reactivar los hooks de Git después de instalar, usa `pnpm run prepare`.
 
-> Si instalaste antes de ejecutar `git init`, los hooks de commits no quedan activos. Actívalos con `pnpm run prepare`.
+### Actualizar una copia existente
+
+Detén la aplicación antes de actualizar y comprueba que estás en la rama de esta versión:
+
+```powershell
+git fetch origin
+git switch feature/postulaciones-movil
+git pull --ff-only origin feature/postulaciones-movil
+pnpm dev
+```
+
+Si la actualización modifica las dependencias o el lockfile, ejecuta `pnpm install --frozen-lockfile` antes de `pnpm dev`. Si Git informa de cambios locales que serían sobrescritos, guárdalos mediante un commit o un respaldo con `git stash` antes de continuar.
+
+### Probar desde un celular
+
+Conecta el celular y la computadora a la misma red. Sustituye `IP-DE-TU-PC` por la dirección de red de la computadora:
+
+| Configuración | Valor para la red local |
+|---|---|
+| `apps/web/.env`: `PUBLIC_API_URL` | `http://IP-DE-TU-PC:3000` |
+| `apps/api/.env`: `WEB_URL` | `http://IP-DE-TU-PC:4321` |
+| `apps/api/.env`: `COOKIE_DOMAIN` | Vacío |
+| Dirección que debes abrir | `http://IP-DE-TU-PC:4321` |
+
+Reinicia ambos servicios después de cambiar la configuración y permite el acceso de Node.js en la red privada si el firewall lo solicita. Usa el mismo hostname o IP para web y API; no mezcles `localhost` con la IP al probar la sesión.
+
+El frontend ya escucha en la red local. Si cambia la IP de la computadora, actualiza los `.env`, reinicia y vuelve a generar los enlaces y QR. `localhost` en el celular se refiere al propio celular, no a la computadora que ejecuta el proyecto.
 
 ## Scripts principales
 
@@ -59,100 +140,162 @@ Desde la raíz del proyecto:
 
 | Comando | Qué hace |
 |---|---|
-| `pnpm dev` | Compila shared e inicia frontend y backend en una terminal |
+| `pnpm dev` | Compila shared, mantiene sus cambios e inicia frontend y backend en una terminal |
 | `pnpm dev:web` / `pnpm dev:api` | Levanta solo una app |
 | `pnpm stop:web` | Detiene el frontend si se inició en segundo plano |
-| `pnpm build` | Compila todo |
-| `pnpm typecheck` | Revisa los tipos de TypeScript |
-| `pnpm test` | Pruebas unitarias con Vitest |
+| `pnpm build` | Compila los tres paquetes |
+| `pnpm typecheck` | Revisa los tipos de la API y shared; web no tiene actualmente un script propio de typecheck |
+| `pnpm test` | Ejecuta las pruebas unitarias de la API y shared con Vitest |
+| `pnpm --filter api test:e2e` | Pruebas HTTP de la API con repositorios simulados; no usan una hoja real |
 | `pnpm lint` | Revisa el código con Biome sin modificarlo |
+| `pnpm format` | Aplica formato con Biome |
 | `pnpm check` | Formatea y corrige lo que Biome pueda arreglar solo |
+| `pnpm ci:check` | Comprueba formato y lint sin escribir cambios, como en CI |
 | `pnpm commit` | Asistente para escribir el commit con el formato correcto |
-| `postinstall` | Se ejecuta solo después de `pnpm install`: compila `packages/shared`, que usa la API |
+| `postinstall` | Se ejecuta después de instalar dependencias: compila `packages/shared`, que usa la API |
 
-Pruebas e2e de la API: `pnpm --filter api test:e2e`.
+Las comprobaciones recientes de desarrollo incluyen las compilaciones de web y API, typecheck, pruebas unitarias y HTTP, y verificaciones de navegación con Playwright en tamaños móviles y de escritorio. Las verificaciones de navegador no forman parte de un comando de pruebas versionado del frontend. Para una entrega, ejecutar también la [lista de aceptación](docs/entrega/validacion-entrega.md) con el cliente.
 
 ## Estructura
 
-```
+```text
 apps/
   api/src/
-    main.ts                  arranque: validación global y CORS
-    app.module.ts            módulo raíz (cada módulo nuevo se importa aquí)
-    clases/                  controller, service, dto, interfaces y repositories (clases y postulaciones)
-    profesores/              controller, service, interfaces y repositories
-  web/src/
-    pages/                   rutas de las pantallas (index, nueva-clase, profesores, calendario...)
-    components/pantallas/    una pantalla React por archivo, con el nombre de su sección
-    components/              piezas compartidas: navegación, tarjetas, QR, mensajes y sesión
-    layouts/                 moldes de página
-    styles/                  estilos globales
+    main.ts                  arranque: validación global, cookies y CORS
+    config/env.ts            carga y validación de variables de entorno
+    auth/                    inicio de sesión, JWT y cierre de sesión
+    clases/                  clases, postulaciones, cupos y validación de horarios
+    profesores/              registro, cambios de estado y eliminación de profesores
+    google/                  cliente de Google Sheets
+  api/test/                  pruebas HTTP con repositorios simulados
+  web/
+    public/documentos/       PDF de operación y entrega, y ZIP descargable
+    src/
+      pages/                 rutas del sistema y formulario público
+      components/pantallas/  contenido React de cada pantalla
+      components/            navegación, tarjetas, confirmaciones, QR y mensajes
+      layouts/               encabezado, navegación y protección de páginas privadas
+      hooks/                 estado de operaciones y tema
+      lib/                   acceso a la API y enlaces de formularios
+      styles/                estilos globales y temas
 packages/shared/src/
-  enums/                     estados de postulación y profesor, duraciones de clase
-  types/api.ts               forma de los datos que viajan entre web y api
-docs/                        guías del proyecto
+  enums/                     estados, duraciones y reglas compartidas
+  types/api.ts               contratos de datos entre web y API
+scripts/                     generador opcional de los PDF de entrega
+docs/                        guías, entrega y material de presentación
 ```
 
-Para localizar cada pantalla y sus componentes, consulta el [mapa de pantallas](docs/05-mapa-de-pantallas.md).
+Para localizar cada pantalla y su ruta, consulta el [mapa de pantallas](docs/05-mapa-de-pantallas.md).
 
 ## Endpoints de la API
 
-| Método | Ruta | Qué hace |
-|---|---|---|
-| `GET` | `/clases` | Lista las clases con sus cupos disponibles |
-| `POST` | `/clases` | Crea una clase |
-| `POST` | `/clases/:id` | Actualiza una clase |
-| `DELETE` | `/clases/:id` | Elimina una clase |
-| `GET` | `/clases/postulaciones` | Lista las postulaciones |
-| `POST` | `/clases/postulaciones` | Registra una postulación |
-| `POST` | `/clases/postulaciones/estado` | Cambia el estado de una postulación |
-| `DELETE` | `/clases/postulaciones/:id` | Elimina una postulación |
-| `GET` | `/profesores` | Lista los profesores |
-| `POST` | `/profesores` | Crea un profesor |
-| `POST` | `/profesores/estado` | Activa o desactiva un profesor |
-| `DELETE` | `/profesores/:id` | Elimina un profesor con sesión de administrador |
+Las rutas requieren sesión de administrador salvo las indicadas como **públicas**. La sesión se envía mediante cookie, no mediante una clave en la URL.
 
-La eliminación de profesores quita su fila de la hoja `Profesores`. Las clases y postulaciones existentes conservan el nombre guardado; no se eliminan en cascada. Las eliminaciones y los cambios de estado de profesores se ejecutan en orden dentro de cada instancia de la API para evitar desplazamientos de fila entre esas acciones simultáneas.
+| Método | Ruta | Acceso | Qué hace |
+|---|---|---|---|
+| `POST` | `/auth/login` | Público | Verifica las credenciales y crea la cookie de sesión |
+| `GET` | `/auth/me` | Administrador | Comprueba la sesión y devuelve el usuario |
+| `POST` | `/auth/logout` | Administrador | Borra la cookie de sesión |
+| `GET` | `/clases` | Administrador | Lista las clases con sus cupos disponibles |
+| `GET` | `/clases/:id` | Público | Consulta la clase del formulario o QR |
+| `POST` | `/clases` | Administrador | Crea una clase y comprueba la disponibilidad del profesor |
+| `POST` | `/clases/:id` | Administrador | Actualiza una clase y comprueba cruces con otras clases |
+| `DELETE` | `/clases/:id` | Administrador | Elimina una clase |
+| `GET` | `/clases/postulaciones` | Administrador | Lista las postulaciones |
+| `POST` | `/clases/postulaciones` | Público | Valida y registra una postulación pendiente |
+| `POST` | `/clases/postulaciones/estado` | Administrador | Cambia el estado y actualiza los cupos |
+| `DELETE` | `/clases/postulaciones/:id` | Administrador | Elimina una postulación y recalcula cupos |
+| `GET` | `/profesores` | Administrador | Lista los profesores |
+| `POST` | `/profesores` | Administrador | Crea un profesor |
+| `POST` | `/profesores/estado` | Administrador | Activa o desactiva un profesor |
+| `DELETE` | `/profesores/:id` | Administrador | Elimina un profesor |
+
+Las clases se identifican por id, pero actualmente guardan al profesor por nombre. Al eliminar un profesor, sus clases y solicitudes existentes conservan el nombre guardado; no se eliminan en cascada. Las postulaciones también conservan una copia de los datos de su clase al momento de enviarse.
 
 ## Cambios realizados (2026-10-07)
 
-- Se corrigió la carga de postulaciones en `apps/web/src/pages/postulaciones.astro`: ahora consulta `GET /clases/postulaciones` en vez de `GET /profesores`.
-- Se movió la importación de `apiFetch` al `<script>` de la página, donde se utiliza en el navegador. La compilación de `apps/web` finalizó correctamente después del cambio.
+- Se corrigió la consulta de postulaciones para utilizar `GET /clases/postulaciones` en lugar de `GET /profesores`.
+- Se ajustó el acceso a la API desde la pantalla de postulaciones y se verificó la compilación del frontend.
 
 ## Cambios realizados (2026-10-09)
 
-- Se corrigió el tipado de la prueba e2e de la API en `apps/api/test/app.e2e-spec.ts`, eliminando la importación no válida de `supertest/types`.
-- Se actualizaron las pruebas unitarias de `ClasesController` y `ClasesService` para registrar sus dependencias mediante mocks en los módulos de prueba.
+- Se corrigió el tipado de la prueba e2e de la API, eliminando la importación no válida de `supertest/types`.
+- Se actualizaron las pruebas unitarias de `ClasesController` y `ClasesService` para registrar sus dependencias mediante mocks.
 - Se ejecutó Biome sobre los archivos modificados mediante los hooks de Git.
 
-**Pendiente de verificación:** ejecutar `typecheck` y las pruebas de la API y del monorepo antes de publicar los cambios.
+## Cambios realizados (2026-10-27)
+
+- Se incorporó la validación de postulaciones, el consentimiento y los datos del apoderado para menores, junto con controles de cupos y solicitudes duplicadas.
+- Se unificó la navegación inferior y se ajustaron los formularios y tarjetas para pantallas móviles.
+- Se organizó la consulta de clases vigentes, próximas y finalizadas, con accesos a postulaciones y convocatoria de cada clase.
+- Se permitió compartir convocatorias y recibir postulaciones antes de la fecha de inicio de las clases.
+- Se cambió el QR a negro sobre fondo blanco y se corrigió la copia del enlace al acceder mediante una dirección de red local con HTTP.
+
+## Cambios realizados (2026-10-29)
+
+- Se añadieron mensajes de estado dentro de la app y protección contra envíos repetidos durante las operaciones.
+- Se incorporaron búsqueda y filtros de postulaciones, indicadores de últimos cupos y número de solicitud al completar el formulario.
+- Se agregaron los temas claro, oscuro y automático, junto con la guía rápida y la información del sistema.
+- Se centralizaron la cuenta, los ajustes y el cierre de sesión en la sección Usuario de la barra inferior. La creación de clases quedó dentro de Clases.
+- Se adoptó el nombre provisional Mi Dojo y se configuró el login como entrada a la aplicación.
+- Se reemplazó la confirmación del navegador al eliminar clases por una confirmación dentro de la app.
+
+## Cambios realizados (2026-11-09)
+
+- Se preparó una presentación PDF del proyecto y se agregaron capturas con datos ficticios para demostración y portafolio.
+
+## Cambios realizados (2026-11-12)
+
+- Se incorporó la eliminación de profesores desde la app y la API, con confirmación y conservación de los nombres en clases y solicitudes existentes.
+- Se corrigió la interacción táctil de los botones Editar y Eliminar del menú de clases.
+- Se ajustaron los selectores de profesor y duración para mostrar su indicación inicial sin ofrecerla como opción seleccionable.
+- Se corrigió la descarga del QR como archivo PNG y se añadió una alternativa para abrir y guardar la imagen desde el celular.
+- Se ajustó el campo de nacimiento del formulario público y se pasaron las fechas del aviso y resumen al formato español.
+- Se agregó la detección de horarios superpuestos del mismo profesor al crear y editar clases, considerando fechas, días y horas entre sedes.
+- Se añadieron la guía del administrador, el procedimiento manual de respaldo y recuperación y la lista de 18 pruebas para la entrega, disponibles en PDF y ZIP desde Ajustes.
+
+Las fechas del registro corresponden a la zona horaria de Perú (`America/Lima`).
 
 ## Pendiente de mejorar
 
 ### Frontend
 
-- Unificar el diseño del frontend: revisar las páginas de `apps/web` y aplicar criterios visuales comunes (estructura, navegación, colores, tipografía, espaciado y estilos de formularios, tablas y botones), reutilizando los layouts y componentes compartidos. La meta es que todas las páginas se vean ordenadas y coherentes entre sí, en lugar de parecer diseños distintos.
-
-- Aunque `apps/web/src/lib/api.js` ya centraliza la URL con `PUBLIC_API_URL` y ofrece `apiFetch`, algunos componentes todavía hacen `fetch` directamente a `http://127.0.0.1:3000`; falta migrarlos a la configuración común.
-- `apps/web` todavía no usa `@dojo/shared`.
+- Incorporar un script propio de typecheck y una suite de pruebas de navegador versionada, para que las verificaciones móviles puedan repetirse mediante un comando del proyecto.
+- Evaluar el uso directo de `@dojo/shared` en el frontend; actualmente sus contratos se utilizan desde la API.
 
 ### Backend
 
-- El origen permitido por CORS (`http://localhost:4321`) y el `spreadsheetId` de Google están escritos en el código de la API; faltan en un `.env` validado.
+- Migrar la relación de profesor en las clases a un identificador estable, en lugar de depender del nombre.
+- Optimizar las lecturas completas de Google Sheets si crece el volumen de datos.
+- Si se utilizan varias réplicas de la API, reemplazar las colas y límites en memoria por coordinación compartida. Las protecciones actuales se aplican dentro de una instancia y no coordinan ediciones manuales simultáneas en Sheets.
+
+### Entrega y publicación
+
+- Realizar el ensayo de recuperación en una copia de la hoja del cliente y asignar un responsable a los respaldos manuales.
+- Completar las pruebas de aceptación, las condiciones de soporte y la conformidad con el cliente. Los documentos preparados no equivalen a una aceptación firmada.
+- Confirmar el nombre definitivo, los datos iniciales y la configuración de los servicios de alojamiento; el dominio personalizado puede definirse después.
+- Verificar HTTPS, cookies de sesión, CORS y conexión entre frontend y backend con las direcciones definitivas antes de usar datos reales en producción.
+- Acordar con el cliente el responsable, el contacto y los plazos de conservación del aviso de datos personales.
 
 ## Automatizaciones en GitHub
 
+El repositorio contiene las siguientes configuraciones. Su ejecución depende de las ramas, permisos y servicios habilitados en GitHub.
+
 | Archivo | Qué hace |
 |---|---|
-| `.github/workflows/ci.yml` | En cada PR y en `main`/`develop`: Biome, typecheck, tests, build y tests e2e |
-| `.github/workflows/pr-title.yml` | Valida el título del PR (Conventional Commits) y que las ramas sigan Gitflow |
-| `.github/dependabot.yml` | Actualiza las GitHub Actions (PRs hacia `develop`) |
-| `renovate.json` | Actualiza las dependencias de npm (PRs hacia `develop`; requiere instalar la app Renovate) |
+| `.github/workflows/ci.yml` | En cada PR y en pushes a `main`/`develop`: configura Biome, typecheck, pruebas, build y pruebas HTTP de la API |
+| `.github/workflows/pr-title.yml` | Valida el título del PR (Conventional Commits) y las ramas de Gitflow |
+| `.github/dependabot.yml` | Propone actualizaciones de GitHub Actions hacia `develop` |
+| `renovate.json` | Configura actualizaciones de dependencias de npm hacia `develop`; requiere habilitar la app Renovate |
+
+El workflow de CI no se dispara por un push aislado a `feature/postulaciones-movil`; se ejecuta al abrir o actualizar un PR. Antes de utilizarlo como requisito de entrega, revisar su ejecución en Actions y la estructura del bloque `env` del paso de pruebas e2e para que las variables queden dentro de ese bloque.
 
 ### Configuración del repositorio (una sola vez, en Settings)
 
-1. **Ramas**: crea `develop` desde `main` y márcala como rama por defecto (**General > Default branch**).
-2. **Rules > Rulesets**: crea una regla para `main` y otra para `develop` que exijan PR, los checks `Lint, tipos, tests y build`, `Tests e2e del api`, `Validar Conventional Commits` y `Validar ramas de Gitflow`, y que bloqueen el force push y el borrado de la rama.
-3. **General > Pull Requests**: habilita *Allow squash merging* (para `feature` → `develop`) y *Allow merge commits* (para `release` y `hotfix` → `main`). Desactiva *Allow rebase merging*.
-4. **Advanced Security**: activa secret scanning, push protection y CodeQL en modo *Default setup*.
-5. Instala la app **Renovate** desde GitHub Marketplace para este repositorio.
+Estas son indicaciones para el responsable del repositorio; no implican que los ajustes ya estén aplicados. Algunas opciones dependen del plan y la visibilidad del repositorio.
+
+1. **Ramas**: al adoptar Gitflow, crear `develop` desde `main` y marcarla como rama por defecto (**General > Default branch**). La versión de demostración descrita aquí está en `feature/postulaciones-movil`.
+2. **Rules > Rulesets**: configurar reglas para `main` y `develop` que exijan PR y los checks `Lint, tipos, tests y build`, `Tests e2e del api`, `Validar Conventional Commits` y `Validar ramas de Gitflow`, una vez comprobado que esos workflows funcionan. Bloquear el force push y el borrado de las ramas protegidas.
+3. **General > Pull Requests**: habilitar *Allow squash merging* para `feature` → `develop` y *Allow merge commits* para `release` y `hotfix` → `main`, de acuerdo con la guía de Gitflow.
+4. **Advanced Security**: habilitar secret scanning, push protection y CodeQL cuando estén disponibles para el repositorio.
+5. Habilitar la app **Renovate** si se desea automatizar la actualización de dependencias.
