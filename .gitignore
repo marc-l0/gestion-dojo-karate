@@ -36,3 +36,8 @@ Thumbs.db
 /docs/entrega/apoyo/
 Guion-de-puesta-en-marcha.*
 Archivos-de-apoyo-para-la-reunion.zip
+
+# Documentación de entrega y portafolio conservada fuera del proyecto
+/docs/entrega/
+/docs/portafolio/
+/scripts/generar-documentos-entrega.py

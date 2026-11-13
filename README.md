@@ -25,7 +25,7 @@ Los datos se guardan en una hoja de cálculo de Google. La estructura del almace
 - Formulario público con validaciones, consentimiento, datos del apoderado para menores de edad y número de solicitud al completar el envío.
 - Búsqueda y filtros de postulaciones por clase y estado, aceptación, rechazo y eliminación de solicitudes. Las pendientes no reservan vacante; las aceptadas o aprobadas consumen cupos.
 - Navegación móvil compartida, avisos dentro de la app y temas claro, oscuro o automático.
-- Guía rápida de uso y preferencias de apariencia desde **Usuario > Ajustes**. La documentación de entrega se conserva por separado en [docs/entrega](docs/entrega/README.md).
+- Guía rápida de uso y preferencias de apariencia desde **Usuario > Ajustes**.
 
 ## Guías del proyecto
 
@@ -34,8 +34,6 @@ Los datos se guardan en una hoja de cálculo de Google. La estructura del almace
 3. [Datos en Google Sheets](docs/03-google-sheets.md): pestañas, columnas, credenciales y validación de postulaciones.
 4. [Calidad de código](docs/04-calidad-de-codigo.md): Biome, Husky, pruebas con Vitest y CI.
 5. [Mapa de pantallas](docs/05-mapa-de-pantallas.md): rutas y archivos de cada sección.
-6. [Documentación de entrega](docs/entrega/README.md): operación, respaldo, recuperación, pruebas y condiciones por acordar con el cliente.
-7. [Presentación y capturas](docs/portafolio/README.md): PDF y capturas con datos ficticios para mostrar el proyecto.
 
 ## Requisitos
 
@@ -154,7 +152,7 @@ Desde la raíz del proyecto:
 | `pnpm commit` | Asistente para escribir el commit con el formato correcto |
 | `postinstall` | Se ejecuta después de instalar dependencias: compila `packages/shared`, que usa la API |
 
-Las comprobaciones recientes de desarrollo incluyen las compilaciones de web y API, typecheck, pruebas unitarias y HTTP, y verificaciones de navegación con Playwright en tamaños móviles y de escritorio. Las verificaciones de navegador no forman parte de un comando de pruebas versionado del frontend. La validación de entrega se completa con la ejecución de la [lista de aceptación](docs/entrega/validacion-entrega.md) junto con el cliente.
+Las comprobaciones recientes de desarrollo incluyen las compilaciones de web y API, typecheck, pruebas unitarias y HTTP, y verificaciones de navegación con Playwright en tamaños móviles y de escritorio. Las verificaciones de navegador no forman parte de un comando de pruebas versionado del frontend. La validación de entrega se completa con pruebas de aceptación acordadas con el cliente.
 
 ## Estructura
 
@@ -180,8 +178,7 @@ apps/
 packages/shared/src/
   enums/                     estados, duraciones y reglas compartidas
   types/api.ts               contratos de datos entre web y API
-scripts/                     generador opcional de los PDF de entrega
-docs/                        guías, entrega y material de presentación
+docs/                        documentación técnica del proyecto
 ```
 
 La ubicación de cada pantalla y su ruta se detalla en el [mapa de pantallas](docs/05-mapa-de-pantallas.md).
@@ -239,10 +236,6 @@ Las clases se identifican por id, pero actualmente guardan al profesor por nombr
 - Se adoptó el nombre provisional Mi Dojo y se configuró el login como entrada a la aplicación.
 - Se reemplazó la confirmación del navegador al eliminar clases por una confirmación dentro de la app.
 
-## Cambios realizados (2026-11-09)
-
-- Se preparó una presentación PDF del proyecto y se agregaron capturas con datos ficticios para demostración y portafolio.
-
 ## Cambios realizados (2026-11-12)
 
 - Se incorporó la eliminación de profesores desde la app y la API, con confirmación y conservación de los nombres en clases y solicitudes existentes.
@@ -251,7 +244,6 @@ Las clases se identifican por id, pero actualmente guardan al profesor por nombr
 - Se corrigió la descarga del QR como archivo PNG y se añadió una alternativa para abrir y guardar la imagen desde el celular.
 - Se ajustó el campo de nacimiento del formulario público y se pasaron las fechas del aviso y resumen al formato español.
 - Se agregó la detección de horarios superpuestos del mismo profesor al crear y editar clases, considerando fechas, días y horas entre sedes.
-- Se añadieron la guía del administrador, el procedimiento manual de respaldo y recuperación y la lista de 18 pruebas para la entrega, preparadas en PDF y ZIP como documentación externa de entrega.
 
 Las fechas del registro corresponden a la zona horaria de Perú (`America/Lima`).
 
